@@ -4,7 +4,7 @@ import {withRouter} from "react-router-dom";
 import * as Yup from "yup";
 import {Formik} from "formik";
 import Cookies from 'universal-cookie';
-import {logIn, disconnect} from "../actions/getFirestoreData/authentication";
+import {logIn, disconnect} from "../actions/authentication";
 import FormTextField from "../components/form/FormTextField";
 import Typography from '@material-ui/core/Typography';
 import {Button, Link} from "@material-ui/core";
@@ -41,15 +41,6 @@ class Connexion extends React.Component {
         //const [cookies, setCookie, removeCookie] = useCookies(['cookie-name']);
         const cookies = new Cookies();
         let cookie = cookies.get('userCookie') ? cookies.get('userCookie') : "";
-        if (this.props.auth) {
-            return (
-                <Grid container>
-                    <Typography>Vous êtes connecté en tant que  {cookie}</Typography>
-                    <Button onClick={this.disconnection}>Se déconnecter</Button>
-                </Grid>
-            )
-        }
-        else {
             return (
                 <>
                     <Grid container justify='center' spacing={2}>
@@ -90,8 +81,6 @@ class Connexion extends React.Component {
                     </Grid>
                 </>
             )
-
-        }
     }
 }
 

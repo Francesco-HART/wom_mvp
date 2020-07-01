@@ -1,5 +1,5 @@
-import {db} from "../../Firebase";
-import {SHOW_SNACKBAR, AUTH_USER} from "../type";
+import {db} from "../Firebase";
+import {SHOW_SNACKBAR, AUTH_USER} from "./type";
 import Cookies from 'universal-cookie';
 
 

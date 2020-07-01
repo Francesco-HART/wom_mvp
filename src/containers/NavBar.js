@@ -1,21 +1,11 @@
 import React from 'react';
 import {connect} from "react-redux";
 import {Link} from "react-router-dom";
-import {disconnect, logIn} from "../actions/getFirestoreData/authentication";
+import {disconnect, logIn} from "../actions/authentication";
 import {withStyles} from "@material-ui/core/styles";
 import Cookies from 'universal-cookie';
 import AppBar from '@material-ui/core/AppBar';
-import Logo from "../components/mui/Logo";
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import Home from '@material-ui/icons/Home';
-import ShoppingBasketIcon from '@material-ui/icons/ShoppingBasket';
 import FaceIcon from '@material-ui/icons/Face';
-import AddCircleIcon from '@material-ui/icons/AddCircle';
-import FastFoodIcon from '@material-ui/icons/Fastfood';
-import SearchIcon from '@material-ui/icons/Search';
-import GroupAddIcon from '@material-ui/icons/GroupAdd';
-import PostAddIcon from '@material-ui/icons/PostAdd';
-import PublicIcon from '@material-ui/icons/Public';
 import MenuIcon from "@material-ui/icons/Menu";
 import {Brightness6} from "@material-ui/icons";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
@@ -125,48 +115,7 @@ class NavBar extends React.Component {
         const {classes, theme, container} = this.props;
         const {mobileOpen/*, open_config_menu*/} = this.state;
 
-        const drawer = (
-            <div>
-                <div className={classes.toolbar} style={{textAlign: "center"}}>
-                    <Logo/>
-                </div>
-                <Divider/>
-                <List>
-                    {this.renderListItem({
-                        link: "/",
-                        icon: <Home/>,
-                        title: "Tableau de bord",
-                    })}
-                    {this.props.auth ?
-                        this.renderListItem({
-                            link: "/accueil",
-                            icon: <AddCircleIcon/>,
-                            title: "accueil",
-                        })
-                        : null}
-                    {!this.props.auth && this.renderListItem({
-                        link: "/inscription",
-                        icon: <AddCircleIcon/>,
-                        title: "Deviens un Womer",
-                    })
-                    }
-                    {
-                        this.renderListItem({
-                            link: "/post/creer",
-                            icon: <PostAddIcon/>,
-                            title: "Créer Wom Trader",
-                        })
-                    }
-                    {
-                        this.renderListItem({
-                            link: "/destockage",
-                            icon: <PublicIcon/>,
-                            title: "Wom Trader",
-                        })
-                    }
-                </List>
-            </div>
-        );
+
         return (
             <div className={classes.root}>
                 <CssBaseline/>
@@ -186,30 +135,6 @@ class NavBar extends React.Component {
                             </Grid>
 
                             <Grid item>
-                                {this.props.auth && this.props.auth.type === 'admin' &&
-                                <Tooltip
-                                    title="Créer un utilisateur"
-                                    aria-label="Créer-utilisateur"
-                                    style={{marginRight: 10}}
-                                    className={classes.appBarIcon}
-                                >
-                                    <IconButton to="/utilisateur/creer" component={Link}>
-                                        <GroupAddIcon/>
-                                    </IconButton>
-                                </Tooltip>}
-
-                                {this.props.auth &&
-                                <Tooltip
-                                    title="Mon compte"
-                                    aria-label="compte"
-                                    style={{marginRight: 10}}
-                                    className={classes.appBarIcon}
-                                >
-                                    <IconButton to="/profil/informations" component={Link}>
-                                        <FaceIcon/>
-                                    </IconButton>
-                                </Tooltip>}
-
                                 <Tooltip
                                     title="Couleur"
                                     aria-label="couleur"
@@ -254,7 +179,6 @@ class NavBar extends React.Component {
                                 keepMounted: true, // Better open performance on mobile.
                             }}
                         >
-                            {drawer}
                         </Drawer>
                     </Hidden>
                     <Hidden smDown implementation="css">
@@ -263,7 +187,6 @@ class NavBar extends React.Component {
                             variant="permanent"
                             open
                         >
-                            {drawer}
                         </Drawer>
                     </Hidden>
                 </nav>

@@ -1,7 +1,7 @@
 import React from 'react';
 import {connect} from "react-redux";
 import Cookies from 'universal-cookie';
-import {logIn} from "../actions/getFirestoreData/authentication";
+import {logIn} from "../actions/authentication";
 import LinearProgress from "@material-ui/core/LinearProgress";
 
 
