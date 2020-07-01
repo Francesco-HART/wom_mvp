@@ -17,9 +17,12 @@ import LockOpenIcon from '@material-ui/icons/LockOpen';
  * the action 'logIn' is used to get information about user if we found it in database
  */
 class Connexion extends React.Component {
-    state = {
-        isConnected: false
-    };
+    constructor(props) {
+        super(props);
+        this.state = {
+            isConnected: false
+        };
+    }
 
     handleSubmit = async (values) => {
         let request = await this.props.logIn(values);
@@ -33,12 +36,11 @@ class Connexion extends React.Component {
     };
 
     render() {
-        //console.log(this.props)
         const array = [
-            {name: "login", label: "login", type: "text"},
+            {name: "login", label: "Login", type: "text"},
             {name: "password", label: "Mot de passe", type: "password"}
         ];
-        //const [cookies, setCookie, removeCookie] = useCookies(['cookie-name']);
+
         const cookies = new Cookies();
         let cookie = cookies.get('userCookie') ? cookies.get('userCookie') : "";
             return (
@@ -56,31 +58,34 @@ class Connexion extends React.Component {
                         </Grid>
                     </Grid>
 
-                    <Formik initialValues={{
-                        login: cookie,
-                        password: cookies.get('userPassCookie') ? cookies.get('userPassCookie') : ""
-                    }} onSubmit={this.handleSubmit}
-                            validationSchema={Yup.object({
-                                login: Yup.string().required("Champs requis"),
-                                password: Yup.string().required("Champs requis"),
-                            })}>
-                        {props => <FormTextField {...props} arrayField={array}/>}
+                    <Formik 
+                        initialValues={{
+                            login: cookie,
+                            password: cookies.get('userPassCookie') ? cookies.get('userPassCookie') : ""
+                        }} 
+                        onSubmit={this.handleSubmit}
+                        validationSchema={Yup.object({
+                            login: Yup.string().required("Champs requis"),
+                            password: Yup.string().required("Champs requis")
+                        })}
+                    >
+                        { props => <FormTextField {...props} arrayField={array}/>}
                     </Formik>
 
                     <Grid container justify='center' spacing={4}>
                         <Grid item>
                             <Link href="/profil/motdepasse">
-                                <Typography variant={'body2'}>Mot de passe oublié?</Typography>
+                                <Typography variant={'body2'}>Mot de passe oublié ?</Typography>
                             </Link>
                         </Grid>
                         <Grid item>
                             <Link href="/post/creer">
-                                <Typography variant={'body2'}>Toujours pas inscrit? </Typography>
+                                <Typography variant={'body2'}>Toujours pas inscrit ? </Typography>
                             </Link>
                         </Grid>
                     </Grid>
                 </>
-            )
+            );
     }
 }
 

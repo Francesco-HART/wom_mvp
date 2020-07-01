@@ -8,7 +8,7 @@ import Cookies from 'universal-cookie';
  * @param user  {object}:   contain login's and password's values
  * @returns     {function(*): boolean} :    false if can't connect, true
  */
-export const logIn = (user ) => async dispatch => {
+export const logIn = (user) => async dispatch => {
     let isConnexionAllowed = false;
     let userFromDb = "";
     try {
@@ -58,13 +58,14 @@ export const logIn = (user ) => async dispatch => {
  * @return {function(...[*]=)}
  */
 export const disconnect = () => async dispatch => {
-    try{
+    try {
         const cookies = new Cookies();
         cookies.remove("userCookie", { path: '/' });
         cookies.remove("userPassCookie", { path: '/' });
         dispatch({type: AUTH_USER, payload: null});
         dispatch({type: SHOW_SNACKBAR, payload: {txt: "Vous vous êtes déconnecté ", variant: "success"}});
-    }catch (e) {
+    }
+    catch (e) {
         dispatch({type: SHOW_SNACKBAR, payload: {txt: "une erreur s'est produite lors de la déconnexion", variant: "error"}});
     }
 };

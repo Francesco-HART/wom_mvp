@@ -4,7 +4,6 @@ import Cookies from 'universal-cookie';
 import {logIn} from "../actions/authentication";
 import LinearProgress from "@material-ui/core/LinearProgress";
 
-
 /**
  * This function is used to check if the user have already been connected by checking cookies.
  * if there is the required cookies, we check if they are in database, and then the user was automatically connected
@@ -33,14 +32,8 @@ class CookieHandler extends React.Component {
     };
 
     render(){
-        if (this.state.isLoading) {return (<LinearProgress/>)}
-        return null;
+        return this.state.isLoading ? <LinearProgress/> : null;
     }
 }
 
-
-
-export default connect(
-    null,
-    {logIn}
-)(CookieHandler)
+export default connect(null, {logIn})(CookieHandler)

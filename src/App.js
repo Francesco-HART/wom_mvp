@@ -20,13 +20,14 @@ class App extends React.Component {
     componentDidMount() {
         const cookies = new Cookies();
         this.setState({
-            themeColorAdaptation : cookies.get('colorTheme') && cookies.get('colorTheme') ==="true" ? false : true,
+            // themeColorAdaptation : cookies.get('colorTheme') && cookies.get('colorTheme') === "true" ? false : true,
+            themeColorAdaptation : cookies.get('colorTheme') && cookies.get('colorTheme') !== "true",
             isLoading : false
         });
     }
 
     setColorTheme = () =>{
-        this.setState({themeColorAdaptation : !this.state.themeColorAdaptation});
+        this.setState({ themeColorAdaptation : !this.state.themeColorAdaptation });
     };
 
     render() {
@@ -34,10 +35,9 @@ class App extends React.Component {
         const cookies = new Cookies();
 
         return (
-            (cookies.get('userCookie') ? true : false) && !this.props.auth ? <CookieHandler/> :
+            (cookies.get('userCookie') /*? true : false*/) && !this.props.auth ? <CookieHandler/> :
                 <MuiThemeProvider theme={themeColor}>
                     <BrowserRouter>
-
                         <div style={{height: "100%"}}>
                             <NavBar themeColor={this.state.themeColorAdaptation} setThemeColor={this.setColorTheme}>
                                 <Routes/>
