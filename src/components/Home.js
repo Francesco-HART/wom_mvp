@@ -9,13 +9,10 @@ class Home extends React.Component {
     }
 
     render() {
-        console.log("Home");
-        console.log("props");
-        console.log(this.props);
         return (
             <div>
                 <p>Bienvenue sur Wom</p>
-                <p>Visiter notre <a href="womparis.com">site vitrine</a> !</p>
+                <p>Visitez notre <a href="http://womparis.com" target="_blank">site vitrine</a> !</p>
             </div>
         );
     }

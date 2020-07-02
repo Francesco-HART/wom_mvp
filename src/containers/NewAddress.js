@@ -10,16 +10,82 @@ import Typography from '@material-ui/core/Typography';
 import {Button, Link} from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import LockOpenIcon from '@material-ui/icons/LockOpen';
-import {addNewAddress} from '../actions/address';
+import {addNewAddress, findAddressByAddressName} from '../actions/address';
 
 class NewAddress extends React.Component {
     constructor(props) {
         super(props);
+        this.state = {
+            phoneNumber: "",
+            addressName: "",
+            address: "",
+            category: "",
+            city: "",
+            postalCode: "",
+            country: "",
+            offer1: "",
+            offer2: "",
+            mail: "",
+            mailConfirm: "",
+            password: "",
+            passwordConfirm: "",
+            webSite: "",
+            documentId : null
+        };
     }
 
     handleSubmit = async (values) => {
-        addNewAddress(values);
+        this.setState({
+            phoneNumber: values["phoneNumber"],
+            addressName: values["addressName"],
+            address: values["address"],
+            category: values["category"],
+            city: values["city"],
+            postalCode: values["postalCode"],
+            country: values["country"],
+            offer1: values["offer1"],
+            offer2: values["offer2"],
+            mail: values["mail"],
+            mailConfirm: values["mailConfirm"],
+            password: values["password"],
+            passwordConfirm: values["passwordConfirm"],
+            webSite: values["webSite"]
+        });
+
+        // check si c'est bon
+        // [...]
+        /// end
+
+        const documentId = await addNewAddress(values);
+        if (documentId != undefined && documentId != null) {
+            this.setState({
+                phoneNumber: "",
+                addressName: "",
+                address: "",
+                category: "",
+                city: "",
+                postalCode: "",
+                country: "",
+                offer1: "",
+                offer2: "",
+                mail: "",
+                mailConfirm: "",
+                password: "",
+                passwordConfirm: "",
+                webSite: "",
+                documentId: documentId
+            });
+        }
     };
+
+    getDocumentId() {
+        return this.state.documentId == null ? null :
+            <div>
+                <p>Adresse créé avec l'id : {this.state.documentId}</p>
+                <p><a href="https://fr.qr-code-generator.com/" target="_blank">Générer le QRCode</a> avec l'url suivante : http://localhost:3000/address/{this.state.documentId}</p>
+            </div>
+        ;
+    }
 
     render() {
         const array = [
@@ -57,38 +123,7 @@ class NewAddress extends React.Component {
                     </Grid>
 
                     <Formik 
-                        // initialValues={{
-                        //     phoneNumber: "",
-                        //     addressName: "",
-                        //     address: "",
-                        //     category: "",
-                        //     city: "",
-                        //     postalCode: "",
-                        //     country: "",
-                        //     offer1: "",
-                        //     offer2: "",
-                        //     mail: "",
-                        //     mailConfirm: "",
-                        //     password: "",
-                        //     passwordConfirm: "",
-                        //     webSite: ""
-                        // }} 
-                        initialValues={{
-                                phoneNumber: "+33893025354",
-                                addressName: "Café d'Orléans",
-                                address: "43 Avenue du Général Leclerc",
-                                category: "Bar",
-                                city: "Paris",
-                                postalCode: "75014",
-                                country: "France",
-                                offer1: "Un café",
-                                offer2: "Un croissant",
-                                mail: "cafe.dorleans.paris@gmail.com",
-                                mailConfirm: "cafe.dorleans.paris@gmail.com",
-                                password: "test123",
-                                passwordConfirm: "test123",
-                                webSite: "https://www.facebook.com/pages/category/French-Restaurant/Caf%C3%A9-dOrleans-Paris-139305912747539/"
-                            }} 
+                        initialValues={this.state} 
                         onSubmit={this.handleSubmit}
                         validationSchema={Yup.object({
                             phoneNumber: Yup.string().required("Champs requis"),
@@ -108,6 +143,8 @@ class NewAddress extends React.Component {
                     >
                         { props => <FormTextField {...props} arrayField={array}/> }
                     </Formik>
+
+                    {this.getDocumentId()}
                 </>
             );
     }
