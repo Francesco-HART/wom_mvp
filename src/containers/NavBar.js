@@ -11,7 +11,7 @@ import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import Account from "@material-ui/icons/PersonPin";
 import Earth from "@material-ui/icons/AddLocation";
 
-import {disconnect, logIn} from "../actions/authentication";
+import {disconnect, findUserByPhoneNumber} from "../actions/authentication";
 
 import {
     CssBaseline,
@@ -161,8 +161,8 @@ class NavBar extends React.Component {
 
 
                                 <Tooltip 
-                                    title={this.props.auth ? "Déconnexion" : "Connexion Admin"}
-                                    aria-label={this.props.auth ? "deconnexion" : "connexion admin"}
+                                    title={this.props.auth ? "Déconnexion" : "Connexion"}
+                                    aria-label={this.props.auth ? "deconnexion" : "connexion"}
                                     style={{marginRight: 10}}
                                     className={classes.appBarIcon}
                                 >
@@ -171,7 +171,7 @@ class NavBar extends React.Component {
                                             <ExitToAppIcon/>
                                         </IconButton>
                                         :
-                                        <IconButton to="/login-admin" component={Link}>
+                                        <IconButton to="/login" component={Link}>
                                             <Account/>
                                         </IconButton>
                                     }
@@ -220,7 +220,4 @@ const mapStateToProps = ({auth}) => {
 };
 
 
-export default connect(mapStateToProps, {
-    logIn,
-    disconnect,
-})(withStyles(styles, {withTheme: true})(NavBar));
+export default connect(mapStateToProps, { findUserByPhoneNumber, disconnect })(withStyles(styles, {withTheme: true})(NavBar));

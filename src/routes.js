@@ -9,7 +9,6 @@ import Address from './containers/Address';
 import NewAddress from './containers/NewAddress';
 import Login from './containers/Login'
 import Signin from './containers/Signin'
-import LoginAdmin from './containers/LoginAdmin'
 
 function Routes(props) {
     return (
@@ -19,7 +18,6 @@ function Routes(props) {
                 <Route exact path="/new-address" component={requireNoAuth(NewAddress)}/>
                 <Route exact path="/login" component={requireNoAuth(Login)}/>
                 <Route exact path="/signin" component={requireNoAuth(Signin)}/>
-                <Route exact path="/login-admin" component={requireNoAuth(LoginAdmin)}/>
                 <Route component={Home}/>
             </Switch>
         );

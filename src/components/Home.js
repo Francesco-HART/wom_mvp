@@ -1,6 +1,7 @@
 import React from 'react';
-import {Route, Switch, withRouter} from "react-router-dom";
+import {withRouter} from "react-router-dom";
 import {connect} from "react-redux";
+import { Grid, Button, Typography } from '@material-ui/core';
 
 class Home extends React.Component {
 
@@ -10,10 +11,16 @@ class Home extends React.Component {
 
     render() {
         return (
-            <div>
-                <p>Bienvenue sur Wom</p>
-                <p>Visitez notre <a href="http://womparis.com" target="_blank">site vitrine</a> !</p>
-            </div>
+            <Grid container spacing={2}>
+                <Grid item xs={12}>
+                    <Typography variant="h1">
+                        Bienvenue sur Wom
+                    </Typography>
+                    <Button variant="contained" color="primary" href="http://womparis.com" target="_blank">
+                        Visitez notre site vitrine !
+                    </Button>
+                </Grid>
+            </Grid>
         );
     }
 }

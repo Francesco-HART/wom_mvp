@@ -4,13 +4,12 @@ import {withRouter} from "react-router-dom";
 import * as Yup from "yup";
 import {Formik} from "formik";
 import Cookies from 'universal-cookie';
-import {logIn, disconnect} from "../actions/authentication";
 import FormTextField from "../components/form/FormTextField";
 import Typography from '@material-ui/core/Typography';
-import {Button, Link} from "@material-ui/core";
+import {Button} from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
-import LockOpenIcon from '@material-ui/icons/LockOpen';
 import {addNewAddress} from '../actions/address';
+import Earth from "@material-ui/icons/AddLocation";
 
 class NewAddress extends React.Component {
     constructor(props) {
@@ -26,32 +25,14 @@ class NewAddress extends React.Component {
             offer1: "",
             offer2: "",
             mail: "",
-            mailConfirm: "",
             password: "",
-            passwordConfirm: "",
             webSite: "",
             documentId : null,
-            status: "success"
+            status: null
         };
     }
 
     handleSubmit = async (values) => {
-        this.setState({
-            phoneNumber: values["phoneNumber"],
-            addressName: values["addressName"],
-            address: values["address"],
-            category: values["category"],
-            city: values["city"],
-            postalCode: values["postalCode"],
-            country: values["country"],
-            offer1: values["offer1"],
-            offer2: values["offer2"],
-            mail: values["mail"],
-            mailConfirm: values["mailConfirm"],
-            password: values["password"],
-            passwordConfirm: values["passwordConfirm"],
-            webSite: values["webSite"]
-        });
 
         // check si c'est bon
         // [...]
@@ -60,12 +41,14 @@ class NewAddress extends React.Component {
         const documentId = await addNewAddress(values);
         if (documentId != undefined && documentId != null) {
             this.setState({
+                ...values,
                 documentId: documentId,
                 status: "success"
             });
         }
         else {
             this.setState({
+                ...values,
                 status: "error"
             });
         }
@@ -128,9 +111,7 @@ class NewAddress extends React.Component {
             {name: "offer1", label: "Offre 1", type: "text"},
             {name: "offer2", label: "Offre 2", type: "text"},
             {name: "mail", label: "e-mail", type: "mail"},
-            {name: "mailConfirm", label: "Confirmation", type: "mail"},
             {name: "password", label: "Mot de passe", type: "password"},
-            {name: "passwordConfirm", label: "Confirmation", type: "password"},
             {name: "webSite", label: "Site web (facultatif)", type: "url"}
         ];
 
@@ -142,10 +123,10 @@ class NewAddress extends React.Component {
                         <Grid item xs={12}>
                             <Grid container justify='center' spacing={2}>
                                 <Grid item>
-                                    <LockOpenIcon/>
+                                    <Earth/>
                                 </Grid>
                                 <Grid item>
-                                    <Typography>Connexion</Typography>
+                                    <Typography>Nouvelle adresse Wom !</Typography>
                                 </Grid>
                             </Grid>
                         </Grid>
@@ -165,9 +146,7 @@ class NewAddress extends React.Component {
                             offer1: Yup.string().required("Champs requis"),
                             offer2: Yup.string().required("Champs requis"),
                             mail: Yup.string().required("Champs requis"),
-                            mailConfirm: Yup.string().required("Champs requis"),
                             password: Yup.string().required("Champs requis"),
-                            passwordConfirm: Yup.string().required("Champs requis")
                         })}
                     >
                         { props => <FormTextField {...props} arrayField={array}/> }

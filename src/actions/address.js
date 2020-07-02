@@ -1,6 +1,5 @@
 import {db} from "../Firebase";
 import firebase from 'firebase/app';
-import { object } from "firebase-functions/lib/providers/storage";
 
 /**
  * Try to create a new address.
@@ -27,8 +26,10 @@ export async function addNewAddress(address) {
         mail: address["mail"],
         password: address["password"],
         webSite: address["webSite"],
-        isActive: false,
+        isPhoneNumberActive: false,
+        isMailActive: false,
         position: new firebase.firestore.GeoPoint(0, 0),
+        registerDate: firebase.firestore.FieldValue.serverTimestamp(),
         documentId: null
     })
     .then(async () => {
@@ -106,8 +107,8 @@ export async function findAddressByDocumentId(documentId) {
     .doc(documentId)
     .get()
     .then(doc => {
-        if (doc.empty) {
-            console.log("Doc is empty.");
+        if (doc.data() === undefined) {
+            console.log("Doc is undefined.");
             return null;
         }
         return doc.data();

@@ -4,26 +4,82 @@ import {withRouter} from "react-router-dom";
 import * as Yup from "yup";
 import {Formik} from "formik";
 import Cookies from 'universal-cookie';
-import {logIn, disconnect} from "../actions/authentication";
+import {addNewUser} from "../actions/authentication";
 import FormTextField from "../components/form/FormTextField";
-import Typography from '@material-ui/core/Typography';
-import {Button, Link} from "@material-ui/core";
-import Grid from "@material-ui/core/Grid";
+import {Button, Grid, Typography} from "@material-ui/core";
 import LockOpenIcon from '@material-ui/icons/LockOpen';
 
 class SignIn extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            isConnected: false
-        };
+            phoneNumber: "+33",
+            username: "",
+            birthday: "",
+            address: "",
+            city: "",
+            postalCode: "",
+            country: "",
+            mail: "",
+            password: "",
+            status: null
+        };  
     }
 
     handleSubmit = async (values) => {
-        console.log("send data : " + values);
+        console.log("handle");
+        console.log(values);
+        const isCreated = await addNewUser(values) ? "success" : "error";
+        console.log("isCreated");
+        console.log(isCreated);
+        this.setState({
+            ...values,
+            status: isCreated
+        })
     };
 
-
+    getMessage() {
+        switch (this.state.status) {
+            case "success":
+                return (
+                    <Grid container spacing={2}>
+                        <Grid item xs={12}>
+                            <Grid container justify="center" spacing={2}>
+                                <Grid item spacing={2}>
+                                    <Button variant="contained" color="primary">
+                                        Nous sommes heureux de te compte parmis nos membres !
+                                    </Button>
+                                </Grid>
+                                <Grid item spacing={2}>
+                                    <Button variant="contained" color="primary" href={"/address/" + this.state.documentId} spacing={5}>
+                                        Voir ma nouvelle adresse !
+                                    </Button>
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                );
+            case "error":
+                return (
+                    <Grid container spacing={2}>
+                        <Grid item xs={12}>
+                            <Grid container justify="center" spacing={2}>
+                                <Grid item>
+                                    <Button variant="contained" color="secondary">
+                                        <Typography>
+                                            Erreur lors de la création de l'utilisateur !
+                                        </Typography>
+                                    </Button>
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                );
+            default:
+                return null;
+        }
+    }
+    
     render() {
         const array = [
             {name: "phoneNumber", label: "Phone", type: "tel"},
@@ -34,42 +90,28 @@ class SignIn extends React.Component {
             {name: "postalCode", label: "Code postal", type: "number"},
             {name: "country", label: "Pays", type: "text"},
             {name: "mail", label: "e-mail", type: "mail"},
-            {name: "mailConfirm", label: "Confirmation", type: "mail"},
             {name: "password", label: "Mot de passe", type: "password"},
-            {name: "passwordConfirm", label: "Confirmation", type: "password"}
         ];
 
         const cookies = new Cookies();
         const cookie = cookies.get('userCookie') ? cookies.get('userCookie') : "";
-            return (
-                <>
+
+        return (
+            <Grid container justify='center' spacing={2}>
+                <Grid item xs={12}>
                     <Grid container justify='center' spacing={2}>
-                        <Grid item xs={12}>
-                            <Grid container justify='center' spacing={2}>
-                                <Grid item>
-                                    <LockOpenIcon/>
-                                </Grid>
-                                <Grid item>
-                                    <Typography>Connexion</Typography>
-                                </Grid>
-                            </Grid>
+                        <Grid item>
+                            <LockOpenIcon/>
+                        </Grid>
+                        <Grid item>
+                            <Typography>Deviens un Womer !</Typography>
                         </Grid>
                     </Grid>
+                </Grid>
 
+                <Grid item xs={12}>
                     <Formik 
-                        initialValues={{
-                            phoneNumber: "",
-                            username: "",
-                            birthday: "",
-                            address: "",
-                            city: "",
-                            postalCode: "",
-                            country: "",
-                            mail: "",
-                            mailConfirm: "",
-                            password: "",
-                            passwordConfirm: ""
-                        }} 
+                        initialValues={this.state} 
                         onSubmit={this.handleSubmit}
                         validationSchema={Yup.object({
                             phoneNumber: Yup.string().required("Champs requis"),
@@ -80,15 +122,28 @@ class SignIn extends React.Component {
                             postalCode: Yup.string().required("Champs requis"),
                             country: Yup.string().required("Champs requis"),
                             mail: Yup.string().required("Champs requis"),
-                            mailConfirm: Yup.string().required("Champs requis"),
                             password: Yup.string().required("Champs requis"),
-                            passwordConfirm: Yup.string().required("Champs requis")
                         })}
                     >
                         { props => <FormTextField {...props} arrayField={array}/> }
                     </Formik>
-                </>
-            );
+                </Grid>
+
+                <Grid item xs={12} container justify='center' spacing={2}>
+                    <Typography item>
+                        Déjà inscrit
+                    </Typography>
+                </Grid>
+                <Grid item xs={12} container justify='center' spacing={2}>
+                    <Button variant="contained" color="primary" href="/login">
+                        Me connecter
+                    </Button>
+                </Grid>
+
+                {this.getMessage()}
+
+            </Grid>
+        );
     }
 }
 

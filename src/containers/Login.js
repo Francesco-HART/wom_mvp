@@ -5,13 +5,11 @@ import * as Yup from "yup";
 import {Formik} from "formik";
 import Cookies from 'universal-cookie';
 
-import Typography from '@material-ui/core/Typography';
-import Grid from "@material-ui/core/Grid";
+import {Button, Grid, Typography} from "@material-ui/core";
 import LockOpenIcon from '@material-ui/icons/LockOpen';
-import {Button, Link} from "@material-ui/core";
-
 import FormTextField from "../components/form/FormTextField";
-import {logIn, disconnect} from "../actions/authentication";
+
+import {findUserByPhoneNumber, disconnect} from "../actions/authentication";
 
 /**
  * This class contain a form to allow a connexion thanks to a password and pseudo or mail given in TextField
@@ -20,20 +18,16 @@ import {logIn, disconnect} from "../actions/authentication";
 class Login extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
-            isConnected: false
-        };
     }
 
     handleSubmit = async (values) => {
-        let request = await this.props.logIn(values);
-        if (this.props.auth) {
-            
+        const query = await this.props.findUserByPhoneNumber(values["phoneNumber"]);
+        if (query != null) {
+            console.log("j'ai trouvé mon user");
         }
-    };
-
-    disconnection = async () => {
-        this.props.disconnect()
+        else {
+            console.log("je n'ai pas trouvé mon user");
+        }
     };
 
     render() {
@@ -42,24 +36,23 @@ class Login extends React.Component {
         ];
         const cookies = new Cookies();
         let cookie = cookies.get('userCookie') ? cookies.get('userCookie') : "";
-            return (
-                <>
+        return (
+            <Grid container justify='center' spacing={2}>
+                <Grid item xs={12}>
                     <Grid container justify='center' spacing={2}>
-                        <Grid item xs={12}>
-                            <Grid container justify='center' spacing={2}>
-                                <Grid item>
-                                    <LockOpenIcon/>
-                                </Grid>
-                                <Grid item>
-                                    <Typography>Connexion</Typography>
-                                </Grid>
-                            </Grid>
+                        <Grid item>
+                            <LockOpenIcon/>
+                        </Grid>
+                        <Grid item>
+                            <Typography>Connexion</Typography>
                         </Grid>
                     </Grid>
+                </Grid>
 
+                <Grid item xs={12}>
                     <Formik 
                         initialValues={{
-                            login: "",
+                            phoneNumber: "+33",
                         }} 
                         onSubmit={this.handleSubmit}
                         validationSchema={Yup.object({
@@ -68,8 +61,20 @@ class Login extends React.Component {
                     >
                         { props => <FormTextField {...props} arrayField={array}/> }
                     </Formik>
-                </>
-            );
+                </Grid>
+
+                <Grid item xs={12} container justify='center' spacing={2}>
+                    <Typography item>
+                        Pas encore inscrit ?
+                    </Typography>
+                </Grid>
+                <Grid item xs={12} container justify='center' spacing={2}>
+                    <Button variant="contained" color="primary" href="/signin">
+                        M'inscrire
+                    </Button>
+                </Grid>
+            </Grid>
+        );
     }
 }
 
@@ -78,5 +83,5 @@ const mapStateToProps = ({auth}) => {
 };
 
 export default withRouter(
-    connect( mapStateToProps, {logIn, disconnect} )(Login)
+    connect( mapStateToProps, {findUserByPhoneNumber, disconnect} )(Login)
     );
