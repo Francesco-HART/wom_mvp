@@ -15,6 +15,7 @@ function Routes(props) {
     return (
             <Switch>
                 <Route exact path="/address/:id" component={requireNoAuth(Address)}/>
+                <Route exact path="/address/:id/login" component={requireNoAuth(Login)}/>
                 <Route exact path="/new-address" component={requireNoAuth(NewAddress)}/>
                 <Route exact path="/login" component={requireNoAuth(Login)}/>
                 <Route exact path="/signin" component={requireNoAuth(Signin)}/>

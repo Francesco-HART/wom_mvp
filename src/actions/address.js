@@ -1,5 +1,6 @@
 import {db} from "../Firebase";
 import firebase from 'firebase/app';
+import { object } from "firebase-functions/lib/providers/storage";
 
 /**
  * Try to create a new address.
@@ -19,8 +20,10 @@ export async function addNewAddress(address) {
         city: address["city"],
         postalCode: address["postalCode"],
         country: address["country"],
-        offer1: address["offer1"],
-        offer2: address["offer2"],
+        offers: [
+            address["offer1"] + ":value:true",
+            address["offer2"] + ":value:true"
+        ],
         mail: address["mail"],
         password: address["password"],
         webSite: address["webSite"],
@@ -92,7 +95,25 @@ export async function findAddressByAddressName(addressName) {
         return allAddress;
     })
     .catch(e => {
-        console.log("Error occured to find the address '" + addressName + "' : " + e.message);
+        console.log("Error occured to find the address by name '" + addressName + "' : " + e.message);
+        return null;
+    });
+};
+
+export async function findAddressByDocumentId(documentId) {
+    return await db
+    .collection("address")
+    .doc(documentId)
+    .get()
+    .then(doc => {
+        if (doc.empty) {
+            console.log("Doc is empty.");
+            return null;
+        }
+        return doc.data();
+    })
+    .catch(e => {
+        console.log("Error occured to find the address by id '" + documentId + "' : " + e.message);
         return null;
     });
 };

@@ -10,7 +10,7 @@ import Typography from '@material-ui/core/Typography';
 import {Button, Link} from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import LockOpenIcon from '@material-ui/icons/LockOpen';
-import {addNewAddress, findAddressByAddressName} from '../actions/address';
+import {addNewAddress} from '../actions/address';
 
 class NewAddress extends React.Component {
     constructor(props) {
@@ -30,7 +30,8 @@ class NewAddress extends React.Component {
             password: "",
             passwordConfirm: "",
             webSite: "",
-            documentId : null
+            documentId : null,
+            status: "success"
         };
     }
 
@@ -59,33 +60,60 @@ class NewAddress extends React.Component {
         const documentId = await addNewAddress(values);
         if (documentId != undefined && documentId != null) {
             this.setState({
-                phoneNumber: "",
-                addressName: "",
-                address: "",
-                category: "",
-                city: "",
-                postalCode: "",
-                country: "",
-                offer1: "",
-                offer2: "",
-                mail: "",
-                mailConfirm: "",
-                password: "",
-                passwordConfirm: "",
-                webSite: "",
-                documentId: documentId
+                documentId: documentId,
+                status: "success"
+            });
+        }
+        else {
+            this.setState({
+                status: "error"
             });
         }
     };
 
     getDocumentId() {
-        return this.state.documentId == null ? null :
-            <div>
-                <p>Adresse créé avec l'id : {this.state.documentId}</p>
-                <p><a href="https://fr.qr-code-generator.com/" target="_blank">Générer le QRCode</a> avec l'url suivante : http://localhost:3000/address/{this.state.documentId}</p>
-                <a href={"/address/" + this.state.documentId} onClick={this.funcfunc()}>Lien</a>
-            </div>
-        ;
+        switch (this.state.status) {
+            case "success":
+                return (
+                    <Grid container spacing={2}>
+                        <Grid item xs={12}>
+                            <Grid container justify="center" spacing={2}>
+                                <Grid item spacing={2}>
+                                    <Button variant="contained" color="primary" href="https://fr.qr-code-generator.com/" target="_blank" spacing={5}>
+                                        Généree le QR Code avec l'url suivante :
+                                    </Button>
+                                    <Typography>
+                                        http://localhost:3000/address/{this.state.documentId}
+                                    </Typography>
+                                </Grid>
+                                <Grid item spacing={2}>
+                                    <Button variant="contained" color="primary" href={"/address/" + this.state.documentId} spacing={5}>
+                                        Voir ma nouvelle adresse !
+                                    </Button>
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                );
+            case "error":
+                return (
+                    <Grid container spacing={2}>
+                        <Grid item xs={12}>
+                            <Grid container justify="center" spacing={2}>
+                                <Grid item>
+                                    <Button variant="contained" color="secondary">
+                                        <Typography>
+                                            Erreur lors de la création de l'adresse !
+                                        </Typography>
+                                    </Button>
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                );
+            default:
+                return null;
+        }
     }
 
     render() {
