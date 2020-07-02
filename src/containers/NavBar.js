@@ -4,12 +4,14 @@ import {Link} from "react-router-dom";
 import Cookies from 'universal-cookie';
 
 import AppBar from '@material-ui/core/AppBar';
+
 import FaceIcon from '@material-ui/icons/Face';
 import MenuIcon from "@material-ui/icons/Menu";
 import {Brightness6} from "@material-ui/icons";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import Account from "@material-ui/icons/PersonPin";
 import Earth from "@material-ui/icons/AddLocation";
+import Home from "@material-ui/icons/Home";
 
 import {disconnect, findUserByPhoneNumber} from "../actions/authentication";
 
@@ -136,6 +138,17 @@ class NavBar extends React.Component {
                             </Grid>
 
                             <Grid item>
+                                <Tooltip 
+                                    title="Home"
+                                    aria-label="home"
+                                    style={{marginRight: 10}}
+                                    className={classes.appBarIcon}
+                                >
+                                    <IconButton to="/" component={Link}>
+                                        <Home/>
+                                    </IconButton>
+                                </Tooltip>
+
                                 <Tooltip
                                     title="Couleur"
                                     aria-label="couleur"
