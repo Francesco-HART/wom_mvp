@@ -83,7 +83,7 @@ class NewAddress extends React.Component {
             <div>
                 <p>Adresse créé avec l'id : {this.state.documentId}</p>
                 <p><a href="https://fr.qr-code-generator.com/" target="_blank">Générer le QRCode</a> avec l'url suivante : http://localhost:3000/address/{this.state.documentId}</p>
-                <p><a href='/address/${this.state.documentId}' target="_blank">Voir mon adresse</a></p>
+                <a href={"/address/" + this.state.documentId} onClick={this.funcfunc()}>Lien</a>
             </div>
         ;
     }
