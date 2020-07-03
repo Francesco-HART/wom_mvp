@@ -4,7 +4,7 @@ import {withRouter} from "react-router-dom";
 import * as Yup from "yup";
 import {Formik} from "formik";
 import Cookies from 'universal-cookie';
-import {addNewUser} from "../actions/authentication";
+import {addNewUser, isUserAlreadyExists} from "../actions/authentication";
 import FormTextField from "../components/form/FormTextField";
 import {Button, Grid, Typography} from "@material-ui/core";
 import LockOpenIcon from '@material-ui/icons/LockOpen';
@@ -27,15 +27,18 @@ class SignIn extends React.Component {
     }
 
     handleSubmit = async (values) => {
-        console.log("handle");
-        console.log(values);
+        if (await isUserAlreadyExists(values["phoneNumber"])) {
+            this.setState({
+                ...values,
+                status: "alreadyExists"
+            });
+            return;
+        }
         const isCreated = await addNewUser(values) ? "success" : "error";
-        console.log("isCreated");
-        console.log(isCreated);
         this.setState({
             ...values,
             status: isCreated
-        })
+        });
     };
 
     getMessage() {
@@ -48,11 +51,6 @@ class SignIn extends React.Component {
                                 <Grid item spacing={2}>
                                     <Button variant="contained" color="primary">
                                         Nous sommes heureux de te compte parmis nos membres !
-                                    </Button>
-                                </Grid>
-                                <Grid item spacing={2}>
-                                    <Button variant="contained" color="primary" href={"/address/" + this.state.documentId} spacing={5}>
-                                        Voir ma nouvelle adresse !
                                     </Button>
                                 </Grid>
                             </Grid>
@@ -68,6 +66,22 @@ class SignIn extends React.Component {
                                     <Button variant="contained" color="secondary">
                                         <Typography>
                                             Erreur lors de la création de l'utilisateur !
+                                        </Typography>
+                                    </Button>
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                );
+            case "alreadyExists":
+                return (
+                    <Grid container spacing={2}>
+                        <Grid item xs={12}>
+                            <Grid container justify="center" spacing={2}>
+                                <Grid item>
+                                    <Button variant="contained" color="secondary">
+                                        <Typography>
+                                            Ce Womer existe déjà !
                                         </Typography>
                                     </Button>
                                 </Grid>
@@ -152,5 +166,5 @@ const mapStateToProps = ({auth}) => {
 };
 
 export default withRouter(
-    connect(mapStateToProps, {})(SignIn)
+    connect(mapStateToProps, {addNewUser, isUserAlreadyExists})(SignIn)
     );
