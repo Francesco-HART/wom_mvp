@@ -28,7 +28,7 @@ const Logo = () => {
             <Paper className={classes.box}>
                 <Grid container direction="row" justify="center" alignItems="center" item>
                     <LocalDining style={{margin: 'auto'}}/>
-                        <Typography variant="body1" className={classes.title}>Cook 'n Save</Typography>
+                        <Typography variant="body1" className={classes.title}>Wom Paris</Typography>
                     <LocalDining/>
                 </Grid>
             </Paper>

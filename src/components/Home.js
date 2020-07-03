@@ -1,0 +1,30 @@
+import React from 'react';
+import {withRouter} from "react-router-dom";
+import {connect} from "react-redux";
+import { Grid, Button, Typography } from '@material-ui/core';
+
+class Home extends React.Component {
+
+    constructor(props) {
+        super(props);
+    }
+
+    render() {
+        return (
+            <Grid container spacing={2}>
+                <Grid item xs={12}>
+                    <Typography variant="h1">
+                        Bienvenue sur Wom
+                    </Typography>
+                    <Button variant="contained" color="primary" href="http://womparis.com" target="_blank">
+                        Visitez notre site vitrine !
+                    </Button>
+                </Grid>
+            </Grid>
+        );
+    }
+}
+
+export default withRouter(
+    connect()(Home)
+    );

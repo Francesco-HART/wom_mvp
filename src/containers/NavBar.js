@@ -1,16 +1,19 @@
 import React from 'react';
 import {connect} from "react-redux";
 import {Link} from "react-router-dom";
-import {disconnect, logIn} from "../actions/authentication";
-import {withStyles} from "@material-ui/core/styles";
 import Cookies from 'universal-cookie';
+
 import AppBar from '@material-ui/core/AppBar';
+
 import FaceIcon from '@material-ui/icons/Face';
 import MenuIcon from "@material-ui/icons/Menu";
 import {Brightness6} from "@material-ui/icons";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import Account from "@material-ui/icons/PersonPin";
+import Earth from "@material-ui/icons/AddLocation";
+import Home from "@material-ui/icons/Home";
 
+import {disconnect, findUserByPhoneNumber} from "../actions/authentication";
 
 import {
     CssBaseline,
@@ -26,6 +29,7 @@ import {
     Toolbar,
     Divider
 } from "@material-ui/core";
+import {withStyles} from "@material-ui/core/styles";
 
 
 const drawerWidth = 240;
@@ -115,7 +119,6 @@ class NavBar extends React.Component {
         const {classes, theme, container} = this.props;
         const {mobileOpen/*, open_config_menu*/} = this.state;
 
-
         return (
             <div className={classes.root}>
                 <CssBaseline/>
@@ -135,6 +138,17 @@ class NavBar extends React.Component {
                             </Grid>
 
                             <Grid item>
+                                <Tooltip 
+                                    title="Home"
+                                    aria-label="home"
+                                    style={{marginRight: 10}}
+                                    className={classes.appBarIcon}
+                                >
+                                    <IconButton to="/" component={Link}>
+                                        <Home/>
+                                    </IconButton>
+                                </Tooltip>
+
                                 <Tooltip
                                     title="Couleur"
                                     aria-label="couleur"
@@ -147,16 +161,30 @@ class NavBar extends React.Component {
                                     </IconButton>
                                 </Tooltip>
 
-                                <Tooltip style={{marginRight: 10}}
-                                         className={classes.appBarIcon}
-                                         title={this.props.auth ? "Déconnexion" : "Connexion"}
-                                         aria-label={this.props.auth ? "deconnexion" : "connexion"}>
+                                <Tooltip
+                                    title="Ajouter une adresse"
+                                    aria-label="ajouter une adresse"
+                                    style={{marginRight: 10}}
+                                    className={classes.appBarIcon}
+                                >
+                                    <IconButton to="/new-address" component={Link}>
+                                        <Earth/>
+                                    </IconButton>
+                                </Tooltip>
+
+
+                                <Tooltip 
+                                    title={this.props.auth ? "Déconnexion" : "Connexion"}
+                                    aria-label={this.props.auth ? "deconnexion" : "connexion"}
+                                    style={{marginRight: 10}}
+                                    className={classes.appBarIcon}
+                                >
                                     {this.props.auth ?
                                         <IconButton onClick={async () => await this.props.disconnect()}>
                                             <ExitToAppIcon/>
                                         </IconButton>
                                         :
-                                        <IconButton to="/connexion" component={Link}>
+                                        <IconButton to="/login" component={Link}>
                                             <Account/>
                                         </IconButton>
                                     }
@@ -205,7 +233,4 @@ const mapStateToProps = ({auth}) => {
 };
 
 
-export default connect(mapStateToProps, {
-    logIn,
-    disconnect,
-})(withStyles(styles, {withTheme: true})(NavBar));
+export default connect(mapStateToProps, { findUserByPhoneNumber, disconnect })(withStyles(styles, {withTheme: true})(NavBar));

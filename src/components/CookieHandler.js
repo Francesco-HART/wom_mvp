@@ -1,9 +1,8 @@
 import React from 'react';
 import {connect} from "react-redux";
 import Cookies from 'universal-cookie';
-import {logIn} from "../actions/authentication";
+import {findUserByPhoneNumber} from "../actions/authentication";
 import LinearProgress from "@material-ui/core/LinearProgress";
-
 
 /**
  * This function is used to check if the user have already been connected by checking cookies.
@@ -20,7 +19,7 @@ class CookieHandler extends React.Component {
         let cookie = cookies.get('userCookie') ? cookies.get('userCookie') : "";
         let cookie2 = cookies.get('userPassCookie') ? cookies.get('userPassCookie') :"";
         if (cookie !=="" && cookie2!==""){
-            await this.props.logIn({login:cookie, password:cookie2});
+            await this.props.findUserByPhoneNumber({login:cookie, password:cookie2});
         }
         if (this._isMounted) {
             this.setState({isLoading: false});
@@ -33,14 +32,8 @@ class CookieHandler extends React.Component {
     };
 
     render(){
-        if (this.state.isLoading) {return (<LinearProgress/>)}
-        return null;
+        return this.state.isLoading ? <LinearProgress/> : null;
     }
 }
 
-
-
-export default connect(
-    null,
-    {logIn}
-)(CookieHandler)
+export default connect(null, {findUserByPhoneNumber})(CookieHandler)
