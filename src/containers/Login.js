@@ -16,9 +16,6 @@ import {findUserByPhoneNumber, disconnect} from "../actions/authentication";
  * the action 'logIn' is used to get information about user if we found it in database
  */
 class Login extends React.Component {
-    constructor(props) {
-        super(props);
-    }
 
     handleSubmit = async (values) => {
         const query = await this.props.findUserByPhoneNumber(values["phoneNumber"]);

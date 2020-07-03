@@ -12,8 +12,10 @@ import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import Account from "@material-ui/icons/PersonPin";
 import Earth from "@material-ui/icons/AddLocation";
 import Home from "@material-ui/icons/Home";
+import Reset from '@material-ui/icons/TrackChanges';
 
 import {disconnect, findUserByPhoneNumber} from "../actions/authentication";
+import {resetOffers} from '../actions/address';
 
 import {
     CssBaseline,
@@ -21,15 +23,15 @@ import {
     Hidden,
     Grid,
     IconButton,
+    Icon,
     Tooltip,
-    List,
     ListItem,
     ListItemIcon,
     ListItemText,
     Toolbar,
-    Divider
 } from "@material-ui/core";
 import {withStyles} from "@material-ui/core/styles";
+
 
 
 const drawerWidth = 240;
@@ -115,6 +117,11 @@ class NavBar extends React.Component {
         cookies.set("colorTheme", this.props.themeColor, {path: '/'});
     };
 
+    resetAllOffers = async () => {
+        console.log("hello");
+        await resetOffers();
+    }
+
     render() {
         const {classes, theme, container} = this.props;
         const {mobileOpen/*, open_config_menu*/} = this.state;
@@ -162,6 +169,17 @@ class NavBar extends React.Component {
                                 </Tooltip>
 
                                 <Tooltip
+                                    title="Réinitialisé les offres"
+                                    aria-label="réinitialisé les offres"
+                                    style={{marginRight: 10}}
+                                    className={classes.appBarIcon}
+                                >
+                                    <IconButton onClick={this.resetAllOffers}>
+                                        <Reset />
+                                    </IconButton>
+                                </Tooltip>
+
+                                <Tooltip
                                     title="Ajouter une adresse"
                                     aria-label="ajouter une adresse"
                                     style={{marginRight: 10}}
@@ -171,7 +189,6 @@ class NavBar extends React.Component {
                                         <Earth/>
                                     </IconButton>
                                 </Tooltip>
-
 
                                 <Tooltip 
                                     title={this.props.auth ? "Déconnexion" : "Connexion"}

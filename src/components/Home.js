@@ -4,11 +4,7 @@ import {connect} from "react-redux";
 import { Grid, Button, Typography } from '@material-ui/core';
 
 class Home extends React.Component {
-
-    constructor(props) {
-        super(props);
-    }
-
+    
     render() {
         return (
             <Grid container spacing={2}>

@@ -4,6 +4,7 @@ import Cookies from 'universal-cookie';
 import firebase from 'firebase/app';
 
 export async function addNewUser(user) {
+    console.log("creating a womer");
     return await db
     .collection("womers")
     .doc(user["phoneNumber"])
@@ -20,15 +21,39 @@ export async function addNewUser(user) {
         isPhoneNumberActive: false,
         isMailActive: false,
         isAdmin: false,
+        isAddress: false,
         registerDate: firebase.firestore.FieldValue.serverTimestamp()
     })
     .then((doc) => {
-        console.log("New user created with success");
+        // dispatch({type: SHOW_SNACKBAR, payload: {txt: user["username"] + ", votre compte a bien été créé !", variant: "success"}});
+        console.log(user["username"] + ", votre compte a bien été créé !");
         return true;
     })
     .catch((e) => {
-        console.log("Error occured to wrote a new user : " + e.message);
+        // dispatch({type: SHOW_SNACKBAR, payload: {txt: "Impossible de créer votre compte ! " + e.message, variant: "error"}});
+        console.log("Impossible de créer votre compte ! " + e.message);
         return false;
+    });
+};
+
+export async function isUserAlreadyExists(phoneNumber) {
+    console.log("search if exist a womer : " + phoneNumber);
+    return await db
+    .collection("womers")
+    .doc(phoneNumber)
+    .get()
+    .then(doc => {
+        console.log("doc.data() : ");
+        console.log(doc.data());
+        if (doc.data() === undefined) {
+            return false;
+        }
+        return true;
+    })
+    .catch(e => {
+        // dispatch({type: SHOW_SNACKBAR, payload: {txt: "Erreur lors de la séquence d'existance !", variant: "error"}});
+        console.log("Erreur lors de la séquence d'existance !");
+        return null;
     });
 };
 

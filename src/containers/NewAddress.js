@@ -5,18 +5,17 @@ import * as Yup from "yup";
 import {Formik} from "formik";
 import Cookies from 'universal-cookie';
 import FormTextField from "../components/form/FormTextField";
-import Typography from '@material-ui/core/Typography';
-import {Button} from "@material-ui/core";
-import Grid from "@material-ui/core/Grid";
-import {addNewAddress} from '../actions/address';
+import {Typography, Button, Grid} from '@material-ui/core';
 import Earth from "@material-ui/icons/AddLocation";
+
+import {addNewAddress, isAddressAlreadyExists} from '../actions/address';
 
 class NewAddress extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             phoneNumber: "",
-            addressName: "",
+            name: "",
             address: "",
             category: "",
             city: "",
@@ -37,9 +36,16 @@ class NewAddress extends React.Component {
         // check si c'est bon
         // [...]
         /// end
-
+        if (await isAddressAlreadyExists(values["name"], values["city"], values["postalCode"], values["country"])) {
+            this.setState({
+                ...values,
+                status: "alreadyExists"
+            });
+            return;
+        }
+        console.log("send to create");
         const documentId = await addNewAddress(values);
-        if (documentId != undefined && documentId != null) {
+        if (documentId !== undefined && documentId !== null) {
             this.setState({
                 ...values,
                 documentId: documentId,
@@ -94,6 +100,22 @@ class NewAddress extends React.Component {
                         </Grid>
                     </Grid>
                 );
+                case "alreadyExists":
+                    return (
+                        <Grid container spacing={2}>
+                            <Grid item xs={12}>
+                                <Grid container justify="center" spacing={2}>
+                                    <Grid item>
+                                        <Button variant="contained" color="secondary">
+                                            <Typography>
+                                                Cette adresse existe déjà !
+                                            </Typography>
+                                        </Button>
+                                    </Grid>
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                    );
             default:
                 return null;
         }
@@ -102,7 +124,7 @@ class NewAddress extends React.Component {
     render() {
         const array = [
             {name: "phoneNumber", label: "Phone", type: "tel"},
-            {name: "addressName", label: "Nom", type: "text"},
+            {name: "name", label: "Nom", type: "text"},
             {name: "address", label: "Adresse", type: "text"},
             {name: "category", label: "Categorie", type: "text"},
             {name: "city", label: "Ville", type: "text"},
@@ -137,7 +159,7 @@ class NewAddress extends React.Component {
                         onSubmit={this.handleSubmit}
                         validationSchema={Yup.object({
                             phoneNumber: Yup.string().required("Champs requis"),
-                            addressName: Yup.string().required("Champs requis"),
+                            name: Yup.string().required("Champs requis"),
                             address: Yup.string().required("Champs requis"),
                             category: Yup.string().required("Champs requis"),
                             city: Yup.string().required("Champs requis"),
