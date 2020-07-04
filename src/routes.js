@@ -9,15 +9,16 @@ import Address from './containers/Address';
 import NewAddress from './containers/NewAddress';
 import Login from './containers/Login'
 import Signin from './containers/Signin'
+import Instagram from './containers/Instagram';
 
 function Routes(props) {
     return (
             <Switch>
                 <Route exact path="/address/:id" component={requireNoAuth(Address)}/>
-                <Route exact path="/address/:id/login" component={requireNoAuth(Login)}/>
-                <Route exact path="/new-address" component={requireNoAuth(NewAddress)}/>
+                <Route exact path="/new-address" component={requireNoAuth(NewAddress)}/> // requireAuth
                 <Route exact path="/login" component={requireNoAuth(Login)}/>
                 <Route exact path="/signin" component={requireNoAuth(Signin)}/>
+                <Route exact path="/instagram" component={requireNoAuth(Instagram)}/>    // requireAuth
                 <Route component={Home}/>
             </Switch>
         );

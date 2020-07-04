@@ -147,7 +147,7 @@ export async function resetOffers() {
         }
 
         allAddress.forEach( async (address) => {
-            if (await resetOffersOfOneAddress(address)){
+            if (await resetOffersOfOneAddress(address.documentId, address.offers)){
                 console.log("Les offres de " + address.name + " ont été réinitialisé !");
             }
             else {
@@ -156,16 +156,30 @@ export async function resetOffers() {
         });
 }
 
-async function resetOffersOfOneAddress(address) {
+async function resetOffersOfOneAddress(addressId, addressOffers) {
     return await db
         .collection("address")
-        .doc(address.documentId)
+        .doc(addressId)
         .update({
-            offers: address.offers.map(offer => offer.split(":value:")[0] + ":value:true")
+            offers: addressOffers.map(offer => offer.split(":value:")[0] + ":value:true")
         })
         .then(() => {return true;})
         .catch((e) => { 
-            console.log("Error to reset offer of an address: " + e.message);
+            console.log("Error to reset an offer of an address: " + e.message);
             return false;
         });
+}
+
+export async function desableAnOffer(addressId, addressOffers, selectedOffer){
+    return await db
+        .collection("address")
+        .document(addressId)
+        .update({
+            offer: addressOffers.map(offer => offer.split(":value:")[0] + (offer.split(":value:")[0] === selectedOffer ? ":value:false" : offer.split(":value:")[1]))
+        })
+        .then(() => {return true;})
+        .catch(e => {
+            console.log("Error to desable an offer of an address: " + e.message);
+            return false;
+        })
 }
