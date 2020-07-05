@@ -1,13 +1,10 @@
 import React from 'react';
 import {connect} from "react-redux";
 import {withRouter} from "react-router-dom";
-import * as Yup from "yup";
-import {Formik} from "formik";
 import Cookies from 'universal-cookie';
-
+import FormPhoneNumber from "../components/form/FormPhoneNumber";
 import {Button, Grid, Typography} from "@material-ui/core";
 import LockOpenIcon from '@material-ui/icons/LockOpen';
-import FormTextField from "../components/form/FormTextField";
 
 import {findUserByPhoneNumber, disconnect} from "../actions/authentication";
 
@@ -21,8 +18,7 @@ class Login extends React.Component {
         const query = await this.props.findUserByPhoneNumber(values["phoneNumber"]);
         if (query != null) {
             console.log("j'ai trouvé mon user");
-        }
-        else {
+        } else {
             console.log("je n'ai pas trouvé mon user");
         }
     };
@@ -45,19 +41,8 @@ class Login extends React.Component {
                         </Grid>
                     </Grid>
                 </Grid>
-
                 <Grid item xs={12}>
-                    <Formik 
-                        initialValues={{
-                            phoneNumber: "+33",
-                        }} 
-                        onSubmit={this.handleSubmit}
-                        validationSchema={Yup.object({
-                            phoneNumber: Yup.string().required("Champs requis")
-                        })}
-                    >
-                        { props => <FormTextField {...props} arrayField={array}/> }
-                    </Formik>
+                    <FormPhoneNumber  arrayField={array}/>
                 </Grid>
 
                 <Grid item xs={12} container justify='center' spacing={2}>
@@ -80,5 +65,5 @@ const mapStateToProps = ({auth}) => {
 };
 
 export default withRouter(
-    connect( mapStateToProps, {findUserByPhoneNumber, disconnect} )(Login)
-    );
+    connect(mapStateToProps, {findUserByPhoneNumber, disconnect})(Login)
+);

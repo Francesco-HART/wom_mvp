@@ -68,6 +68,7 @@ export const findUserByPhoneNumber = (phoneNumber) => async dispatch => {
             return null;
         }
         dispatch({type: SHOW_SNACKBAR, payload: {txt: "Ravie de vous revoir " + doc.data().username + " !", variant: "success"}});
+        dispatch({type: AUTH_USER, payload: doc.data()});
         return doc.data();
     })
     .catch(e => {
