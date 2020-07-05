@@ -1,31 +1,43 @@
 import React from 'react'
 import PhoneInput from 'react-phone-input-2'
-import {isValidPhoneNumber} from 'react-phone-number-input'
 import 'react-phone-input-2/lib/style.css'
 import {Button, Grid} from "@material-ui/core";
 import es from 'react-phone-input-2/lang/es.json'
 import startsWith from 'lodash.startswith';
 import validator from 'validator'
+import {disconnect, findUserByPhoneNumber, isUserAlreadyExists} from "../actions/authentication";
+import {withRouter} from "react-router-dom";
+import {connect} from "react-redux";
 
-export default class FormPhoneNumber extends React.Component {
+
+class FormPhoneNumber extends React.Component {
     state = {
         phone: '',
-        canSubmit: false
+        isValidPhoneNumber: false
     }
 
     handleOnChange = (value) => {
-        this.setState({phone: value})
         const isValidPhoneNumber = validator.isMobilePhone(value)
-
-        console.log(isValidPhoneNumber)
         console.log(value)
+        this.setState({phone: value, isValidPhoneNumber})
+
     }
 
-    verifIsValid = (canSubmit) => {
-        this.setState({canSubmit})
+    verifIsValid = async () => {
+
+        if (this.state.isValidPhoneNumber) {
+            const user = await this.props.findUserByPhoneNumber(this.state.phone)
+            if (!user) {
+                this.props.history.push('/signin')
+            } else {
+                const addressId = this.props.match.params.id
+                this.props.history.push(`/gratuity/${this.props.match.params.id}`)
+            }
+        }
     }
 
     render() {
+        const {isValidPhoneNumber} = this.state
         return (
             <Grid container justify="center" spacing={2}>
                 <Grid item xs={12} md={2}>
@@ -43,10 +55,10 @@ export default class FormPhoneNumber extends React.Component {
                                 value={this.state.phone}
                                 onChange={this.handleOnChange}
                                 localization={es}
-                                isValid={ (inputNumber, country, countries) => {
+                                isValid={(inputNumber, country, countries) => {
                                     return countries.some((country) => {
-                                    return startsWith(inputNumber, country.dialCode) || startsWith(country.dialCode, inputNumber);
-                                });
+                                        return startsWith(inputNumber, country.dialCode) || startsWith(country.dialCode, inputNumber);
+                                    });
                                 }}
                             />
                         </Grid>
@@ -57,7 +69,8 @@ export default class FormPhoneNumber extends React.Component {
                         container
                         justify='center'>
                         <Grid item>
-                            <Button type={"submit"}>Valider</Button>
+                            {this.props.randomConfirm && <Button disabled={!isValidPhoneNumber} type={"button"}
+                                                                 onClick={this.verifIsValid}>Valider</Button>}
                         </Grid>
                     </Grid>
                 </Grid>
@@ -65,3 +78,8 @@ export default class FormPhoneNumber extends React.Component {
         )
     }
 }
+
+
+export default withRouter(
+    connect(null, {findUserByPhoneNumber, disconnect})(FormPhoneNumber)
+);

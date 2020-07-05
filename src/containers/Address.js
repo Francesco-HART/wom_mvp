@@ -2,7 +2,7 @@ import React from 'react';
 import {withRouter} from "react-router-dom";
 import {connect} from "react-redux";
 import {findAddressByDocumentId} from '../actions/address';
-import { Grid, Button, Typography, CircularProgress } from '@material-ui/core';
+import {Grid, Button, Typography, CircularProgress} from '@material-ui/core';
 
 class Address extends React.Component {
 
@@ -20,7 +20,7 @@ class Address extends React.Component {
         };
         this.offers = [];
     }
-    
+
     async loadAddress() {
         const query = await findAddressByDocumentId(this.props.match.params.id);
         this.setState({
@@ -30,7 +30,7 @@ class Address extends React.Component {
             withFriends: null,                      // a foutre dans redux
             idNotAssociate: query == null
         });
-        
+
         // faire une action pour envoyer dans redux : l'address, la selectedOffer à null, la withFriend à null
         // ces 5 champs ne sont pas à perdre c'est pourquoi il faut les mettre dans redux
         // si notConnected -> on montre les offres et le btn connexion, 
@@ -95,7 +95,7 @@ class Address extends React.Component {
             return (
                 <Grid container>
                     <Grid item height="100%" justify="center">
-                        <CircularProgress />
+                        <CircularProgress/>
                     </Grid>
                 </Grid>
             );
@@ -106,12 +106,12 @@ class Address extends React.Component {
             return (
                 <Grid container>
                     <Grid item height="100%" justify="center">
-                        <CircularProgress />
+                        <CircularProgress/>
                     </Grid>
                 </Grid>
             );
         }
-        
+
         // si l'adresse entrée n'existe pas
         if (this.state.idNotAssociate) {
             return (
@@ -173,13 +173,6 @@ class Address extends React.Component {
                         </Grid>
                     </Grid>
                     <Grid item xs={12}>
-                        <Grid container >
-                            <Button variant="contained" color="primary" /*href="/login"*/ onClick={() => this.setState({isConnected: true})} style={{height: 50}}>
-                                Je me connecte pour bénéficier d'une offre !
-                            </Button>
-                        </Grid>
-                    </Grid>
-                    <Grid item xs={12}>
                         <Grid container>
                             <Button variant="contained" color="secondary" style={{height: 50}} onClick={this.cancel}>
                                 Annuler
@@ -205,8 +198,9 @@ class Address extends React.Component {
                     <Grid item xs={12}>
                         <Grid container spacing={5}>
                             {this.offers.map((value, id) => (
-                                <Grid key={id} item >
-                                    <Button variant="contained" color="primary" style={{ height: 50 }} onClick={() => this.selectionOffer(id)}>
+                                <Grid key={id} item>
+                                    <Button variant="contained" color="primary" style={{height: 50}}
+                                            onClick={() => this.selectionOffer(id)}>
                                         {value}
                                     </Button>
                                 </Grid>
@@ -215,8 +209,8 @@ class Address extends React.Component {
                     </Grid>
 
                     <Grid item xs={12}>
-                        <Grid container >
-                            <Button variant="contained" color="secondary" style={{ height: 50 }} onClick={this.cancel}>
+                        <Grid container>
+                            <Button variant="contained" color="secondary" style={{height: 50}} onClick={this.cancel}>
                                 Annuler
                             </Button>
                         </Grid>
@@ -236,7 +230,7 @@ class Address extends React.Component {
                         <Typography variant="h5">
                             Offre choisi :
                         </Typography>
-                        <Button variant="contained" style={{ height: 50 }}>
+                        <Button variant="contained" style={{height: 50}}>
                             {this.state.selectedOffer}
                         </Button>
                     </Grid>
@@ -247,12 +241,14 @@ class Address extends React.Component {
                         </Typography>
                         <Grid item container spacing={5}>
                             <Grid item>
-                                <Button variant="contained" color="primary" style={{ height: 50 }} onClick={() => this.selectionWithFriends("Seul")}>
+                                <Button variant="contained" color="primary" style={{height: 50}}
+                                        onClick={() => this.selectionWithFriends("Seul")}>
                                     Seul
                                 </Button>
                             </Grid>
                             <Grid item>
-                                <Button variant="contained" color="primary" style={{ height: 50 }} onClick={() => this.selectionWithFriends("Avec mes amis")}>
+                                <Button variant="contained" color="primary" style={{height: 50}}
+                                        onClick={() => this.selectionWithFriends("Avec mes amis")}>
                                     Avec mes amis
                                 </Button>
                             </Grid>
@@ -260,13 +256,13 @@ class Address extends React.Component {
                     </Grid>
 
                     <Grid item xs={12}>
-                        <Button variant="contained" style={{ height: 50 }} onClick={this.resetSelectedOffer}>
+                        <Button variant="contained" style={{height: 50}} onClick={this.resetSelectedOffer}>
                             Changer d'offre
                         </Button>
                     </Grid>
-                    
-                    <Grid item xs={12} >
-                        <Button variant="contained" color="secondary" style={{ height: 50 }} onClick={this.cancel}>
+
+                    <Grid item xs={12}>
+                        <Button variant="contained" color="secondary" style={{height: 50}} onClick={this.cancel}>
                             Annuler
                         </Button>
                     </Grid>
@@ -280,7 +276,8 @@ class Address extends React.Component {
             return (
                 <Grid item xs={12}>
                     <Grid container>
-                        <Button variant="contained" color="primary" onClick={() => this.setState({isConnectedWithInsta: true})} style={{height: 50}} >
+                        <Button variant="contained" color="primary"
+                                onClick={() => this.setState({isConnectedWithInsta: true})} style={{height: 50}}>
                             Je me connecte à instagram
                         </Button>
                     </Grid>
@@ -299,7 +296,7 @@ class Address extends React.Component {
                         <Typography variant="h5">
                             Offre choisi :
                         </Typography>
-                        <Button variant="contained" style={{ height: 50 }}>
+                        <Button variant="contained" style={{height: 50}}>
                             {this.state.selectedOffer}
                         </Button>
                     </Grid>
@@ -308,19 +305,19 @@ class Address extends React.Component {
                         <Typography variant="h5">
                             Je suis :
                         </Typography>
-                        <Button variant="contained" style={{ height: 50 }}>
+                        <Button variant="contained" style={{height: 50}}>
                             {this.state.withFriends}
                         </Button>
                     </Grid>
 
                     <Grid item container spacing={5}>
                         <Grid item>
-                            <Button variant="contained" style={{ height: 50 }} onClick={this.resetSelectedOffer}>
+                            <Button variant="contained" style={{height: 50}} onClick={this.resetSelectedOffer}>
                                 Changer d'offre
                             </Button>
                         </Grid>
                         <Grid item>
-                            <Button variant="contained" style={{ height: 50 }} onClick={this.resetWithFriends}>
+                            <Button variant="contained" style={{height: 50}} onClick={this.resetWithFriends}>
                                 Je ne suis pas {this.state.withFriends}
                             </Button>
                         </Grid>
@@ -328,18 +325,18 @@ class Address extends React.Component {
 
                     <Grid item container spacing={5}>
                         <Grid item>
-                            <Button variant="contained" color="primary" style={{ height: 50 }} onClick={this.validation}>
+                            <Button variant="contained" color="primary" style={{height: 50}} onClick={this.validation}>
                                 Valider
                             </Button>
                         </Grid>
                         <Grid item>
-                            <Button variant="contained" color="secondary" style={{ height: 50 }} onClick={this.cancel}>
+                            <Button variant="contained" color="secondary" style={{height: 50}} onClick={this.cancel}>
                                 Annuler
                             </Button>
                         </Grid>
                     </Grid>
                 </Grid>
-            ); 
+            );
         }
 
         return (
@@ -351,7 +348,7 @@ class Address extends React.Component {
                     <Typography variant="h5">
                         Offre choisi :
                     </Typography>
-                    <Button variant="contained" style={{ height: 50 }}>
+                    <Button variant="contained" style={{height: 50}}>
                         {this.state.selectedOffer}
                     </Button>
                 </Grid>
@@ -360,7 +357,7 @@ class Address extends React.Component {
                     <Typography variant="h5">
                         Je suis :
                     </Typography>
-                    <Button variant="contained" style={{ height: 50 }}>
+                    <Button variant="contained" style={{height: 50}}>
                         {this.state.withFriends}
                     </Button>
                 </Grid>
@@ -378,7 +375,7 @@ class Address extends React.Component {
                 </Grid>
 
                 <Grid item spacing={5} justify="center">
-                    <CircularProgress />
+                    <CircularProgress/>
                 </Grid>
             </Grid>
         );
@@ -386,10 +383,10 @@ class Address extends React.Component {
 }
 
 // const mapStateToProps = ({auth}) => {
-    //     return {auth}
-    // };
-    
-    export default withRouter(
-        connect(/*mapStateToProps*/)(Address)
-        );
+//     return {auth}
+// };
+
+export default withRouter(
+    connect(/*mapStateToProps*/)(Address)
+);
         

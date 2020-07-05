@@ -13,7 +13,7 @@ class SignIn extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            phoneNumber: "+33",
+            phoneNumber: "33",
             username: "",
             birthday: "",
             address: "",

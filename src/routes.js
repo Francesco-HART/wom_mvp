@@ -10,18 +10,19 @@ import NewAddress from './containers/NewAddress';
 import Login from './containers/Login'
 import Signin from './containers/Signin'
 import Instagram from './containers/Instagram';
+import PhoneValidation from "./containers/PhoneValidation";
 
 function Routes(props) {
     return (
-            <Switch>
-                <Route exact path="/address/:id" component={requireNoAuth(Address)}/>
-                <Route exact path="/new-address" component={requireNoAuth(NewAddress)}/> // requireAuth
-                <Route exact path="/login" component={requireNoAuth(Login)}/>
-                <Route exact path="/signin" component={requireNoAuth(Signin)}/>
-                <Route exact path="/instagram" component={requireNoAuth(Instagram)}/>    // requireAuth
-                <Route component={Home}/>
-            </Switch>
-        );
+        <Switch>
+            <Route exact path="/address/:id" component={requireAuth(Address)}/>
+            <Route exact path="/new-address" component={requireAuth(NewAddress)}/> // requireAuth
+            <Route exact path="/login" component={requireNoAuth(PhoneValidation)}/>
+            <Route exact path="/signin" component={requireNoAuth(Signin)}/>
+            <Route exact path="/instagram" component={requireAuth(Instagram)}/> // requireAuth
+            <Route component={Home}/>
+        </Switch>
+    );
 }
 
 const mapStateToProps = ({auth}) => {
@@ -30,4 +31,4 @@ const mapStateToProps = ({auth}) => {
 
 export default withRouter(
     connect(mapStateToProps, {})(withRouter(Routes))
-    );
+);

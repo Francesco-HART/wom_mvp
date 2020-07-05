@@ -33,7 +33,6 @@ import {
 import {withStyles} from "@material-ui/core/styles";
 
 
-
 const drawerWidth = 240;
 
 const styles = (theme) => {
@@ -145,7 +144,7 @@ class NavBar extends React.Component {
                             </Grid>
 
                             <Grid item>
-                                <Tooltip 
+                                <Tooltip
                                     title="Home"
                                     aria-label="home"
                                     style={{marginRight: 10}}
@@ -168,6 +167,7 @@ class NavBar extends React.Component {
                                     </IconButton>
                                 </Tooltip>
 
+                                {this.props.auth &&
                                 <Tooltip
                                     title="Réinitialisé les offres"
                                     aria-label="réinitialisé les offres"
@@ -175,22 +175,24 @@ class NavBar extends React.Component {
                                     className={classes.appBarIcon}
                                 >
                                     <IconButton onClick={this.resetAllOffers}>
-                                        <Reset />
+                                        <Reset/>
                                     </IconButton>
-                                </Tooltip>
+                                </Tooltip>}
 
+                                {this.props.auth &&
                                 <Tooltip
                                     title="Ajouter une adresse"
                                     aria-label="ajouter une adresse"
                                     style={{marginRight: 10}}
                                     className={classes.appBarIcon}
                                 >
+
                                     <IconButton to="/new-address" component={Link}>
                                         <Earth/>
                                     </IconButton>
-                                </Tooltip>
+                                </Tooltip>}
 
-                                <Tooltip 
+                                <Tooltip
                                     title={this.props.auth ? "Déconnexion" : "Connexion"}
                                     aria-label={this.props.auth ? "deconnexion" : "connexion"}
                                     style={{marginRight: 10}}
@@ -250,4 +252,7 @@ const mapStateToProps = ({auth}) => {
 };
 
 
-export default connect(mapStateToProps, { findUserByPhoneNumber, disconnect })(withStyles(styles, {withTheme: true})(NavBar));
+export default connect(mapStateToProps, {
+    findUserByPhoneNumber,
+    disconnect
+})(withStyles(styles, {withTheme: true})(NavBar));
