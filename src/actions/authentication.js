@@ -7,7 +7,7 @@ export const addNewUser = async (user) => {
     console.log("creating a womer");
     return await db
         .collection("womers")
-        .doc(user["phoneNumber"])
+        .doc()
         .set({
             phoneNumber: user["phoneNumber"],
             username: user["username"],
@@ -38,23 +38,20 @@ export const addNewUser = async (user) => {
 };
 
 export const isUserAlreadyExists = (phoneNumber) => async dispatch => {
-    console.log("search if exist a womer : " + phoneNumber);
     return await db
         .collection("womers")
-        .doc(phoneNumber)
+        .where("phoneNumber", "==", phoneNumber)
         .get()
-        .then(doc => {
-            console.log("doc.data() : ");
-            console.log(doc.data());
-            if (doc.data() === undefined) {
+        .then(querySnapshot => {
+            if (querySnapshot.empty) {
                 return false;
             }
-            return doc.data();
+            return true;
         })
         .catch(e => {
             dispatch({
                 type: SHOW_SNACKBAR,
-                payload: {txt: "Erreur lors de la séquence d'existance !", variant: "error"}
+                payload: {txt: "Erreur lors de la séquence d'existance ! " + e.message, variant: "error"}
             });
             return null;
         });
@@ -63,25 +60,25 @@ export const isUserAlreadyExists = (phoneNumber) => async dispatch => {
 export const findUserByPhoneNumber = (phoneNumber, confirmPhone) => async dispatch => {
     return await db
         .collection("womers")
-        .doc(phoneNumber)
+        .where("phoneNumber", "==", phoneNumber)
         .get()
-        .then(doc => {
-            if (doc.data() === undefined) {
-                dispatch({
-                    type: SHOW_SNACKBAR,
-                    payload: {txt: "Aucun Womer associé au numéro " + phoneNumber + " !", variant: "error"}
-                });
+        .then(querySnapshot => {
+            if (querySnapshot.empty) {
                 return null;
             }
+            let result = [];
+            querySnapshot.forEach(doc => {
+                result.push(doc.data());
+            })
             dispatch({
                 type: SHOW_SNACKBAR,
-                payload: {txt: "Ravie de vous revoir " + doc.data().username + " !", variant: "success"}
+                payload: {txt: "Ravie de vous revoir " + result[0].username + " !", variant: "success"}
             });
             if (confirmPhone) {
-                dispatch({type: AUTH_USER, payload: doc.data()});
+                dispatch({type: AUTH_USER, payload: result[0]});
             }
 
-            return doc.data();
+            return result[0];
         })
         .catch(e => {
             dispatch({type: SHOW_SNACKBAR, payload: {txt: "Impossible de vous connecter !", variant: "error"}});

@@ -40,7 +40,7 @@ class PhoneValidation extends React.Component {
                 this.props.history.push('/signin')
             } else {
                 const randomConfirm = Math.random() * (9999 - 1000) + 1000;
-                this.setState({randomConfirm})
+                this.setState({randomConfirm});
             }
         }
     }
@@ -69,20 +69,20 @@ class PhoneValidation extends React.Component {
                         <Grid item>
                             {this.state.randomConfirm ? <TextField onChange={this.handleOnChange}/> :
                                 <PhoneInput
-                                inputProps={{
-                                    name: 'phone',
-                                    required: true,
-                                    autoFocus: true
-                                }}
-                                country={'fr'}
-                                value={this.state.phone}
-                                onChange={this.handleOnChange}
-                                localization={es}
-                                isValid={(inputNumber, country, countries) => {
-                                    return countries.some((country) => {
-                                        return startsWith(inputNumber, country.dialCode) || startsWith(country.dialCode, inputNumber);
-                                    });
-                                }}
+                                    inputProps={{
+                                        name: 'phone',
+                                        required: true,
+                                        autoFocus: true
+                                    }}
+                                    country={'fr'}
+                                    value={this.state.phone}
+                                    onChange={this.handleOnChange}
+                                    localization={es}
+                                    isValid={(inputNumber, country, countries) => {
+                                        return countries.some((country) => {
+                                            return startsWith(inputNumber, country.dialCode) || startsWith(country.dialCode, inputNumber);
+                                        });
+                                    }}
                             />}
                         </Grid>
                     </Grid>

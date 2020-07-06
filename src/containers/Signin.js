@@ -15,6 +15,7 @@ class SignIn extends React.Component {
         this.state = {
             phoneNumber: "33",
             username: "",
+            idInsta: "@",
             birthday: "",
             address: "",
             city: "",
@@ -27,7 +28,7 @@ class SignIn extends React.Component {
     }
 
     handleSubmit = async (values) => {
-        if (await isUserAlreadyExists(values["phoneNumber"])) {
+        if (await this.props.isUserAlreadyExists(values["phoneNumber"])) {
             this.setState({
                 ...values,
                 status: "alreadyExists"
@@ -35,6 +36,8 @@ class SignIn extends React.Component {
             return;
         }
         const isCreated = await addNewUser(values) ? "success" : "error";
+        console.log("isCreated : ");
+        console.log(isCreated);
         this.setState({
             ...values,
             status: isCreated
@@ -98,6 +101,7 @@ class SignIn extends React.Component {
         const array = [
             {name: "phoneNumber", label: "Phone", type: "tel"},
             {name: "username", label: "Pseudo", type: "text"},
+            {name: "idInsta", label: "Instagram", type: "text"},
             {name: "birthday", label: "Date de naissance", type: "date"},
             {name: "address", label: "Adresse", type: "text"},
             {name: "city", label: "Ville", type: "text"},
@@ -130,6 +134,7 @@ class SignIn extends React.Component {
                         validationSchema={Yup.object({
                             phoneNumber: Yup.string().required("Champs requis"),
                             username: Yup.string().required("Champs requis"),
+                            idInsta: Yup.string().required("Champs requis"),
                             birthday: Yup.string().required("Champs requis"),
                             address: Yup.string().required("Champs requis"),
                             city: Yup.string().required("Champs requis"),

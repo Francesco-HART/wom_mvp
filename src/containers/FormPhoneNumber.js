@@ -18,9 +18,7 @@ class FormPhoneNumber extends React.Component {
 
     handleOnChange = (value) => {
         const isValidPhoneNumber = validator.isMobilePhone(value)
-        console.log(value)
         this.setState({phone: value, isValidPhoneNumber})
-
     }
 
     verifIsValid = async () => {
