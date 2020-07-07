@@ -13,7 +13,7 @@ class SignIn extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            phoneNumber: "33",
+            phoneNumber: "",
             username: "",
             idInsta: "@",
             birthday: "",
@@ -35,9 +35,8 @@ class SignIn extends React.Component {
             });
             return;
         }
-        const isCreated = await addNewUser(values) ? "success" : "error";
-        console.log("isCreated : ");
-        console.log(isCreated);
+        const isCreated = await this.props.addNewUser(values) ? "success" : "error";
+        this.props.history.push('/home')
         this.setState({
             ...values,
             status: isCreated
@@ -158,9 +157,6 @@ class SignIn extends React.Component {
                         Me connecter
                     </Button>
                 </Grid>
-
-                {this.getMessage()}
-
             </Grid>
         );
     }

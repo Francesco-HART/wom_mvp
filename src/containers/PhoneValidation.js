@@ -20,7 +20,7 @@ class PhoneValidation extends React.Component {
     state = {
         phone: '',
         isValidPhoneNumber: false,
-        randomValue: null, randomConfirm: null, phoneNumber: null
+        randomValue: null, randomConfirm: null
     }
     componentDidMount = async () => {
         if (this.props.match.params.id) {
@@ -28,11 +28,13 @@ class PhoneValidation extends React.Component {
         }
     }
 
-    handleOnChange = (value) => {
-        const isValidPhoneNumber = validator.isMobilePhone(value)
-        this.setState({phone: value, isValidPhoneNumber})
+    handleOnChange = (e) => {
+        const isValidPhoneNumber = validator.isMobilePhone(e.target.value)
+        this.setState({phone: e.target.value, isValidPhoneNumber})
     }
-
+    handleOnChangeCodeConfirm = (e) => {
+        this.setState({randomValue: e.target.value})
+    }
     verifIsValid = async () => {
         if (this.state.isValidPhoneNumber) {
             const user = await this.props.findUserByPhoneNumber(this.state.phone, false)
@@ -41,6 +43,7 @@ class PhoneValidation extends React.Component {
             } else {
                 const randomConfirm = Math.random() * (9999 - 1000) + 1000;
                 this.setState({randomConfirm});
+                console.log(randomConfirm)
             }
         }
     }
@@ -67,24 +70,17 @@ class PhoneValidation extends React.Component {
                         container
                         justify='center'>
                         <Grid item>
-                            {this.state.randomConfirm ? <TextField onChange={this.handleOnChange}/> :
-                                <PhoneInput
-                                    inputProps={{
-                                        name: 'phone',
-                                        required: true,
-                                        autoFocus: true
-                                    }}
-                                    country={'fr'}
+                            {this.state.randomConfirm ? <TextField variant="outlined"
+                                                                   value={this.state.randomConfirm}
+                                                                   onChange={this.handleOnChangeCodeConfirm}/> :
+                                <TextField
+                                    type='text'
                                     value={this.state.phone}
                                     onChange={this.handleOnChange}
-                                    localization={es}
-                                    isValid={(inputNumber, country, countries) => {
-                                        return countries.some((country) => {
-                                            return startsWith(inputNumber, country.dialCode) || startsWith(country.dialCode, inputNumber);
-                                        });
-                                    }}
-                            />}
+                                    variant="outlined"
+                                />}
                         </Grid>
+
                     </Grid>
                 </Grid>
                 <Grid xs={12}>
@@ -92,7 +88,8 @@ class PhoneValidation extends React.Component {
                         container
                         justify='center'>
                         <Grid item>
-                            {this.props.randomConfirm ? <Button onClick={this.handleSubmit}> Confirmer </Button> :
+                            {this.state.randomConfirm ?
+                                <Button onClick={this.handleSubmit}> Valider le code sms </Button> :
                                 <Button disabled={!isValidPhoneNumber} type={"button"}
                                         onClick={this.verifIsValid}>Valider</Button>}
                         </Grid>

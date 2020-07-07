@@ -3,7 +3,7 @@ import {SHOW_SNACKBAR, AUTH_USER} from "./type";
 import Cookies from 'universal-cookie';
 import firebase from 'firebase/app';
 
-export const addNewUser = async (user) => {
+export const addNewUser =  (user) => async dispatch =>{
     console.log("creating a womer");
     return await db
         .collection("womers")
@@ -28,6 +28,10 @@ export const addNewUser = async (user) => {
         .then((doc) => {
             // dispatch({type: SHOW_SNACKBAR, payload: {txt: user["username"] + ", votre compte a bien été créé !", variant: "success"}});
             console.log(user["username"] + ", votre compte a bien été créé !");
+            dispatch({
+                type: SHOW_SNACKBAR,
+                payload: {txt: " Nous sommes heureux de te compte parmis nos membres !" , variant: "sucess"}
+            });
             return true;
         })
         .catch((e) => {
