@@ -3,7 +3,7 @@ import {SHOW_SNACKBAR, AUTH_USER} from "./type";
 import Cookies from 'universal-cookie';
 import firebase from 'firebase/app';
 
-export const addNewUser =  (user) => async dispatch =>{
+export const addNewUser = (user) => async dispatch => {
     console.log("creating a womer");
     return await db
         .collection("womers")
@@ -30,7 +30,7 @@ export const addNewUser =  (user) => async dispatch =>{
             console.log(user["username"] + ", votre compte a bien été créé !");
             dispatch({
                 type: SHOW_SNACKBAR,
-                payload: {txt: " Nous sommes heureux de te compte parmis nos membres !" , variant: "sucess"}
+                payload: {txt: " Nous sommes heureux de te compte parmis nos membres !", variant: "sucess"}
             });
             return true;
         })
@@ -74,14 +74,13 @@ export const findUserByPhoneNumber = (phoneNumber, confirmPhone) => async dispat
             querySnapshot.forEach(doc => {
                 result.push(doc.data());
             })
-            dispatch({
-                type: SHOW_SNACKBAR,
-                payload: {txt: "Ravie de vous revoir " + result[0].username + " !", variant: "success"}
-            });
             if (confirmPhone) {
+                dispatch({
+                    type: SHOW_SNACKBAR,
+                    payload: {txt: "Ravie de vous revoir " + result[0].username + " !", variant: "success"}
+                });
                 dispatch({type: AUTH_USER, payload: result[0]});
             }
-
             return result[0];
         })
         .catch(e => {

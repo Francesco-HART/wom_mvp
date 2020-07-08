@@ -3,8 +3,6 @@ import {connect} from "react-redux";
 import {withRouter} from "react-router-dom";
 import PhoneInput from 'react-phone-input-2'
 import 'react-phone-input-2/lib/style.css'
-import es from 'react-phone-input-2/lang/es.json'
-import startsWith from 'lodash.startswith';
 import {Button, Grid, TextField} from "@material-ui/core";
 import {findUserByPhoneNumber, disconnect} from "../actions/authentication";
 import {findAddressByDocumentId} from "../actions/address";
@@ -45,15 +43,13 @@ class PhoneValidation extends React.Component {
             } else {
                 let randomValue = Math.random() * (9999 - 1000) + 1000;
                 randomValue = Math.trunc(randomValue)
-                this.setState({randomValue, phone: ''});
+                this.setState({randomValue});
                 console.log(randomValue)
             }
         }
     }
 
     handleSubmit = async () => {
-        console.log(this.state.randomConfirm)
-        console.log(this.state.randomValue)
         if (this.state.attempt <= 0) {
             this.props.showSnackbar('Code faux', 'error')
             this.props.history.push('/sigin')
@@ -68,9 +64,10 @@ class PhoneValidation extends React.Component {
                     this.props.history.push(`/home`)
                 }
             } else {
-                this.props.showSnackbar('Code faux plus que ' + this.state.attempt + this.state.attempt > 1 ? ' tentatives' : ' tentative', 'error')
+                this.props.showSnackbar(this.state.attempt > 1 ? 'Code faux plus que ' + this.state.attempt + ' tentatives' : 'Code faux plus que ' + this.state.attempt +
+                    ' tentative', 'error'
+                )
                 this.setState({attempt: this.state.attempt - 1})
-
             }
         }
     };

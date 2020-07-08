@@ -5,7 +5,7 @@ import {Button, Grid} from "@material-ui/core";
 import es from 'react-phone-input-2/lang/es.json'
 import startsWith from 'lodash.startswith';
 import validator from 'validator'
-import {disconnect, findUserByPhoneNumber, isUserAlreadyExists} from "../actions/authentication";
+import {disconnect, findUserByPhoneNumber} from "../actions/authentication";
 import {withRouter} from "react-router-dom";
 import {connect} from "react-redux";
 

@@ -4,7 +4,6 @@ import {withRouter} from "react-router-dom";
 import * as Yup from "yup";
 import {Formik} from "formik";
 import Cookies from 'universal-cookie';
-
 import {Grid, Typography} from "@material-ui/core";
 import Insta from '@material-ui/icons/Instagram';
 import FormTextField from "../components/form/FormTextField";

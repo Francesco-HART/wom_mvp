@@ -2,10 +2,7 @@ import React from 'react';
 import {connect} from "react-redux";
 import {Link} from "react-router-dom";
 import Cookies from 'universal-cookie';
-
 import AppBar from '@material-ui/core/AppBar';
-
-import FaceIcon from '@material-ui/icons/Face';
 import MenuIcon from "@material-ui/icons/Menu";
 import {Brightness6} from "@material-ui/icons";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
@@ -167,7 +164,7 @@ class NavBar extends React.Component {
                                     </IconButton>
                                 </Tooltip>
 
-                                {this.props.auth &&
+                                {this.props.auth && this.props.auth.type === 'admin' &&
                                 <Tooltip
                                     title="Réinitialisé les offres"
                                     aria-label="réinitialisé les offres"
