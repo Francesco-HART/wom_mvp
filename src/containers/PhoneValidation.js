@@ -33,7 +33,7 @@ class PhoneValidation extends React.Component {
         this.setState({phone: e.target.value, isValidPhoneNumber})
     }
     handleOnChangeCodeConfirm = (e) => {
-        this.setState({randomValue: e.target.value})
+        this.setState({randomConfirm: e.target.value})
     }
     verifIsValid = async () => {
         if (this.state.isValidPhoneNumber) {
@@ -41,9 +41,9 @@ class PhoneValidation extends React.Component {
             if (!user) {
                 this.props.history.push('/signin')
             } else {
-                const randomConfirm = Math.random() * (9999 - 1000) + 1000;
-                this.setState({randomConfirm});
-                console.log(randomConfirm)
+                const randomValue = Math.random() * (9999 - 1000) + 1000;
+                this.setState({randomValue});
+                console.log(randomValue)
             }
         }
     }
