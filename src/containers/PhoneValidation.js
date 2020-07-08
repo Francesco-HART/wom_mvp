@@ -32,29 +32,37 @@ class PhoneValidation extends React.Component {
         const isValidPhoneNumber = validator.isMobilePhone(e.target.value)
         this.setState({phone: e.target.value, isValidPhoneNumber})
     }
+
     handleOnChangeCodeConfirm = (e) => {
         this.setState({randomConfirm: e.target.value})
     }
+
     verifIsValid = async () => {
         if (this.state.isValidPhoneNumber) {
             const user = await this.props.findUserByPhoneNumber(this.state.phone, false)
             if (!user) {
                 this.props.history.push('/signin')
             } else {
-                const randomValue = Math.random() * (9999 - 1000) + 1000;
-                this.setState({randomValue});
+                let randomValue = Math.random() * (9999 - 1000) + 1000;
+                randomValue = Math.trunc(randomValue)
+                this.setState({randomValue, phone: ''});
                 console.log(randomValue)
             }
         }
     }
 
     handleSubmit = async () => {
-        if (this.state.randomConfirm === this.state.randomValue) {
+        console.log(this.state.randomConfirm)
+        console.log(this.state.randomValue)
+
+        if (Number(this.state.randomConfirm) === Number(this.state.randomValue)) {
             const user = await this.props.findUserByPhoneNumber(this.state.phone, true)
             if (this.props.match.params.id) {
-                await this.props.history.push(`/gratuity/${this.props.match.params.id}`)
+                this.props.history.push(`/gratuity/${this.props.match.params.id}`)
+            } else if (this.props.address) {
+                this.props.history.push(`/gratuity/${this.props.address.documentId}`)
             } else {
-                await this.props.history.push(`/gratuity/${this.props.address.documentId}`)
+                this.props.history.push(`/home`)
             }
         } else {
             this.props.showSnackbar('Code faux', 'success')
@@ -70,9 +78,13 @@ class PhoneValidation extends React.Component {
                         container
                         justify='center'>
                         <Grid item>
-                            {this.state.randomConfirm ? <TextField variant="outlined"
-                                                                   value={this.state.randomConfirm}
-                                                                   onChange={this.handleOnChangeCodeConfirm}/> :
+                            {this.state.randomValue ?
+                                <TextField
+                                    type='text'
+                                    variant="outlined"
+                                    value={this.state.randomConfirm}
+                                    onChange={this.handleOnChangeCodeConfirm}
+                                /> :
                                 <TextField
                                     type='text'
                                     value={this.state.phone}
@@ -88,7 +100,7 @@ class PhoneValidation extends React.Component {
                         container
                         justify='center'>
                         <Grid item>
-                            {this.state.randomConfirm ?
+                            {this.state.randomValue ?
                                 <Button onClick={this.handleSubmit}> Valider le code sms </Button> :
                                 <Button disabled={!isValidPhoneNumber} type={"button"}
                                         onClick={this.verifIsValid}>Valider</Button>}
