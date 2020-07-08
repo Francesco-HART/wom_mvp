@@ -1,7 +1,8 @@
 import {db} from "../Firebase";
 import {SHOW_SNACKBAR, AUTH_USER} from "./type";
 import Cookies from 'universal-cookie';
-import firebase from 'firebase/app';
+import * as firebase from 'firebase';
+import 'firebase/firestore';
 
 export const addNewUser = (user) => async dispatch => {
     console.log("creating a womer");
