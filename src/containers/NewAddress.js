@@ -7,6 +7,7 @@ import Cookies from 'universal-cookie';
 import FormTextField from "../components/form/FormTextField";
 import {Typography, Button, Grid} from '@material-ui/core';
 import Earth from "@material-ui/icons/AddLocation";
+import QRCode from 'qrcode.react';
 
 import {addNewAddress, isAddressAlreadyExists} from '../actions/address';
 
@@ -74,6 +75,7 @@ class NewAddress extends React.Component {
                                     <Typography>
                                         http://localhost:3000/address/{this.state.documentId}
                                     </Typography>
+                                    <QRCode value={"ttp://localhost:3000/address/" + this.state.documentId} />
                                 </Grid>
                                 <Grid item spacing={2}>
                                     <Button variant="contained" color="primary" href={"/address/" + this.state.documentId} spacing={5}>

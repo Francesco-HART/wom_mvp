@@ -17,6 +17,7 @@
     "leaflet": "^1.6.0",
     "markdown-to-jsx": "^6.11.4",
     "material-table": "^1.59.0",
+    "qrcode.react": "^1.0.0",
     "react": "^16.13.1",
     "react-cookie": "^4.0.3",
     "react-dom": "^16.13.1",
