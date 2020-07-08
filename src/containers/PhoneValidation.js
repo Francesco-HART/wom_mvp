@@ -20,7 +20,7 @@ class PhoneValidation extends React.Component {
     state = {
         phone: '',
         isValidPhoneNumber: false,
-        randomValue: null, randomConfirm: null
+        randomValue: null, randomConfirm: null, attempt: 3
     }
     componentDidMount = async () => {
         if (this.props.match.params.id) {
@@ -54,18 +54,24 @@ class PhoneValidation extends React.Component {
     handleSubmit = async () => {
         console.log(this.state.randomConfirm)
         console.log(this.state.randomValue)
-
-        if (Number(this.state.randomConfirm) === Number(this.state.randomValue)) {
-            const user = await this.props.findUserByPhoneNumber(this.state.phone, true)
-            if (this.props.match.params.id) {
-                this.props.history.push(`/gratuity/${this.props.match.params.id}`)
-            } else if (this.props.address) {
-                this.props.history.push(`/gratuity/${this.props.address.documentId}`)
-            } else {
-                this.props.history.push(`/home`)
-            }
+        if (this.state.attempt <= 0) {
+            this.props.showSnackbar('Code faux', 'error')
+            this.props.history.push('/sigin')
         } else {
-            this.props.showSnackbar('Code faux', 'success')
+            if (Number(this.state.randomConfirm) === Number(this.state.randomValue)) {
+                const user = await this.props.findUserByPhoneNumber(this.state.phone, true)
+                if (this.props.match.params.id) {
+                    this.props.history.push(`/gratuity/${this.props.match.params.id}`)
+                } else if (this.props.address) {
+                    this.props.history.push(`/gratuity/${this.props.address.documentId}`)
+                } else {
+                    this.props.history.push(`/home`)
+                }
+            } else {
+                this.props.showSnackbar('Code faux plus que ' + this.state.attempt + this.state.attempt > 1 ? ' tentatives' : ' tentative', 'error')
+                this.setState({attempt: this.state.attempt - 1})
+
+            }
         }
     };
 
