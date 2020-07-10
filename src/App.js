@@ -4,7 +4,7 @@ import {connect} from "react-redux";
 import {MuiThemeProvider} from "@material-ui/core/styles";
 import Snackbar from "./containers/Snackbar";
 import NavBar from "./containers/NavBar"
-//import socketIOClient from "socket.io-client";
+//import socketIOClient from "socket.io-serveur";
 import Routes from "./routes";
 import {theme} from "./components/MUITheme/app";
 import CookieHandler from "./components/CookieHandler";
