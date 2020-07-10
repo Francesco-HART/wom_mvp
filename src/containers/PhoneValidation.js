@@ -2,6 +2,7 @@ import React from 'react';
 import {connect} from "react-redux";
 import {withRouter} from "react-router-dom";
 import PhoneInput from 'react-phone-input-2'
+import {sendSms} from "../actions/sendSms";
 import 'react-phone-input-2/lib/style.css'
 import {Button, Grid, TextField} from "@material-ui/core";
 import {findUserByPhoneNumber, disconnect} from "../actions/authentication";
@@ -13,9 +14,15 @@ import validator from "validator";
  * This class contain a form to allow a connexion thanks to a password and pseudo or mail given in TextField
  * the action 'logIn' is used to get information about user if we found it in database
  */
+
+
 class PhoneValidation extends React.Component {
 
     state = {
+        message: {
+            to: '+33651506043',
+            body: 'Francesco te dit tete de bite from WOM'
+        },
         phone: '',
         isValidPhoneNumber: false,
         randomValue: null, randomConfirm: null, attempt: 3
@@ -36,17 +43,19 @@ class PhoneValidation extends React.Component {
     }
 
     verifIsValid = async () => {
-        if (this.state.isValidPhoneNumber) {
-            const user = await this.props.findUserByPhoneNumber(this.state.phone, false)
-            if (!user) {
-                this.props.history.push('/signin')
-            } else {
-                let randomValue = Math.random() * (9999 - 1000) + 1000;
-                randomValue = Math.trunc(randomValue)
-                this.setState({randomValue});
-                console.log(randomValue)
-            }
-        }
+        this.props.sendSms(this.state.message)
+
+        /*  if (this.state.isValidPhoneNumber) {
+              const user = await this.props.findUserByPhoneNumber(this.state.phone, false)
+              if (!user) {
+                  this.props.history.push('/signin')
+              } else {
+                  let randomValue = Math.random() * (9999 - 1000) + 1000;
+                  randomValue = Math.trunc(randomValue)
+                  this.setState({randomValue});
+                  console.log(randomValue)
+              }
+    }*/
     }
 
     handleSubmit = async () => {
@@ -81,19 +90,12 @@ class PhoneValidation extends React.Component {
                         container
                         justify='center'>
                         <Grid item>
-                            {this.state.randomValue ?
-                                <TextField
-                                    type='text'
-                                    variant="outlined"
-                                    value={this.state.randomConfirm}
-                                    onChange={this.handleOnChangeCodeConfirm}
-                                /> :
-                                <TextField
-                                    type='text'
-                                    value={this.state.phone}
-                                    onChange={this.handleOnChange}
-                                    variant="outlined"
-                                />}
+                            <TextField
+                                type='text'
+                                value={this.state.phone}
+                                onChange={this.handleOnChange}
+                                variant="outlined"
+                            />
                         </Grid>
 
                     </Grid>
@@ -103,10 +105,8 @@ class PhoneValidation extends React.Component {
                         container
                         justify='center'>
                         <Grid item>
-                            {this.state.randomValue ?
-                                <Button onClick={this.handleSubmit}> Valider le code sms </Button> :
-                                <Button disabled={!isValidPhoneNumber} type={"button"}
-                                        onClick={this.verifIsValid}>Valider</Button>}
+                            <Button disabled={!isValidPhoneNumber} type={"button"}
+                                    onClick={this.verifIsValid}>Valider</Button>}
                         </Grid>
                     </Grid>
                 </Grid>
@@ -124,6 +124,7 @@ export default withRouter(
         findUserByPhoneNumber,
         findAddressByDocumentId,
         showSnackbar,
+        sendSms,
         disconnect
     })(PhoneValidation)
 );
