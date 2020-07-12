@@ -4,7 +4,7 @@ import {connect} from "react-redux";
 import {findAddressByDocumentId} from '../actions/address';
 import {Grid, Button, Typography, CircularProgress} from '@material-ui/core';
 
-class Address extends React.Component {
+class AddressOri extends React.Component {
 
     constructor(props) {
         super(props);
@@ -387,6 +387,6 @@ class Address extends React.Component {
 // };
 
 export default withRouter(
-    connect(/*mapStateToProps*/)(Address)
+    connect(/*mapStateToProps*/)(AddressOri)
 );
         

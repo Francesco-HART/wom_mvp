@@ -1,5 +1,4 @@
 import {db} from "../Firebase";
-import firebase from 'firebase/app';
 import {ADDRESS} from "./type";
 
 /**
@@ -93,6 +92,7 @@ export const findAddressByDocumentId = (documentId) => async dispatch => {
         .then(doc => {
             if (doc.data() === undefined) {
                 console.log("Doc is undefined.");
+                dispatch({type: ADDRESS, payload: null});
                 return null;
             }
             dispatch({type: ADDRESS, payload: doc.data()});
@@ -173,12 +173,12 @@ async function resetOffersOfOneAddress(addressId, addressOffers) {
         });
 }
 
-export async function desableAnOffer(addressId, addressOffers, selectedOffer) {
+export async function disableAnOffer(addressId, addressOffers, selectedOffer) {
     return await db
         .collection("address")
-        .document(addressId)
+        .doc(addressId)
         .update({
-            offer: addressOffers.map(offer => offer.split(":value:")[0] + (offer.split(":value:")[0] === selectedOffer ? ":value:false" : offer.split(":value:")[1]))
+            offers: addressOffers.map(offer => offer.split(":value:")[0] + ":value:" + (offer.split(":value:")[0] === selectedOffer ? "false" : offer.split(":value:")[1]))
         })
         .then(() => {
             return true;
