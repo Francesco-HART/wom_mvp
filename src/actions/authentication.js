@@ -1,17 +1,15 @@
 import {SHOW_SNACKBAR, AUTH_USER} from "./type";
 import Cookies from 'universal-cookie';
+import {db} from "../Firebase";
+import * as firebase from 'firebase';
 import 'firebase/firestore';
 
 export const addNewUser = (user) => async dispatch => {
-    dispatch({
-        type: SHOW_SNACKBAR, 
-        payload: {txt: "Création d'un compte...", variant: "success"}
-    });
     return await db
         .collection("womers")
         .doc()
         .set({
-            phoneNumber: user["phoneNumber"],
+            phoneNumber: user["phoneNumber"].replace(" ", ""),
             username: user["username"],
             birthday: user["birthday"],
             address: user["address"],
@@ -107,7 +105,7 @@ export const findUserByUsernameAndPassword = (username, password) => async dispa
                     type: SHOW_SNACKBAR,
                     payload: {txt: "Aucun utilisateur associé à ce Pseudo et ce mot de passe ! ", variant: "error"}
                 });
-                return null;
+                return false;
             }
             let result = [];
             querySnapshot.forEach(user => {
@@ -118,7 +116,7 @@ export const findUserByUsernameAndPassword = (username, password) => async dispa
                 payload: {txt: "Ravie de vous revoir " + result[0].username + " !", variant: "success"}
             });
             dispatch({type: AUTH_USER, payload: result[0]});
-            return result[0];
+            return true;
         })
         .catch(err => {
             dispatch({

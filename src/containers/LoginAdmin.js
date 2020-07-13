@@ -19,7 +19,9 @@ import LockOpenIcon from '@material-ui/icons/LockOpen';
 class LoginAdmin extends React.Component {
 
     handleSubmit = async (values) => {
-        await this.props.findUserByUsernameAndPassword(values.login, values.password);
+        if (await this.props.findUserByUsernameAndPassword(values.login, values.password)) {
+            this.props.history.push("/");
+        }
     };
 
     disconnection = async () => {

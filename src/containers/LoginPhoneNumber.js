@@ -31,10 +31,10 @@ class InputPhoneNumber extends React.Component {
 
     render() {
         return (
-            <Grid container justify='center' spacing={2}>
-                <Grid item>
-                    <Grid container justify='center' spacing={2}>
-                        <Grid item>
+            <Grid container justify='center' spacing={5}>
+                <Grid item xs={12}>
+                    <Grid container justify='center' spacing={5}>
+                        <Grid item >
                             <PhoneInput
                                 inputProps={{
                                     name: 'phone',
@@ -58,6 +58,10 @@ class InputPhoneNumber extends React.Component {
                                 Valider
                             </Button>
                         </Grid>
+                    </Grid>
+                </Grid>
+                <Grid item xs={12}>
+                    <Grid container justify="center">
                         <Grid item>
                             <Link href="/signin">
                                 <Typography variant={'body2'}>Toujours pas inscrit ?</Typography>

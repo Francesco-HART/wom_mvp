@@ -5,7 +5,7 @@ export default class NotFound extends React.Component {
 
     render() {
         return (
-            <Grid container spacing={5}>
+            <Grid container xs={12} spacing={5} justify='center'>
                 <Grid item justify="center" >
                     <Typography>
                         Aucune adresse associée à cet identifiant !

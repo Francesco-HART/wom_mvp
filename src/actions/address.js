@@ -1,5 +1,7 @@
+import {ADDRESS, SHOW_SNACKBAR} from "./type";
 import {db} from "../Firebase";
-import {ADDRESS} from "./type";
+import * as firebase from 'firebase';
+import 'firebase/firestore';
 
 /**
  * Try to create a new address.
@@ -7,12 +9,12 @@ import {ADDRESS} from "./type";
  * @returns If the address was create and its field 'documentId' was set, return a string corresponding at the documentId.
  * Else, if the address was create but its documentId wasn't set, return null. Endly, return undefined if the address wasn't create.
  */
-export async function addNewAddress(address) {
+export const addNewAddress = (address) => async dispatch => {
     return await db
         .collection("address")
         .doc()
         .set({
-            phoneNumber: address["phoneNumber"],
+            phoneNumber: address["phoneNumber"].replace(" ", ""),
             name: address["name"],
             address: address["address"],
             category: address["category"],
@@ -33,33 +35,45 @@ export async function addNewAddress(address) {
             documentId: null
         })
         .then(async () => {
-            console.log("New address was wrote successfully !");
-            // if the new user is wrote, we get its id;
-            const documentId = await setNewAddressDocumentId(address["name"], address["city"], address["postalCode"], address["country"]);
-            if (documentId !== null) {
+            const documentId = await getAddressDocumentId(address["name"], address["city"], address["postalCode"], address["country"]);
+            if (documentId === null) {
+                dispatch({
+                    type: SHOW_SNACKBAR,
+                    payload: {txt: "Adresse créée. Impossible de trouver l'adresse !", variant: "error"}
+                });
+                return null;
+            }
+            else {
                 return await db
                     .collection("address")
                     .doc(documentId)
                     .update({documentId: documentId})
                     .then(() => {
-                        console.log("Document id set with success");
+                        dispatch({
+                            type: SHOW_SNACKBAR,
+                            payload: {txt: "L'adresse a été créé avec succès !", variant: "success"}
+                        });
                         return documentId;
                     })
                     .catch(e => {
-                        console.log("Error occured to set document id : " + e.message);
+                        dispatch({
+                            type: SHOW_SNACKBAR,
+                            payload: {txt: "Adresse créée. Erreur lors de l'écriture du documentID de l'adresse : '" + documentId + "' !", variant: "error"}
+                        });
                         return null;
                     });
             }
-            console.log("src/actions/address/addNewAddress(address) : Très bizarre d'être ici. DocumentId received : " + documentId);
-            return null;
         })
         .catch((e) => {
-            console.log("Error occured to wrote a new address : " + e.message);
+            dispatch({
+                type: SHOW_SNACKBAR,
+                payload: {txt: "Impossible de créer l'adresse !", variant: "error"}
+            });
             return undefined;
         });
 }
 
-async function setNewAddressDocumentId(addressName, addressCity, addressPostalCode, addressCountry) {
+async function getAddressDocumentId(addressName, addressCity, addressPostalCode, addressCountry) {
     return await db
         .collection("address")
         .where("name", "==", addressName)
@@ -79,19 +93,22 @@ async function setNewAddressDocumentId(addressName, addressCity, addressPostalCo
             return allDocumentsId[0];
         })
         .catch(e => {
-            console.log("Error occured to find the address '" + addressName + "' : " + e.message);
             return null;
         });
 }
 
 export const findAddressByDocumentId = (documentId) => async dispatch => {
+     console.log("research : " + documentId);
     return await db
         .collection("address")
         .doc(documentId)
         .get()
         .then(doc => {
             if (doc.data() === undefined) {
-                console.log("Doc is undefined.");
+                dispatch({
+                    type: SHOW_SNACKBAR,
+                    payload: {txt: "Aucune adresse associée à cet identifiant ! ", variant: "error"}
+                });
                 dispatch({type: ADDRESS, payload: null});
                 return null;
             }
@@ -99,12 +116,16 @@ export const findAddressByDocumentId = (documentId) => async dispatch => {
             return doc.data();
         })
         .catch(e => {
-            console.log("Error occured to find the address by id '" + documentId + "' : " + e.message);
+            dispatch({
+                type: SHOW_SNACKBAR,
+                payload: {txt: "Error occured to find the address by id '" + documentId + "'.\n" + e.message, variant: "error"}
+            });
+            dispatch({type: ADDRESS, payload: null});
             return null;
         });
 }
 
-export async function isAddressAlreadyExists(addressName, addressCity, addressPostalCode, addressCountry) {
+export const isAddressAlreadyExists = (addressName, addressCity, addressPostalCode, addressCountry) => async dispatch => {
     return await db
         .collection("address")
         .where("name", "==", addressName)
@@ -119,18 +140,24 @@ export async function isAddressAlreadyExists(addressName, addressCity, addressPo
             return true;
         })
         .catch(e => {
-            console.log("Error occured to check if an address's already existing. " + e.message);
+            dispatch({
+                type: SHOW_SNACKBAR,
+                payload: {txt: "Error occured to check if an address's already existing.\n" + e.message, variant: "error"}
+            });
             return null;
         });
 }
 
-export async function resetOffers() {
+export const resetOffers = () => async dispatch => {
     const allAddress = await db
         .collection('address')
         .get()
         .then((querySnapshot) => {
             if (querySnapshot.empty) {
-                console.log("Reset all offer : querySnapshot is empty");
+                dispatch({
+                    type: SHOW_SNACKBAR,
+                    payload: {txt: "Aucune adresse trouvée ! Aucune adresse réinitialisé.", variant: "error"}
+                });
                 return [];
             }
             let addressIds = [];
@@ -140,21 +167,49 @@ export async function resetOffers() {
             return addressIds;
         })
         .catch(e => {
-            console.log("Erreur : Can't reset all offers. " + e.message);
+            dispatch({
+                type: SHOW_SNACKBAR,
+                payload: {txt: "Impossible de réinitialiser les offres ! Aucune adresse réinitialisé.\n" + e.message, variant: "error"}
+            });
             return null;
         });
 
     if (allAddress === null || allAddress.length === 0) {
-        return true;
+        return false;
     }
 
-    allAddress.forEach(async (address) => {
-        if (await resetOffersOfOneAddress(address.documentId, address.offers)) {
-            console.log("Les offres de " + address.name + " ont été réinitialisé !");
-        } else {
-            console.log("Les offres de " + address.name + " n'ont pas été réinitialisé !");
+    let countAddressReseted = 0;
+    await allAddress.forEach(async (address) => {
+        const hasReset = await resetOffersOfOneAddress(address.documentId, address.offers);
+        console.log("hasReset :");
+        console.log(hasReset);
+        if (hasReset) {
+            console.log("j'ai reset");
+            console.log(countAddressReseted);
+            countAddressReseted++;
+            console.log(" => ");
+            console.log(countAddressReseted);
+        }
+        else {
+            console.log("j'ai pas reset");
         }
     });
+    console.log("check:");
+    console.log(countAddressReseted);
+    console.log(allAddress.length);
+    console.log(countAddressReseted !== allAddress.length);
+    if (countAddressReseted !== allAddress.length) {
+        dispatch({
+            type: SHOW_SNACKBAR,
+            payload: {txt: "Adresse réinitialisée : " + countAddressReseted + " / " + allAddress.length + ". Possible qu'il dise ça alors qu'il a bien fait truc :/ pb async", variant: "error"}
+        });
+        return false;
+    }
+    dispatch({
+        type: SHOW_SNACKBAR,
+        payload: {txt: "Toutes les adresse ont été réinitialisée !", variant: "success"}
+    });
+    return true;
 }
 
 async function resetOffersOfOneAddress(addressId, addressOffers) {
@@ -168,12 +223,12 @@ async function resetOffersOfOneAddress(addressId, addressOffers) {
             return true;
         })
         .catch((e) => {
-            console.log("Error to reset an offer of an address: " + e.message);
+            console.log("resetOffersOfOneAddress err: " + e.message);
             return false;
         });
 }
 
-export async function disableAnOffer(addressId, addressOffers, selectedOffer) {
+export const disableAnOffer = (addressId, addressOffers, selectedOffer) => async dispatch => {
     return await db
         .collection("address")
         .doc(addressId)
@@ -181,10 +236,17 @@ export async function disableAnOffer(addressId, addressOffers, selectedOffer) {
             offers: addressOffers.map(offer => offer.split(":value:")[0] + ":value:" + (offer.split(":value:")[0] === selectedOffer ? "false" : offer.split(":value:")[1]))
         })
         .then(() => {
+            dispatch({
+                type: SHOW_SNACKBAR,
+                payload: {txt: "L'offre a été retiré avec succès !", variant: "success"}
+            });
             return true;
         })
         .catch(e => {
-            console.log("Error to desable an offer of an address: " + e.message);
+            dispatch({
+                type: SHOW_SNACKBAR,
+                payload: {txt: "Impossible de supprimé l'offre !", variant: "error"}
+            });
             return false;
-        })
+        });
 }

@@ -2,9 +2,6 @@ import React from 'react';
 import {Grid, Typography, Button} from '@material-ui/core';
 
 export default class SelectedGratuity extends React.Component {
-    constructor(props) {
-        super(props);
-    }
 
     render() {
         return (

@@ -31,8 +31,9 @@ class SignIn extends React.Component {
             return;
         }
 
-        await this.props.addNewUser(values);
-        this.props.history.push('/');
+        if (await this.props.addNewUser(values)) {
+            this.props.history.push('/login');
+        }
     };
     
     render() {

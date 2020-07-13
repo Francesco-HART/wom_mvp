@@ -19,34 +19,32 @@ class Address extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            isLoading: false,
+            isLoading: true,
             selectedOffer: null,
             withFriends: null,
             idNotAssociate: false,
             hasValidate: false
         };
         this.offers = [];
+        this.isOfferDeleted = false;
     }
 
-    async loadAddress() {
-        this.setState({isLoading: true});
-
+    async componentDidMount() {
         const query = await this.props.findAddressByDocumentId(this.props.match.params.id);
             this.offers = [];
-            if (query != null) {
+            if (query !== null) {
                 query.offers.forEach(element => {
                     if (element.split(':value:')[1] === "true") {
                         this.offers.push(element.split(':value:')[0]);
                     }
                 });
             }
-
-        this.setState({
-            isLoading: false,
-            idNotAssociate: query === null,
-            selectedOffer: null,
-            withFriends: null
-        });
+            this.setState({
+                isLoading: false,
+                idNotAssociate: query === null,
+                selectedOffer: null,
+                withFriends: null
+            });
     }
 
     selectionOffer = (value) => {
@@ -126,7 +124,10 @@ class Address extends React.Component {
 
     displayTicketCreation() {
         if (this.state.hasValidate) {
-            disableAnOffer(this.props.address.documentId, this.props.address.offers, this.state.selectedOffer);
+            if (!this.isOfferDeleted) {
+                this.isOfferDeleted = true;
+                this.props.disableAnOffer(this.props.address.documentId, this.props.address.offers, this.state.selectedOffer);
+            }
             return (
                 <Grid container spacing={5}>
                     <Grid item >
@@ -152,18 +153,12 @@ class Address extends React.Component {
             http://localhost:3000/address/r9KaFF7Omo71TAey7x2H
         */
 
-        if (this.props.address === null || this.props.match.params.id !== this.props.address.documentId) {
-            if (!this.state.isLoading) {
-                this.loadAddress();
-            }
-        }
-
         if (this.state.isLoading) {
             return (
-                <Grid container justify='center' spacing={2}>
-                    <Grid item>
-                        <Grid container justify='center' spacing={2}>
-                            <CircularProgress/>
+                <Grid container>
+                    <Grid item xs={12}>
+                        <Grid container justify="center">
+                            <CircularProgress />
                         </Grid>
                     </Grid>
                 </Grid>
@@ -175,7 +170,7 @@ class Address extends React.Component {
         }
         
         if (this.offers.length === 0) {
-            return <NoOffers />;
+            return <NoOffers addressName={this.props.address.name}/>;
         }
 
         if (this.props.auth === null) {
@@ -235,6 +230,6 @@ const mapStateToProps = (state) => {
 }
 
 export default withRouter(
-    connect(mapStateToProps, {findAddressByDocumentId})(Address)
+    connect(mapStateToProps, {findAddressByDocumentId, disableAnOffer})(Address)
 );
         

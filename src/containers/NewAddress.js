@@ -5,9 +5,10 @@ import * as Yup from "yup";
 import {Formik} from "formik";
 import Cookies from 'universal-cookie';
 import FormTextField from "../components/form/FormTextField";
-import {Typography, Button, Grid} from '@material-ui/core';
+import {Typography, Button, Grid, CircularProgress} from '@material-ui/core';
 import Earth from "@material-ui/icons/AddLocation";
 import QRCode from 'qrcode.react';
+import {SHOW_SNACKBAR} from '../actions/type';
 
 import {addNewAddress, isAddressAlreadyExists} from '../actions/address';
 
@@ -33,94 +34,68 @@ class NewAddress extends React.Component {
     }
 
     handleSubmit = async (values) => {
-
+        this.setState({isLoading: true});
         // check si c'est bon
         // [...]
         /// end
-        if (await isAddressAlreadyExists(values["name"], values["city"], values["postalCode"], values["country"])) {
-            this.setState({
-                ...values,
-                status: "alreadyExists"
+        if (await this.props.isAddressAlreadyExists(values["name"], values["city"], values["postalCode"], values["country"])) {
+            this.setState({isLoading: false}, () => {
+                this.props.dispatch({
+                    type: SHOW_SNACKBAR,
+                    payload: {txt: "Cette adresse existe déjà !", variant: "error"}
+                });
             });
             return;
         }
-        console.log("send to create");
-        const documentId = await addNewAddress(values);
-        if (documentId !== undefined && documentId !== null) {
-            this.setState({
-                ...values,
-                documentId: documentId,
-                status: "success"
-            });
-        }
-        else {
-            this.setState({
-                ...values,
-                status: "error"
-            });
-        }
+        this.setState({documentId: await this.props.addNewAddress(values), isLoading: false});
     };
 
-    getDocumentId() {
-        switch (this.state.status) {
-            case "success":
-                return (
-                    <Grid container spacing={2}>
-                        <Grid item xs={12}>
-                            <Grid container justify="center" spacing={2}>
-                                <Grid item spacing={2}>
-                                    <Button variant="contained" color="primary" href="https://fr.qr-code-generator.com/" target="_blank" spacing={5}>
-                                        Généree le QR Code avec l'url suivante :
-                                    </Button>
-                                    <Typography>
-                                        http://localhost:3000/address/{this.state.documentId}
-                                    </Typography>
-                                    <QRCode value={"ttp://localhost:3000/address/" + this.state.documentId} />
-                                </Grid>
-                                <Grid item spacing={2}>
-                                    <Button variant="contained" color="primary" href={"/address/" + this.state.documentId} spacing={5}>
-                                        Voir ma nouvelle adresse !
-                                    </Button>
-                                </Grid>
-                            </Grid>
+    getAddressInformation() {
+        if (this.state.isLoading) {
+            return (
+                <Grid container>
+                    <Grid item xs={12}>
+                        <Grid container justify="center">
+                            <CircularProgress />
                         </Grid>
                     </Grid>
-                );
-            case "error":
-                return (
-                    <Grid container spacing={2}>
-                        <Grid item xs={12}>
-                            <Grid container justify="center" spacing={2}>
-                                <Grid item>
-                                    <Button variant="contained" color="secondary">
-                                        <Typography>
-                                            Erreur lors de la création de l'adresse !
-                                        </Typography>
-                                    </Button>
-                                </Grid>
-                            </Grid>
-                        </Grid>
-                    </Grid>
-                );
-                case "alreadyExists":
-                    return (
-                        <Grid container spacing={2}>
-                            <Grid item xs={12}>
-                                <Grid container justify="center" spacing={2}>
-                                    <Grid item>
-                                        <Button variant="contained" color="secondary">
-                                            <Typography>
-                                                Cette adresse existe déjà !
-                                            </Typography>
-                                        </Button>
-                                    </Grid>
-                                </Grid>
-                            </Grid>
-                        </Grid>
-                    );
-            default:
-                return null;
+                </Grid>
+            );
         }
+        if (this.state.documentId !== null) {
+            return (
+                <Grid container spacing={5}>
+                    <Grid item xs={12}>
+                        <Grid container justify="center" spacing={5}>
+                            <Grid item>
+                                <Button variant="contained" color="primary" href="https://fr.qr-code-generator.com/" target="_blank">
+                                    Générer le QR Code avec l'url suivante :
+                                </Button>
+                                <Typography>
+                                    http://localhost:3000/address/{this.state.documentId}
+                                </Typography>
+                            </Grid>
+                        </Grid>
+                        <Grid container justify="center" spacing={5}>
+                            <Grid item>
+                                <Typography>
+                                    Ou enregistrez-le !
+                                </Typography>
+                                <QRCode value={"http://localhost:3000/address/" + this.state.documentId} />
+                            </Grid>
+                        </Grid>
+                        <Grid container justify="center" spacing={5}>
+                            <Grid item>
+                                <Button variant="contained" color="primary" href={"/address/" + this.state.documentId}>
+                                    Voir ma nouvelle adresse !
+                                </Button>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                </Grid>
+            );
+        }
+        return null;
     }
 
     render() {
@@ -176,7 +151,7 @@ class NewAddress extends React.Component {
                         { props => <FormTextField {...props} arrayField={array}/> }
                     </Formik>
 
-                    {this.getDocumentId()}
+                    {this.getAddressInformation()}
                 </>
             );
     }
@@ -187,5 +162,5 @@ const mapStateToProps = ({auth}) => {
 };
 
 export default withRouter(
-    connect(mapStateToProps, {})(NewAddress)
-    );
+    connect(mapStateToProps, {addNewAddress, isAddressAlreadyExists})(NewAddress)
+);
