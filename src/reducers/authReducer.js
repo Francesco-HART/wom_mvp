@@ -1,4 +1,4 @@
-import { AUTH_USER} from "../actions/type";
+import {AUTH_USER} from "../actions/type";
 
 const INITIAL_STATE = null;
 

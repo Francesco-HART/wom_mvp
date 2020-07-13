@@ -11,7 +11,7 @@ import Earth from "@material-ui/icons/AddLocation";
 import Home from "@material-ui/icons/Home";
 import Reset from '@material-ui/icons/TrackChanges';
 
-import {disconnect, findUserByPhoneNumber} from "../actions/authentication";
+import {disconnect} from "../actions/authentication";
 import {resetOffers} from '../actions/address';
 
 import {
@@ -26,6 +26,7 @@ import {
     ListItemIcon,
     ListItemText,
     Toolbar,
+    Typography,
 } from "@material-ui/core";
 import {withStyles} from "@material-ui/core/styles";
 
@@ -114,8 +115,7 @@ class NavBar extends React.Component {
     };
 
     resetAllOffers = async () => {
-        console.log("hello");
-        await resetOffers();
+        await this.props.resetOffers();
     }
 
     render() {
@@ -138,6 +138,11 @@ class NavBar extends React.Component {
                                 >
                                     <MenuIcon/>
                                 </IconButton>
+                            </Grid>
+                            <Grid item>
+                                <Typography>
+                                    Wom Paris
+                                </Typography>
                             </Grid>
 
                             <Grid item>
@@ -164,7 +169,7 @@ class NavBar extends React.Component {
                                     </IconButton>
                                 </Tooltip>
 
-                                {this.props.auth && this.props.auth.type === 'admin' &&
+                                {this.props.auth && this.props.auth.status === 'admin' &&
                                 <Tooltip
                                     title="Réinitialisé les offres"
                                     aria-label="réinitialisé les offres"
@@ -176,7 +181,7 @@ class NavBar extends React.Component {
                                     </IconButton>
                                 </Tooltip>}
 
-                                {this.props.auth &&
+                                {this.props.auth && (this.props.auth.status === 'admin' || this.props.auth.status === 'address') &&
                                 <Tooltip
                                     title="Ajouter une adresse"
                                     aria-label="ajouter une adresse"
@@ -250,6 +255,6 @@ const mapStateToProps = ({auth}) => {
 
 
 export default connect(mapStateToProps, {
-    findUserByPhoneNumber,
-    disconnect
+    disconnect,
+    resetOffers
 })(withStyles(styles, {withTheme: true})(NavBar));

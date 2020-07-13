@@ -3,21 +3,23 @@ import { connect } from "react-redux";
 
 export default (ChildComponent) => {
     class ComposedComponent extends Component {
-        componentDidMount() {
-            this.shouldNavigateAway();
-        }
+        // componentDidMount() {
+        //     this.shouldNavigateAway();
+        // }
 
-        componentDidUpdate() {
-            this.shouldNavigateAway();
-        }
+        // componentDidUpdate() {
+        //     this.shouldNavigateAway();
+        // }
 
-        shouldNavigateAway() {
-            if (this.props.auth) this.props.history.push("/");
-        }
+        // shouldNavigateAway() {
+        //     if (this.props.auth) this.props.history.push("/");
+        // }
 
         render() {
-            if (!this.props.auth) return <ChildComponent {...this.props} />;
-            return <div />;
+            // if (!this.props.auth) return <ChildComponent {...this.props} />;
+            // return <div />;
+            return <ChildComponent {...this.props} />;
+
         }
     }
 

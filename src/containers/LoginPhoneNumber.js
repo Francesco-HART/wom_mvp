@@ -1,54 +1,47 @@
 import React from 'react'
 import PhoneInput from 'react-phone-input-2'
 import 'react-phone-input-2/lib/style.css'
-import {Button, Grid} from "@material-ui/core";
+import {Button, Grid, Link, Typography} from "@material-ui/core";
 import es from 'react-phone-input-2/lang/es.json'
 import startsWith from 'lodash.startswith';
-import validator from 'validator'
-import {disconnect, findUserByPhoneNumber} from "../actions/authentication";
+import validator from 'validator';
+import {findUserByPhoneNumber} from "../actions/authentication";
 import {withRouter} from "react-router-dom";
 import {connect} from "react-redux";
 
-
-class FormPhoneNumber extends React.Component {
-    state = {
-        phone: '',
-        isValidPhoneNumber: false
+class InputPhoneNumber extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            phoneNumber: "",
+            isValidPhoneNumber: false
+        };
     }
 
     handleOnChange = (value) => {
-        const isValidPhoneNumber = validator.isMobilePhone(value)
-        this.setState({phone: value, isValidPhoneNumber})
-    }
+        this.setState({
+            phone: value,
+            isValidPhoneNumber: validator.isMobilePhone(value)
+        });
+    };
 
     verifIsValid = async () => {
-
-        if (this.state.isValidPhoneNumber) {
-            const user = await this.props.findUserByPhoneNumber(this.state.phone)
-            if (!user) {
-                this.props.history.push('/signin')
-            } else {
-                const addressId = this.props.match.params.id
-                this.props.history.push(`/gratuity/${this.props.match.params.id}`)
-            }
-        }
-    }
+        await this.props.findUserByPhoneNumber(this.state.phone);
+    };
 
     render() {
-        const {isValidPhoneNumber} = this.state
         return (
-            <Grid container justify="center" spacing={2}>
-                <Grid item xs={12} md={2}>
-                    <Grid
-                        container
-                        justify='center'>
-                        <Grid item>
+            <Grid container justify='center' spacing={5}>
+                <Grid item xs={12}>
+                    <Grid container justify='center' spacing={5}>
+                        <Grid item >
                             <PhoneInput
                                 inputProps={{
                                     name: 'phone',
                                     required: true,
                                     autoFocus: true
                                 }}
+                                placeholder={'+33612345678'}
                                 country={'fr'}
                                 value={this.state.phone}
                                 onChange={this.handleOnChange}
@@ -60,24 +53,31 @@ class FormPhoneNumber extends React.Component {
                                 }}
                             />
                         </Grid>
+                        <Grid item>
+                            <Button disabled={!this.state.isValidPhoneNumber} variant="contained" onClick={this.verifIsValid}>
+                                Valider
+                            </Button>
+                        </Grid>
                     </Grid>
                 </Grid>
-                <Grid xs={12}>
-                    <Grid
-                        container
-                        justify='center'>
+                <Grid item xs={12}>
+                    <Grid container justify="center">
                         <Grid item>
-                            {this.props.randomConfirm && <Button disabled={!isValidPhoneNumber} type={"button"}
-                                                                 onClick={this.verifIsValid}>Valider</Button>}
+                            <Link href="/signin">
+                                <Typography variant={'body2'}>Toujours pas inscrit ?</Typography>
+                            </Link>
                         </Grid>
                     </Grid>
                 </Grid>
             </Grid>
-        )
+        );
     }
 }
 
+const mapStateToProps = (state) => {
+    return state;
+}
 
 export default withRouter(
-    connect(null, {findUserByPhoneNumber, disconnect})(FormPhoneNumber)
+    connect(mapStateToProps, {findUserByPhoneNumber})(InputPhoneNumber)
 );

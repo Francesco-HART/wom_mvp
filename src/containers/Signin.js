@@ -6,14 +6,14 @@ import {Formik} from "formik";
 import Cookies from 'universal-cookie';
 import {addNewUser, isUserAlreadyExists} from "../actions/authentication";
 import FormTextField from "../components/form/FormTextField";
-import {Button, Grid, Typography} from "@material-ui/core";
+import {Link, Grid, Typography} from "@material-ui/core";
 import LockOpenIcon from '@material-ui/icons/LockOpen';
 
 class SignIn extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            phoneNumber: "",
+            phoneNumber: "33",
             username: "",
             idInsta: "@",
             birthday: "",
@@ -22,83 +22,23 @@ class SignIn extends React.Component {
             postalCode: "",
             country: "",
             mail: "",
-            password: "",
-            status: null
+            password: ""
         };  
     }
 
     handleSubmit = async (values) => {
         if (await this.props.isUserAlreadyExists(values["phoneNumber"])) {
-            this.setState({
-                ...values,
-                status: "alreadyExists"
-            });
             return;
         }
-        const isCreated = await this.props.addNewUser(values) ? "success" : "error";
-        this.props.history.push('/home')
-        this.setState({
-            ...values,
-            status: isCreated
-        });
-    };
 
-    getMessage() {
-        switch (this.state.status) {
-            case "success":
-                return (
-                    <Grid container spacing={2}>
-                        <Grid item xs={12}>
-                            <Grid container justify="center" spacing={2}>
-                                <Grid item spacing={2}>
-                                    <Button variant="contained" color="primary">
-                                        Nous sommes heureux de te compte parmis nos membres !
-                                    </Button>
-                                </Grid>
-                            </Grid>
-                        </Grid>
-                    </Grid>
-                );
-            case "error":
-                return (
-                    <Grid container spacing={2}>
-                        <Grid item xs={12}>
-                            <Grid container justify="center" spacing={2}>
-                                <Grid item>
-                                    <Button variant="contained" color="secondary">
-                                        <Typography>
-                                            Erreur lors de la création de l'utilisateur !
-                                        </Typography>
-                                    </Button>
-                                </Grid>
-                            </Grid>
-                        </Grid>
-                    </Grid>
-                );
-            case "alreadyExists":
-                return (
-                    <Grid container spacing={2}>
-                        <Grid item xs={12}>
-                            <Grid container justify="center" spacing={2}>
-                                <Grid item>
-                                    <Button variant="contained" color="secondary">
-                                        <Typography>
-                                            Ce Womer existe déjà !
-                                        </Typography>
-                                    </Button>
-                                </Grid>
-                            </Grid>
-                        </Grid>
-                    </Grid>
-                );
-            default:
-                return null;
+        if (await this.props.addNewUser(values)) {
+            this.props.history.push('/login');
         }
-    }
+    };
     
     render() {
         const array = [
-            {name: "phoneNumber", label: "Phone", type: "tel"},
+            {name: "phoneNumber", label: "Phone (33 6 01 02 03 04)", type: "tel"},
             {name: "username", label: "Pseudo", type: "text"},
             {name: "idInsta", label: "Instagram", type: "text"},
             {name: "birthday", label: "Date de naissance", type: "date"},
@@ -148,14 +88,9 @@ class SignIn extends React.Component {
                 </Grid>
 
                 <Grid item xs={12} container justify='center' spacing={2}>
-                    <Typography item>
-                        Déjà inscrit
-                    </Typography>
-                </Grid>
-                <Grid item xs={12} container justify='center' spacing={2}>
-                    <Button variant="contained" color="primary" href="/login">
-                        Me connecter
-                    </Button>
+                    <Link href="/login">
+                        <Typography variant={'body2'}>Déjà inscrit</Typography>
+                    </Link>
                 </Grid>
             </Grid>
         );
@@ -168,4 +103,4 @@ const mapStateToProps = ({auth}) => {
 
 export default withRouter(
     connect(mapStateToProps, {addNewUser, isUserAlreadyExists})(SignIn)
-    );
+);
