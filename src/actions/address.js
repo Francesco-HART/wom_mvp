@@ -98,7 +98,6 @@ async function getAddressDocumentId(addressName, addressCity, addressPostalCode,
 }
 
 export const findAddressByDocumentId = (documentId) => async dispatch => {
-     console.log("research : " + documentId);
     return await db
         .collection("address")
         .doc(documentId)

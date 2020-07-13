@@ -22,26 +22,68 @@ export const addNewUser = (user) => async dispatch => {
             isPhoneNumberActive: false,
             isMailActive: false,
             status: "none",
-            registerDate: firebase.firestore.FieldValue.serverTimestamp()
+            registerDate: firebase.firestore.FieldValue.serverTimestamp(),
+            documentId: null
         })
-        .then((doc) => {
-            // dispatch({type: SHOW_SNACKBAR, payload: {txt: user["username"] + ", votre compte a bien été créé !", variant: "success"}});
-            // console.log(user["username"] + ", votre compte a bien été créé !");
-            dispatch({
-                type: SHOW_SNACKBAR,
-                payload: {txt: "Nous sommes heureux de te compte parmis nos membres !", variant: "success"}
-            });
-            return true;
+        .then(async () => {
+            const documentId = await getUserDocumentId(user["phoneNumber"].replace(" ", ""));
+            if (documentId === null) {
+                dispatch({
+                    type: SHOW_SNACKBAR,
+                    payload: {txt: "Compté créé. Impossible de trouver le compte !", variant: "error"}
+                });
+                return null;
+            }
+            else {
+                return await db
+                    .collection("womers")
+                    .doc(documentId)
+                    .update({documentId: documentId})
+                    .then(() => {
+                        dispatch({
+                            type: SHOW_SNACKBAR,
+                            payload: {txt: "Nous sommes heureux de te compte parmis nos membres !", variant: "success"}
+                        });
+                        return true;
+                    })
+                    .catch(e => {
+                        dispatch({
+                            type: SHOW_SNACKBAR,
+                            payload: {txt: "Compte créé. Erreur lors de l'écriture du documentID du compte : '" + documentId + "' !\n" + e.message, variant: "error"}
+                        });
+                        return null;
+                    });
+            }
         })
         .catch((e) => {
             dispatch({
                 type: SHOW_SNACKBAR, 
-                payload: {txt: "Impossible de créer votre compte ! " + e.message, variant: "error"}
+                payload: {txt: "Impossible de créer votre compte !\n" + e.message, variant: "error"}
             });
-            //console.log("Impossible de créer votre compte ! " + e.message);
-            return false;
+            return null;
         });
 };
+
+async function getUserDocumentId(phoneNumber) {
+    return await db
+        .collection("womers")
+        .where("phoneNumber", "==", phoneNumber)
+        .get()
+        .then(querySnapshot => {
+            if (querySnapshot.empty) {
+                return null;
+            }
+            let allDocumentsId = [];
+            querySnapshot.forEach((doc) => {
+                allDocumentsId.push(doc.$c.path.segments[6]);
+            });
+            // return the first element cause the array is supposed to have only once.
+            return allDocumentsId[0];
+        })
+        .catch(e => {
+            return null;
+        });
+}
 
 export const isUserAlreadyExists = (phoneNumber) => async dispatch => {
     return await db
@@ -141,61 +183,3 @@ export const disconnect = () => async dispatch => {
         });
     }
 };
-
-/**
- * This function will check if a user exist in database depending on a password and a login value (mail or pseudo)
- * @param user  {object}:   contain login's and password's values
- * @returns     {function(*): boolean} :    false if can't connect, true
- */
-// export const logIn = (user) => async dispatch => {
-//     let isConnexionAllowed = false;
-//     let userFromDb = "";
-//     try {
-//         //because of firebase read quota, we have to reduce as possible the number of request we submit
-//         //region => check if pseudo or mail associated to password is in database
-//         await db.collection("utilisateurs").where("pseudo", "==", user.login).get().then((querySnapshot) => {
-//             querySnapshot.forEach((doc) => {
-//                 if (doc.data().password === user.password) {
-//                     isConnexionAllowed = true;
-//                     userFromDb = doc.data(); //maybe have to get only interesting data (not the password)
-//                 }
-//             });
-//         });
-//         if (!isConnexionAllowed) {
-//             await db.collection("utilisateurs").where("email", "==", user.mail).get().then((querySnapshot) => {
-//                 querySnapshot.forEach((doc) => {
-//                     if (doc.data().password === user.password) {
-//                         isConnexionAllowed = true;
-//                         userFromDb = doc.data();
-//                     }
-//                 });
-//             });
-//         }
-//         //endregion
-
-//         //region => results
-//         if (isConnexionAllowed) {
-//             dispatch({type: AUTH_USER, payload: userFromDb});
-//             dispatch({
-//                 type: SHOW_SNACKBAR,
-//                 payload: {txt: "vous êtes connecté en tant que " + userFromDb.mail, variant: "success"}
-//             });
-//             const cookies = new Cookies();
-//             cookies.set("userCookie", userFromDb.mail, {path: '/'});
-//             cookies.set("userPassCookie", userFromDb.password, {path: '/'});
-//         } else {
-//             dispatch({
-//                 type: SHOW_SNACKBAR,
-//                 payload: {txt: "impossible de se connecter, identifiants incorrect", variant: "error"}
-//             });
-//         }
-//         //endregion
-//     } catch (e) {
-//         dispatch({
-//             type: SHOW_SNACKBAR,
-//             payload: {txt: "une erreur c'est produite lors de l'authentification", variant: "error"}
-//         });
-//     }
-
-//     return isConnexionAllowed;
-// };

@@ -4,7 +4,7 @@ import {connect} from "react-redux";
 import {Grid, CircularProgress, Typography, Button} from '@material-ui/core';
 
 import {ADDRESS_CANCEL} from '../../actions/type';
-import {findAddressByDocumentId, disableAnOffer} from '../../actions/address';
+import {findAddressByDocumentId} from '../../actions/address';
 import {disconnect} from '../../actions/authentication';
 import LoginPhoneNumber from '../LoginPhoneNumber';
 import NotFound from './NotFound';
@@ -13,6 +13,7 @@ import Gratuities from './Gratuities';
 import SelectedGratuity from './SelectedGratuity';
 import WithFriends from './WithFriends';
 import SelectedWithFriends from './SelectedWithFriends';
+import CouponCreator from './CouponCreator';
 
 class Address extends React.Component {
 
@@ -26,25 +27,22 @@ class Address extends React.Component {
             hasValidate: false
         };
         this.offers = [];
-        this.isOfferDeleted = false;
     }
 
     async componentDidMount() {
         const query = await this.props.findAddressByDocumentId(this.props.match.params.id);
-            this.offers = [];
-            if (query !== null) {
-                query.offers.forEach(element => {
-                    if (element.split(':value:')[1] === "true") {
-                        this.offers.push(element.split(':value:')[0]);
-                    }
-                });
-            }
-            this.setState({
-                isLoading: false,
-                idNotAssociate: query === null,
-                selectedOffer: null,
-                withFriends: null
+        this.offers = [];
+        if (query !== null) {
+            query.offers.forEach(element => {
+                if (element.split(':value:')[1] === "true") {
+                    this.offers.push(element.split(':value:')[0]);
+                }
             });
+        }
+        this.setState({
+            isLoading: false,
+            idNotAssociate: query == null
+        });
     }
 
     selectionOffer = (value) => {
@@ -122,32 +120,6 @@ class Address extends React.Component {
             ;
     }
 
-    displayTicketCreation() {
-        if (this.state.hasValidate) {
-            if (!this.isOfferDeleted) {
-                this.isOfferDeleted = true;
-                this.props.disableAnOffer(this.props.address.documentId, this.props.address.offers, this.state.selectedOffer);
-            }
-            return (
-                <Grid container spacing={5}>
-                    <Grid item >
-                        <Typography variant="h5">
-                            Commande validée !
-                        </Typography>
-                    </Grid>
-                    <Grid item>
-                        <Typography variant="h5">
-                            Création du coupon...
-                        </Typography>
-                    </Grid>
-                    <Grid item>
-                        <CircularProgress/>
-                    </Grid>
-                </Grid>
-            );
-        }
-    }
-
     render() {
         /* 
             http://localhost:3000/address/r9KaFF7Omo71TAey7x2H
@@ -218,7 +190,7 @@ class Address extends React.Component {
                     </Grid>
                 </Grid>
                 <Grid item xs={12}>
-                    {this.displayTicketCreation()}
+                    {this.state.hasValidate && <CouponCreator selectedOffer={this.state.selectedOffer} withFriends={this.state.withFriends} />}
                 </Grid>
             </Grid>
         );
@@ -230,6 +202,6 @@ const mapStateToProps = (state) => {
 }
 
 export default withRouter(
-    connect(mapStateToProps, {findAddressByDocumentId, disableAnOffer})(Address)
+    connect(mapStateToProps, {findAddressByDocumentId})(Address)
 );
         
