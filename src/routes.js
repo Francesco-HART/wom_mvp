@@ -5,6 +5,7 @@ import requireAuth from "./middleware/requireAuth";
 import requireNoAuth from "./middleware/requireNoAuth";
 import Home from './components/Home';
 import Address from './containers/Address/Address';
+import Coupon from './containers/Coupon/Coupon';
 import NewAddress from './containers/NewAddress';
 import Signin from './containers/Signin';
 import LoginAdmin from './containers/LoginAdmin';
@@ -24,6 +25,7 @@ function Routes(props) {
             <Route exact path="/login" component={requireNoAuth(LoginAdmin)}/>
             <Route exact path="/signin" component={requireNoAuth(Signin)}/>
             <Route exact path="/address/:id" component={requireNoAuth(Address)}/>
+            <Route exact path="/coupon/:id" component={requireNoAuth(Coupon)}/>
             <Route component={requireAuth(Container)}/>
         </Switch>
     );

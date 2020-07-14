@@ -4,7 +4,7 @@ import * as firebase from 'firebase';
 import 'firebase/firestore';
 
 export const createCoupon = (addressId, womerId, selectedOffer, withFriends) => async dispatch => {
-    const creationDate = firebase.firestore.FieldValue.serverTimestamp();
+    const tmpId = makeid(30);
     return await db
         .collection("coupons")
         .doc()
@@ -13,11 +13,12 @@ export const createCoupon = (addressId, womerId, selectedOffer, withFriends) => 
             womerId: womerId,
             selectedOffer: selectedOffer,
             withFriends: withFriends,
-            creationDate: creationDate,
-            documentId: null
+            creationDate: firebase.firestore.FieldValue.serverTimestamp(),
+            documentId: null,
+            tmpId: tmpId
         })
         .then(async () => {
-            const documentId = await getCouponDocumentId(addressId, womerId, creationDate);
+            const documentId = await getCouponByTmpId(tmpId);
             if (documentId === null) {
                 dispatch({
                     type: SHOW_SNACKBAR,
@@ -51,12 +52,20 @@ export const createCoupon = (addressId, womerId, selectedOffer, withFriends) => 
         });
 }
 
-async function getCouponDocumentId(addressId, womerId, creationDate) {
+function makeid(length) {
+    let result = '';
+    let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let charactersLength = characters.length;
+    for (let i = 0; i < length; i++ ) {
+       result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+ }
+
+async function getCouponByTmpId(tmpId) {
     return await db
         .collection("coupons")
-        .where("addressId", "==", addressId)
-        .where("womerId", "==", womerId)
-        .where("creationDate", "==", creationDate)
+        .where("tmpId", "==", tmpId)
         .get()
         .then(querySnapshot => {
             if (querySnapshot.empty) {
@@ -70,6 +79,30 @@ async function getCouponDocumentId(addressId, womerId, creationDate) {
             return allDocumentsId[0];
         })
         .catch(e => {
+            return null;
+        });
+}
+
+export const getCouponByByDocumentId = (documentId) => async dispatch => {
+    return await db
+        .collection("coupons")
+        .doc(documentId)
+        .get()
+        .then(doc => {
+            if (doc.data() === undefined) {
+                dispatch({
+                    type: SHOW_SNACKBAR,
+                    payload: {txt: "Aucun coupon associé à cet identifiant ! ", variant: "error"}
+                });
+                return null;
+            }
+            return doc.data();
+        })
+        .catch(e => {
+            dispatch({
+                type: SHOW_SNACKBAR,
+                payload: {txt: "Impossible de récupérer le coupoun par l'id '" + documentId + "'.\n" + e.message, variant: "error"}
+            });
             return null;
         });
 }

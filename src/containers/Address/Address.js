@@ -6,6 +6,7 @@ import {Grid, CircularProgress, Typography, Button} from '@material-ui/core';
 import {ADDRESS_CANCEL} from '../../actions/type';
 import {findAddressByDocumentId} from '../../actions/address';
 import {disconnect} from '../../actions/authentication';
+import ActivityIndicator from '../../components/ActivityIndicator';
 import LoginPhoneNumber from '../LoginPhoneNumber';
 import NotFound from './NotFound';
 import NoOffers from './NoOffers';
@@ -126,15 +127,7 @@ class Address extends React.Component {
         */
 
         if (this.state.isLoading) {
-            return (
-                <Grid container>
-                    <Grid item xs={12}>
-                        <Grid container justify="center">
-                            <CircularProgress />
-                        </Grid>
-                    </Grid>
-                </Grid>
-            );
+            return <ActivityIndicator />
         }
 
         if (this.state.idNotAssociate) {
