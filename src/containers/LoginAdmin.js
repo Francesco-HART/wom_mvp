@@ -3,7 +3,7 @@ import Grid from "@material-ui/core/Grid";
 import {Formik} from "formik";
 import * as Yup from "yup";
 import FormTextField from "../components/form/FormTextField";
-import {findUserByUsernameAndPassword, disconnect} from "../actions/authentication";
+import {getUserByUsernameAndPassword, disconnect} from "../actions/authentication";
 import {connect} from "react-redux";
 import Typography from '@material-ui/core/Typography';
 import {withRouter} from "react-router-dom";
@@ -19,7 +19,7 @@ import LockOpenIcon from '@material-ui/icons/LockOpen';
 class LoginAdmin extends React.Component {
 
     handleSubmit = async (values) => {
-        if (await this.props.findUserByUsernameAndPassword(values.login, values.password)) {
+        if (await this.props.getUserByUsernameAndPassword(values.login, values.password)) {
             this.props.history.push("/");
         }
     };
@@ -88,5 +88,5 @@ const mapStateToProps = ({auth}) => {
 };
 
 export default withRouter(
-    connect(mapStateToProps, {findUserByUsernameAndPassword, disconnect})(LoginAdmin)
+    connect(mapStateToProps, {getUserByUsernameAndPassword, disconnect})(LoginAdmin)
 );

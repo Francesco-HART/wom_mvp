@@ -1,7 +1,7 @@
 import React from 'react';
 import {connect} from "react-redux";
 import Cookies from 'universal-cookie';
-import {findUserByPhoneNumber} from "../actions/authentication";
+import {getUserByPhoneNumber} from "../actions/authentication";
 import LinearProgress from "@material-ui/core/LinearProgress";
 
 /**
@@ -19,7 +19,7 @@ class CookieHandler extends React.Component {
         let cookie = cookies.get('userCookie') ? cookies.get('userCookie') : "";
         let cookie2 = cookies.get('userPassCookie') ? cookies.get('userPassCookie') :"";
         if (cookie !=="" && cookie2!==""){
-            await this.props.findUserByPhoneNumber({login:cookie, password:cookie2});
+            await this.props.getUserByPhoneNumber({login:cookie, password:cookie2});
         }
         if (this._isMounted) {
             this.setState({isLoading: false});
@@ -36,4 +36,4 @@ class CookieHandler extends React.Component {
     }
 }
 
-export default connect(null, {findUserByPhoneNumber})(CookieHandler)
+export default connect(null, {getUserByPhoneNumber})(CookieHandler)

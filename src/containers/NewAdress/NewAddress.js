@@ -9,11 +9,13 @@ import QRCode from 'qrcode.react';
 import {Typography, Button, Grid} from '@material-ui/core';
 import Earth from "@material-ui/icons/AddLocation";
 
-import FormTextField from "../components/form/FormTextField";
-import ActivityIndicator from '../components/ActivityIndicator';
+import FormTextField from "../../components/form/FormTextField";
+import ActivityIndicator from '../../components/ActivityIndicator';
+import CantCreate from './CantCreate';
 
-import {SHOW_SNACKBAR} from '../actions/type';
-import {addNewAddress, isAddressAlreadyExists} from '../actions/address';
+import {SHOW_SNACKBAR} from '../../actions/type';
+import {addNewAddress, isAddressAlreadyExists} from '../../actions/address';
+import {increaseAddressCreated} from '../../actions/authentication';
 
 
 class NewAddress extends React.Component {
@@ -31,9 +33,11 @@ class NewAddress extends React.Component {
             offer2: "",
             mail: "",
             password: "",
+            validationCode: "",
             webSite: "",
             documentId : null,
-            status: null
+            status: null,
+            canCreate: true
         };
     }
 
@@ -51,7 +55,15 @@ class NewAddress extends React.Component {
             });
             return;
         }
-        this.setState({documentId: await this.props.addNewAddress(values), isLoading: false});
+        const documentId = await this.props.addNewAddress(values, this.props.auth.documentId);
+        
+        if (documentId !== null) {
+            await this.props.increaseAddressCreated(this.props.auth.documentId, this.props.auth.numberAddressCreated);
+        }
+        this.setState({
+            documentId: documentId,
+            isLoading: false
+        });
     };
 
     getAddressInformation() {
@@ -94,9 +106,21 @@ class NewAddress extends React.Component {
         return null;
     }
 
+    componentDidMount() {
+        if (this.props.auth.status !== "admin") {
+            this.setState({
+                canCreate: this.props.auth.numberAddressCanCreate - this.props.auth.numberAddressCreated > 0
+            });
+        }
+    }
+
     render() {
+        if (!this.state.canCreate) {
+            return <CantCreate numberAddressCanCreate={this.props.auth.numberAddressCanCreate} />
+        }
+
         const array = [
-            {name: "phoneNumber", label: "Phone", type: "tel"},
+            {name: "phoneNumber", label: "Phone (33 1 02 03 04 05)", type: "tel"},
             {name: "name", label: "Nom", type: "text"},
             {name: "address", label: "Adresse", type: "text"},
             {name: "category", label: "Categorie", type: "text"},
@@ -107,6 +131,7 @@ class NewAddress extends React.Component {
             {name: "offer2", label: "Offre 2", type: "text"},
             {name: "mail", label: "e-mail", type: "mail"},
             {name: "password", label: "Mot de passe", type: "password"},
+            {name: "validationCode", label: "Code de validationde coupon", type: "text"},
             {name: "webSite", label: "Site web (facultatif)", type: "url"}
         ];
 
@@ -142,6 +167,7 @@ class NewAddress extends React.Component {
                             offer2: Yup.string().required("Champs requis"),
                             mail: Yup.string().required("Champs requis"),
                             password: Yup.string().required("Champs requis"),
+                            validationCode: Yup.string().required("Champs requis")
                         })}
                     >
                         { props => <FormTextField {...props} arrayField={array}/> }
@@ -158,5 +184,5 @@ const mapStateToProps = ({auth}) => {
 };
 
 export default withRouter(
-    connect(mapStateToProps, {addNewAddress, isAddressAlreadyExists})(NewAddress)
+    connect(mapStateToProps, {addNewAddress, isAddressAlreadyExists, increaseAddressCreated})(NewAddress)
 );

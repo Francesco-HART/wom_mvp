@@ -8,7 +8,7 @@ import {Grid, Typography} from "@material-ui/core";
 import Insta from '@material-ui/icons/Instagram';
 import FormTextField from "../components/form/FormTextField";
 
-import {findUserByPhoneNumber, disconnect} from "../actions/authentication";
+import {getUserByPhoneNumber, disconnect} from "../actions/authentication";
 
 /**
  * This class contain a form to allow a connexion thanks to a password and pseudo or mail given in TextField
@@ -63,5 +63,5 @@ const mapStateToProps = ({auth}) => {
 };
 
 export default withRouter(
-    connect( mapStateToProps, {findUserByPhoneNumber, disconnect} )(Login)
+    connect( mapStateToProps, {getUserByPhoneNumber, disconnect} )(Login)
     );

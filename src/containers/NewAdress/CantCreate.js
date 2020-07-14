@@ -11,7 +11,16 @@ export default class NotFound extends React.Component {
                     <Grid container justify='center'>
                         <Grid item>
                             <Typography variant='h5'>
-                                {this.props.message}
+                                Vous ne pouvez créer plus de {this.props.numberAddressCanCreate} adresse{this.props.numberAddressCanCreate > 1 ? "s" : ""} !
+                            </Typography>
+                        </Grid>
+                    </Grid>
+                </Grid>
+                <Grid item>
+                    <Grid container justify='center'>
+                        <Grid item>
+                            <Typography variant='h5'>
+                                Souscrivez une nouvelle adresse à Wom pour pouvoir en créer d'avantage !
                             </Typography>
                         </Grid>
                     </Grid>

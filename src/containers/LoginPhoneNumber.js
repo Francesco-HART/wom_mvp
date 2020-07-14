@@ -5,7 +5,7 @@ import {Button, Grid, Link, Typography} from "@material-ui/core";
 import es from 'react-phone-input-2/lang/es.json'
 import startsWith from 'lodash.startswith';
 import validator from 'validator';
-import {findUserByPhoneNumber} from "../actions/authentication";
+import {getUserByPhoneNumber} from "../actions/authentication";
 import {withRouter} from "react-router-dom";
 import {connect} from "react-redux";
 
@@ -26,7 +26,7 @@ class InputPhoneNumber extends React.Component {
     };
 
     verifIsValid = async () => {
-        await this.props.findUserByPhoneNumber(this.state.phone);
+        await this.props.getUserByPhoneNumber(this.state.phone);
     };
 
     render() {
@@ -79,5 +79,5 @@ const mapStateToProps = (state) => {
 }
 
 export default withRouter(
-    connect(mapStateToProps, {findUserByPhoneNumber})(InputPhoneNumber)
+    connect(mapStateToProps, {getUserByPhoneNumber})(InputPhoneNumber)
 );

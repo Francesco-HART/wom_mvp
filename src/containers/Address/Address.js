@@ -3,7 +3,7 @@ import {withRouter} from "react-router-dom";
 import {connect} from "react-redux";
 
 import {ADDRESS_CANCEL} from '../../actions/type';
-import {findAddressByDocumentId} from '../../actions/address';
+import {getAddressByDocumentId} from '../../actions/address';
 import {disconnect} from '../../actions/authentication';
 
 import ActivityIndicator from '../../components/ActivityIndicator';
@@ -30,7 +30,7 @@ class Address extends React.Component {
     }
 
     async componentDidMount() {
-        const query = await this.props.findAddressByDocumentId(this.props.match.params.id);
+        const query = await this.props.getAddressByDocumentId(this.props.match.params.id);
         this.offers = [];
         if (query !== null) {
             query.offers.forEach(element => {
@@ -93,7 +93,7 @@ class Address extends React.Component {
 
     render() {
         /* 
-            http://localhost:3000/address/r9KaFF7Omo71TAey7x2H
+            http://localhost:3000/address/m1LzI2Z9L5RzVdAyaUtw
         */
 
         if (this.state.isLoading) {
@@ -136,6 +136,6 @@ const mapStateToProps = (state) => {
 }
 
 export default withRouter(
-    connect(mapStateToProps, {findAddressByDocumentId})(Address)
+    connect(mapStateToProps, {getAddressByDocumentId})(Address)
 );
         

@@ -4,12 +4,16 @@ import {db} from "../Firebase";
 import * as firebase from 'firebase';
 import 'firebase/firestore';
 
-export const addNewUser = (user) => async dispatch => {
+export const addNewUser = (user, isAnAddress) => async dispatch => {
+    let phone = user["phoneNumber"];
+    while (phone.includes(" ")) {
+        phone = phone.replace(" ", "");
+    }
     return await db
         .collection("womers")
         .doc()
         .set({
-            phoneNumber: user["phoneNumber"].replace(" ", ""),
+            phoneNumber: phone,
             username: user["username"],
             birthday: user["birthday"],
             address: user["address"],
@@ -21,12 +25,14 @@ export const addNewUser = (user) => async dispatch => {
             password: user["password"],
             isPhoneNumberActive: false,
             isMailActive: false,
-            status: "none",
+            status: isAnAddress ? "address" : "none",
+            numberAddressCanCreate: 1,
+            numberAddressCreated: 0,
             registerDate: firebase.firestore.FieldValue.serverTimestamp(),
             documentId: null
         })
         .then(async () => {
-            const documentId = await getUserDocumentId(user["phoneNumber"].replace(" ", ""));
+            const documentId = await getUserDocumentId(phone);
             if (documentId === null) {
                 dispatch({
                     type: SHOW_SNACKBAR,
@@ -86,6 +92,9 @@ async function getUserDocumentId(phoneNumber) {
 }
 
 export const isUserAlreadyExists = (phoneNumber) => async dispatch => {
+    while (phoneNumber.includes(" ")) {
+        phoneNumber = phoneNumber.replace(" ", "");
+    }
     return await db
         .collection("womers")
         .where("phoneNumber", "==", phoneNumber)
@@ -94,18 +103,46 @@ export const isUserAlreadyExists = (phoneNumber) => async dispatch => {
             if (querySnapshot.empty) {
                 return false;
             }
+            dispatch({
+                type: SHOW_SNACKBAR,
+                payload: {txt: "Ce womer existe déjà ! ", variant: "error"}
+            });
             return true;
         })
         .catch(e => {
             dispatch({
                 type: SHOW_SNACKBAR,
-                payload: {txt: "Erreur lors de la séquence d'existance ! " + e.message, variant: "error"}
+                payload: {txt: "Impossible de vérifier si le womer existe déjà ! " + e.message, variant: "error"}
             });
             return null;
         });
 };
 
-export const findUserByPhoneNumber = (phoneNumber) => async dispatch => {
+export const getUserByDocumentId = (documentId) => async dispatch => {
+    return await db
+        .collection("womers")
+        .doc(documentId)
+        .get()
+        .then(doc => {
+            if (doc.data() === undefined) {
+                dispatch({
+                    type: SHOW_SNACKBAR,
+                    payload: {txt: "Aucun womer associé à cet identifiant ! ", variant: "error"}
+                });
+                return null;
+            }
+            return doc.data();
+        })
+        .catch(e => {
+            dispatch({
+                type: SHOW_SNACKBAR,
+                payload: {txt: "Impossible de trouver le womer par l'identifiant '" + documentId + "'.\n" + e.message, variant: "error"}
+            });
+            return null;
+        });
+}
+
+export const getUserByPhoneNumber = (phoneNumber) => async dispatch => {
     return await db
         .collection("womers")
         .where("phoneNumber", "==", phoneNumber)
@@ -130,12 +167,12 @@ export const findUserByPhoneNumber = (phoneNumber) => async dispatch => {
             return result[0];
         })
         .catch(e => {
-            dispatch({type: SHOW_SNACKBAR, payload: {txt: "Impossible de vous connecter !", variant: "error"}});
+            dispatch({type: SHOW_SNACKBAR, payload: {txt: "Impossible de vous connecter !\n" + e.message, variant: "error"}});
             return null;
         });
 };
 
-export const findUserByUsernameAndPassword = (username, password) => async dispatch => {
+export const getUserByUsernameAndPassword = (username, password) => async dispatch => {
     return await db
         .collection("womers")
         .where("username", "==", username)
@@ -179,7 +216,26 @@ export const disconnect = () => async dispatch => {
     } catch (e) {
         dispatch({
             type: SHOW_SNACKBAR,
-            payload: {txt: "une erreur s'est produite lors de la déconnexion", variant: "error"}
+            payload: {txt: "Impossible de se déconnecter !\n" + e.message, variant: "error"}
         });
     }
+};
+
+export const increaseAddressCreated = (userId, currentNumberOfAddressCreated) => async dispatch => {
+    return await db
+        .collection("womers")
+        .doc(userId)
+        .update({
+            numberAddressCreated: currentNumberOfAddressCreated + 1,
+        })
+        .then( () => {
+            return true;
+        })
+        .catch((e) => {
+            dispatch({
+                type: SHOW_SNACKBAR, 
+                payload: {txt: "Impossible d'incrémenter le nombre d'adresse créée !\n" + e.message, variant: "error"}
+            });
+            return null;
+        });
 };

@@ -4,10 +4,12 @@ import {withRouter} from "react-router-dom";
 import * as Yup from "yup";
 import {Formik} from "formik";
 import Cookies from 'universal-cookie';
-import {addNewUser, isUserAlreadyExists} from "../actions/authentication";
-import FormTextField from "../components/form/FormTextField";
 import {Link, Grid, Typography} from "@material-ui/core";
 import LockOpenIcon from '@material-ui/icons/LockOpen';
+// import Checkbox from '../components/Checkbox';
+
+import {addNewUser, isUserAlreadyExists} from "../actions/authentication";
+import FormTextField from "../components/form/FormTextField";
 
 class SignIn extends React.Component {
     constructor(props) {
@@ -22,8 +24,9 @@ class SignIn extends React.Component {
             postalCode: "",
             country: "",
             mail: "",
-            password: ""
-        };  
+            password: "",
+            isAnAddress: false
+        };
     }
 
     handleSubmit = async (values) => {
@@ -31,11 +34,29 @@ class SignIn extends React.Component {
             return;
         }
 
-        if (await this.props.addNewUser(values)) {
+        if (await this.props.addNewUser(values, this.state.isAnAddress)) {
             this.props.history.push('/login');
         }
     };
     
+    toggleCheckboxChange = () => {
+        this.setState({isAnAddress: !this.state.isAnAddress});
+    }
+
+    getIsAnAddress() {
+        return <div className="checkbox">
+                    <label>
+                        <input
+                            type="checkbox"
+                            value="isAnAddress"
+                            checked={this.state.isAnAddress}
+                            onChange={this.toggleCheckboxChange}
+                        />
+                        Compte Adresse
+                    </label>
+                </div>;
+    }
+
     render() {
         const array = [
             {name: "phoneNumber", label: "Phone (33 6 01 02 03 04)", type: "tel"},
@@ -47,7 +68,7 @@ class SignIn extends React.Component {
             {name: "postalCode", label: "Code postal", type: "number"},
             {name: "country", label: "Pays", type: "text"},
             {name: "mail", label: "e-mail", type: "mail"},
-            {name: "password", label: "Mot de passe", type: "password"},
+            {name: "password", label: "Mot de passe", type: "password"}
         ];
 
         const cookies = new Cookies();
@@ -65,7 +86,9 @@ class SignIn extends React.Component {
                         </Grid>
                     </Grid>
                 </Grid>
-
+                <Grid item>
+                    {this.getIsAnAddress()}
+                </Grid>
                 <Grid item xs={12}>
                     <Formik 
                         initialValues={this.state} 
@@ -80,7 +103,7 @@ class SignIn extends React.Component {
                             postalCode: Yup.string().required("Champs requis"),
                             country: Yup.string().required("Champs requis"),
                             mail: Yup.string().required("Champs requis"),
-                            password: Yup.string().required("Champs requis"),
+                            password: Yup.string().required("Champs requis")
                         })}
                     >
                         { props => <FormTextField {...props} arrayField={array}/> }
