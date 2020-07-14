@@ -3,7 +3,7 @@ import {db} from "../Firebase";
 import * as firebase from 'firebase';
 import 'firebase/firestore';
 
-export const createCoupon = (addressId, womerId, selectedOffer, withFriends) => async dispatch => {
+export const createCoupon = (addressId, womerId, selectedOffer, contribution) => async dispatch => {
     const tmpId = makeid(30);
     return await db
         .collection("coupons")
@@ -12,7 +12,7 @@ export const createCoupon = (addressId, womerId, selectedOffer, withFriends) => 
             addressId: addressId,
             womerId: womerId,
             selectedOffer: selectedOffer,
-            withFriends: withFriends,
+            contribution: contribution,
             creationDate: firebase.firestore.FieldValue.serverTimestamp(),
             documentId: null,
             tmpId: tmpId
@@ -24,7 +24,7 @@ export const createCoupon = (addressId, womerId, selectedOffer, withFriends) => 
                     type: SHOW_SNACKBAR,
                     payload: {txt: "Coupon créé. Impossible de trouver le coupon !", variant: "error"}
                 });
-                return false;
+                return null;
             }
             else {
                 return await db
@@ -32,14 +32,18 @@ export const createCoupon = (addressId, womerId, selectedOffer, withFriends) => 
                     .doc(documentId)
                     .update({documentId: documentId})
                     .then(() => {
-                        return true;
+                        dispatch({
+                            type: SHOW_SNACKBAR,
+                            payload: {txt: "Coupon créé avec succès !", variant: "success"}
+                        });
+                        return documentId;
                     })
                     .catch(e => {
                         dispatch({
                             type: SHOW_SNACKBAR,
                             payload: {txt: "Coupon créé. Erreur lors de l'écriture du documentID du coupon : '" + documentId + "' !\n" + e.message, variant: "error"}
                         });
-                        return false;
+                        return null;
                     });
             }
         })
@@ -48,7 +52,7 @@ export const createCoupon = (addressId, womerId, selectedOffer, withFriends) => 
                 type: SHOW_SNACKBAR,
                 payload: {txt: "Impossible de créer le coupon !\n" + e.message, variant: "error"}
             });
-            return false;
+            return null;
         });
 }
 

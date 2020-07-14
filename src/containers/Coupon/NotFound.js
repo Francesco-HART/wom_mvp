@@ -5,14 +5,24 @@ export default class NotFound extends React.Component {
 
     render() {
         return (
-            <Grid container xs={12} spacing={5} justify='center'>
-                <Grid item justify="center" >
-                    <Typography>
-                        Aucun coupon associé à cet identifiant !
-                    </Typography>
-                    <Button variant="contained" color="primary" style={{height: 50}} href="/">
-                        Home
-                    </Button>
+            <Grid container spacing={5} style={{marginTop: 100}}>
+                <Grid item xs={12}>
+                    <Grid container justify='center'>
+                        <Grid item >
+                            <Typography>
+                                Aucun coupon associé à cet identifiant !
+                            </Typography>
+                        </Grid>
+                    </Grid>
+                </Grid>
+                <Grid item item xs={12}>
+                    <Grid container justify='center'>
+                        <Grid item >
+                            <Button variant="contained" color="primary" style={{height: 50}} href="/">
+                                Home
+                            </Button>
+                        </Grid>
+                    </Grid>
                 </Grid>
             </Grid>
         );

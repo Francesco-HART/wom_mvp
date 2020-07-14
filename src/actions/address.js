@@ -22,8 +22,8 @@ export const addNewAddress = (address) => async dispatch => {
             postalCode: address["postalCode"],
             country: address["country"],
             offers: [
-                address["offer1"] + ":value:true",
-                address["offer2"] + ":value:true"
+                address["offer1"] + ":value:available",
+                address["offer2"] + ":value:available"
             ],
             mail: address["mail"],
             password: address["password"],
@@ -216,7 +216,7 @@ async function resetOffersOfOneAddress(addressId, addressOffers) {
         .collection("address")
         .doc(addressId)
         .update({
-            offers: addressOffers.map(offer => offer.split(":value:")[0] + ":value:true")
+            offers: addressOffers.map(offer => offer.split(":value:")[0] + ":value:available")
         })
         .then(() => {
             return true;
@@ -227,25 +227,51 @@ async function resetOffersOfOneAddress(addressId, addressOffers) {
         });
 }
 
-export const disableAnOffer = (addressId, addressOffers, selectedOffer) => async dispatch => {
+export const changeStateOffer = (addressId, addressOffers, selectedOffer, newState) => async dispatch => {
     return await db
         .collection("address")
         .doc(addressId)
         .update({
-            offers: addressOffers.map(offer => offer.split(":value:")[0] + ":value:" + (offer.split(":value:")[0] === selectedOffer ? "false" : offer.split(":value:")[1]))
+            offers: addressOffers.map(offer => offer.split(":value:")[0] + ":value:" + (offer.split(":value:")[0] === selectedOffer ? newState : offer.split(":value:")[1]))
         })
         .then(() => {
-            dispatch({
-                type: SHOW_SNACKBAR,
-                payload: {txt: "L'offre a été retiré avec succès !", variant: "success"}
-            });
             return true;
         })
         .catch(e => {
             dispatch({
                 type: SHOW_SNACKBAR,
-                payload: {txt: "Impossible de supprimé l'offre !", variant: "error"}
+                payload: {txt: "Impossible de changer l'état de l'offre !\n" + e.message, variant: "error"}
             });
             return false;
+        });
+}
+
+export const isStateOffer = (addressId, offer, state) => async dispatch => {
+    return await db
+        .collection("address")
+        .doc(addressId)
+        .get()
+        .then(doc => {
+            const address = doc.data(); 
+            if (address === undefined) {
+                dispatch({
+                    type: SHOW_SNACKBAR,
+                    payload: {txt: "Aucune adresse associée à cet identifiant ! ", variant: "error"}
+                });
+                return null;
+            }
+            for (let i = 0; i < address.offers.length; i++) {
+                if (address.offers[i].split(':value:')[0] === offer) {
+                    return address.offers[i].split(':value:')[1] === state; 
+                }
+            }
+            return false;
+        })
+        .catch(err => {
+            dispatch({
+                type: SHOW_SNACKBAR,
+                payload: {txt: "Impossible de trouver l'offre !\n" + err.message, variant: "error"}
+            });
+            return null;
         });
 }

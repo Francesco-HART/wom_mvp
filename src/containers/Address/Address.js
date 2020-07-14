@@ -1,19 +1,18 @@
 import React from 'react';
 import {withRouter} from "react-router-dom";
 import {connect} from "react-redux";
-import {Grid, CircularProgress, Typography, Button} from '@material-ui/core';
 
 import {ADDRESS_CANCEL} from '../../actions/type';
 import {findAddressByDocumentId} from '../../actions/address';
 import {disconnect} from '../../actions/authentication';
+
 import ActivityIndicator from '../../components/ActivityIndicator';
-import LoginPhoneNumber from '../LoginPhoneNumber';
+import Authentication from './Authentication';
 import NotFound from './NotFound';
 import NoOffers from './NoOffers';
 import Gratuities from './Gratuities';
-import SelectedGratuity from './SelectedGratuity';
-import WithFriends from './WithFriends';
-import SelectedWithFriends from './SelectedWithFriends';
+import Contribution from './Contribution';
+import Validation from './Validation';
 import CouponCreator from './CouponCreator';
 
 class Address extends React.Component {
@@ -23,7 +22,7 @@ class Address extends React.Component {
         this.state = {
             isLoading: true,
             selectedOffer: null,
-            withFriends: null,
+            contribution: null,
             idNotAssociate: false,
             hasValidate: false
         };
@@ -35,7 +34,7 @@ class Address extends React.Component {
         this.offers = [];
         if (query !== null) {
             query.offers.forEach(element => {
-                if (element.split(':value:')[1] === "true") {
+                if (element.split(':value:')[1] === "available") {
                     this.offers.push(element.split(':value:')[0]);
                 }
             });
@@ -52,9 +51,9 @@ class Address extends React.Component {
         });
     };
 
-    selectionWithFriends = (value) => {
+    selectionContribution = (value) => {
         this.setState({
-            withFriends: value
+            contribution: value
         });
     };
 
@@ -64,9 +63,9 @@ class Address extends React.Component {
         });
     };
 
-    resetWithFriends = () => {
+    resetContribution = () => {
         this.setState({
-            withFriends: null
+            contribution: null
         });
     };
 
@@ -74,7 +73,7 @@ class Address extends React.Component {
         this.setState({
             isLoading: true,
             selectedOffer: null,
-            withFriends: null,
+            contribution: null,
             idNotAssociate: false,
             hasValidate: false
         }, () => {
@@ -92,35 +91,6 @@ class Address extends React.Component {
         });
     };
 
-    displayOffers() {
-        return this.state.selectedOffer === null ?
-            <Gratuities 
-                offers={this.offers} 
-                selectionOffer={this.selectionOffer} 
-            />
-            :
-            <SelectedGratuity 
-                selectedOffer={this.state.selectedOffer}
-                resetSelectedOffer={this.resetSelectedOffer} 
-                hasValidate={this.state.hasValidate}
-            />
-            ;
-    }
-
-    displayWithFriends() {
-        return this.state.withFriends === null ?
-            <WithFriends 
-                selectionWithFriends={this.selectionWithFriends} 
-            />
-            :
-            <SelectedWithFriends 
-                withFriends={this.state.withFriends}
-                resetWithFriends={this.resetWithFriends} 
-                hasValidate={this.state.hasValidate}
-            />
-            ;
-    }
-
     render() {
         /* 
             http://localhost:3000/address/r9KaFF7Omo71TAey7x2H
@@ -135,58 +105,29 @@ class Address extends React.Component {
         }
         
         if (this.offers.length === 0) {
-            return <NoOffers addressName={this.props.address.name}/>;
+            return <NoOffers addressName={this.props.address.name} />;
         }
 
         if (this.props.auth === null) {
-            return (
-                <Grid container spacing={5}>
-                    <Grid item xs={12}>
-                        <Typography variant="h2">
-                            {this.props.addressName}
-                        </Typography>
-                    </Grid>
-                    <Grid container justify='center' spacing={2}>
-                        <Grid item>
-                            <Grid container justify='center' spacing={2}>
-                                <LoginPhoneNumber />
-                            </Grid>
-                        </Grid>
-                    </Grid>
-                </Grid>
-            );
+            return <Authentication addressName={this.props.address.name} />;
         }
 
-        return (
-            <Grid container spacing={5}>
-                <Grid item xs={12}>
-                    <Typography variant="h2">
-                        {this.props.address.name}
-                    </Typography>
-                </Grid>
-                <Grid item xs={12}>
-                    {this.displayOffers()}
-                </Grid>
-                <Grid item xs={12}>
-                    {this.displayWithFriends()}
-                </Grid>
-                <Grid item xs={12} container spacing={5}>
-                    <Grid item>
-                        <Button disabled={this.state.selectedOffer === null || this.state.withFriends === null} variant="contained" color="primary" style={{height: 50}} onClick={this.validation}>
-                            Valider
-                        </Button>
-                    </Grid>
-                    <Grid item>
-                        <Button disabled={this.state.hasValidate} variant="contained" color="secondary" style={{height: 50}} onClick={this.cancel}>
-                            Annuler
-                        </Button>
-                    </Grid>
-                </Grid>
-                <Grid item xs={12}>
-                    {this.state.hasValidate && <CouponCreator selectedOffer={this.state.selectedOffer} withFriends={this.state.withFriends} />}
-                </Grid>
-            </Grid>
-        );
+        if (this.state.selectedOffer === null) {
+            return <Gratuities addressName={this.props.address.name} offers={this.offers} selectionOffer={this.selectionOffer} />;
+        }
+
+        if (this.state.contribution === null) {
+            return <Contribution addressName={this.props.address.name} selectionContribution={this.selectionContribution} />;
+        }
+        
+        if (!this.state.hasValidate) {
+            return <Validation addressName={this.props.address.name} selectedOffer={this.state.selectedOffer} contribution={this.state.contribution} 
+                        resetSelectedOffer={this.resetSelectedOffer} resetContribution={this.resetContribution} 
+                        validation={this.validation} cancel={this.cancel} 
+                    />
+        }
+
+        return <CouponCreator addressName={this.props.address.name} selectedOffer={this.state.selectedOffer} contribution={this.state.contribution} cancel={this.cancel}/>;
     }
 }
 

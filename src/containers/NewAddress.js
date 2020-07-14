@@ -6,7 +6,7 @@ import {Formik} from "formik";
 import Cookies from 'universal-cookie';
 import QRCode from 'qrcode.react';
 
-import {Typography, Button, Grid, CircularProgress} from '@material-ui/core';
+import {Typography, Button, Grid} from '@material-ui/core';
 import Earth from "@material-ui/icons/AddLocation";
 
 import FormTextField from "../components/form/FormTextField";
