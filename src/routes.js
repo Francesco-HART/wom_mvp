@@ -6,7 +6,7 @@ import requireNoAuth from "./middleware/requireNoAuth";
 import Home from './components/Home';
 import Address from './containers/Address/Address';
 import Coupon from './containers/Coupon/Coupon';
-import NewAddress from './containers/NewAddress';
+import NewAddress from './containers/NewAdress/NewAddress';
 import Signin from './containers/Signin';
 import LoginAdmin from './containers/LoginAdmin';
 import Instagram from './containers/Instagram';

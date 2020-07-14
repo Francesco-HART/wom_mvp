@@ -28,7 +28,7 @@ export default class Contribution extends React.Component {
                     <Grid container justify='center' >
                         <Grid item >
                             <Typography variant='h5'>
-                                Offres restantes :
+                                Ma contribution :
                             </Typography>
                         </Grid>
                     </Grid>

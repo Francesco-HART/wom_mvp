@@ -3,18 +3,16 @@ import {db} from "../Firebase";
 import * as firebase from 'firebase';
 import 'firebase/firestore';
 
-/**
- * Try to create a new address.
- * @param {string} address The address Name
- * @returns If the address was create and its field 'documentId' was set, return a string corresponding at the documentId.
- * Else, if the address was create but its documentId wasn't set, return null. Endly, return undefined if the address wasn't create.
- */
-export const addNewAddress = (address) => async dispatch => {
+export const addNewAddress = (address, authId) => async dispatch => {
+    let phone = address["phoneNumber"];
+    while (phone.includes(" ")) {
+        phone = phone.replace(" ", "");
+    }
     return await db
         .collection("address")
         .doc()
         .set({
-            phoneNumber: address["phoneNumber"].replace(" ", ""),
+            phoneNumber: phone,
             name: address["name"],
             address: address["address"],
             category: address["category"],
@@ -26,13 +24,14 @@ export const addNewAddress = (address) => async dispatch => {
                 address["offer2"] + ":value:available"
             ],
             mail: address["mail"],
-            password: address["password"],
             webSite: address["webSite"],
-            isPhoneNumberActive: false,
             isMailActive: false,
+            password: address["password"],
+            validationCode: address["validationCode"],
             position: new firebase.firestore.GeoPoint(0, 0),
             registerDate: firebase.firestore.FieldValue.serverTimestamp(),
-            documentId: null
+            documentId: null,
+            womerId: authId
         })
         .then(async () => {
             const documentId = await getAddressDocumentId(address["name"], address["city"], address["postalCode"], address["country"]);
@@ -58,7 +57,7 @@ export const addNewAddress = (address) => async dispatch => {
                     .catch(e => {
                         dispatch({
                             type: SHOW_SNACKBAR,
-                            payload: {txt: "Adresse créée. Erreur lors de l'écriture du documentID de l'adresse : '" + documentId + "' !", variant: "error"}
+                            payload: {txt: "Adresse créée. Erreur lors de l'écriture du documentID de l'adresse : '" + documentId + "' !\n" + e.message, variant: "error"}
                         });
                         return null;
                     });
@@ -67,9 +66,9 @@ export const addNewAddress = (address) => async dispatch => {
         .catch((e) => {
             dispatch({
                 type: SHOW_SNACKBAR,
-                payload: {txt: "Impossible de créer l'adresse !", variant: "error"}
+                payload: {txt: "Impossible de créer l'adresse !\n" + e.message, variant: "error"}
             });
-            return undefined;
+            return null;
         });
 }
 
@@ -97,7 +96,7 @@ async function getAddressDocumentId(addressName, addressCity, addressPostalCode,
         });
 }
 
-export const findAddressByDocumentId = (documentId) => async dispatch => {
+export const getAddressByDocumentId = (documentId) => async dispatch => {
     return await db
         .collection("address")
         .doc(documentId)
@@ -117,7 +116,7 @@ export const findAddressByDocumentId = (documentId) => async dispatch => {
         .catch(e => {
             dispatch({
                 type: SHOW_SNACKBAR,
-                payload: {txt: "Error occured to find the address by id '" + documentId + "'.\n" + e.message, variant: "error"}
+                payload: {txt: "Impossible de trouver l'adresse par l'identifiant '" + documentId + "'.\n" + e.message, variant: "error"}
             });
             dispatch({type: ADDRESS, payload: null});
             return null;
@@ -141,7 +140,7 @@ export const isAddressAlreadyExists = (addressName, addressCity, addressPostalCo
         .catch(e => {
             dispatch({
                 type: SHOW_SNACKBAR,
-                payload: {txt: "Error occured to check if an address's already existing.\n" + e.message, variant: "error"}
+                payload: {txt: "Impossible de vérifier si l'adresse existe déjà.\n" + e.message, variant: "error"}
             });
             return null;
         });
@@ -168,7 +167,7 @@ export const resetOffers = () => async dispatch => {
         .catch(e => {
             dispatch({
                 type: SHOW_SNACKBAR,
-                payload: {txt: "Impossible de réinitialiser les offres ! Aucune adresse réinitialisé.\n" + e.message, variant: "error"}
+                payload: {txt: "Impossible de réinitialiser les offres ! Aucune adresse réinitialisée.\n" + e.message, variant: "error"}
             });
             return null;
         });
@@ -178,29 +177,17 @@ export const resetOffers = () => async dispatch => {
     }
 
     let countAddressReseted = 0;
-    await allAddress.forEach(async (address) => {
-        const hasReset = await resetOffersOfOneAddress(address.documentId, address.offers);
-        console.log("hasReset :");
-        console.log(hasReset);
+    for (let i = 0; i < allAddress.length; i++) {
+        const hasReset = await resetOffersOfOneAddress(allAddress[i].documentId, allAddress[i].offers);
         if (hasReset) {
-            console.log("j'ai reset");
-            console.log(countAddressReseted);
             countAddressReseted++;
-            console.log(" => ");
-            console.log(countAddressReseted);
         }
-        else {
-            console.log("j'ai pas reset");
-        }
-    });
-    console.log("check:");
-    console.log(countAddressReseted);
-    console.log(allAddress.length);
-    console.log(countAddressReseted !== allAddress.length);
+    }
+
     if (countAddressReseted !== allAddress.length) {
         dispatch({
             type: SHOW_SNACKBAR,
-            payload: {txt: "Adresse réinitialisée : " + countAddressReseted + " / " + allAddress.length + ". Possible qu'il dise ça alors qu'il a bien fait truc :/ pb async", variant: "error"}
+            payload: {txt: "Adresse réinitialisée : " + countAddressReseted + " / " + allAddress.length + ".", variant: "error"}
         });
         return false;
     }
@@ -270,7 +257,7 @@ export const isStateOffer = (addressId, offer, state) => async dispatch => {
         .catch(err => {
             dispatch({
                 type: SHOW_SNACKBAR,
-                payload: {txt: "Impossible de trouver l'offre !\n" + err.message, variant: "error"}
+                payload: {txt: "Impossible de vérifier l'état de l'offre !\n" + err.message, variant: "error"}
             });
             return null;
         });

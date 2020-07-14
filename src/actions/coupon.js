@@ -87,7 +87,7 @@ async function getCouponByTmpId(tmpId) {
         });
 }
 
-export const getCouponByByDocumentId = (documentId) => async dispatch => {
+export const getCouponByDocumentId = (documentId) => async dispatch => {
     return await db
         .collection("coupons")
         .doc(documentId)

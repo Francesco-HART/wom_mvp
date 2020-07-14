@@ -28,7 +28,7 @@ export default class Gratuities extends React.Component {
                     <Grid container justify='center' >
                         <Grid item >
                             <Typography variant='h5'>
-                                Offres restantes :
+                                Offre{this.props.offers.length > 1 ? "s" : ""} restante{this.props.offers.length > 1 ? "s" : ""} :
                             </Typography>
                         </Grid>
                     </Grid>

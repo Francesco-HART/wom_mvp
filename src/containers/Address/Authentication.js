@@ -8,7 +8,7 @@ export default class Authentication extends React.Component {
         return (
             <Grid container direction='column' justify='space-around' spacing={10}>
                 <Grid item>
-                    <Grid container justify="flex-start">
+                    <Grid container>
                         <Grid item>
                             <Typography variant="h2">
                                 {this.props.addressName}
