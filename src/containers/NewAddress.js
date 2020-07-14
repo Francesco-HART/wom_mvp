@@ -4,13 +4,17 @@ import {withRouter} from "react-router-dom";
 import * as Yup from "yup";
 import {Formik} from "formik";
 import Cookies from 'universal-cookie';
-import FormTextField from "../components/form/FormTextField";
-import {Typography, Button, Grid, CircularProgress} from '@material-ui/core';
-import Earth from "@material-ui/icons/AddLocation";
 import QRCode from 'qrcode.react';
-import {SHOW_SNACKBAR} from '../actions/type';
 
+import {Typography, Button, Grid} from '@material-ui/core';
+import Earth from "@material-ui/icons/AddLocation";
+
+import FormTextField from "../components/form/FormTextField";
+import ActivityIndicator from '../components/ActivityIndicator';
+
+import {SHOW_SNACKBAR} from '../actions/type';
 import {addNewAddress, isAddressAlreadyExists} from '../actions/address';
+
 
 class NewAddress extends React.Component {
     constructor(props) {
@@ -52,15 +56,7 @@ class NewAddress extends React.Component {
 
     getAddressInformation() {
         if (this.state.isLoading) {
-            return (
-                <Grid container>
-                    <Grid item xs={12}>
-                        <Grid container justify="center">
-                            <CircularProgress />
-                        </Grid>
-                    </Grid>
-                </Grid>
-            );
+            return <ActivityIndicator />;
         }
         if (this.state.documentId !== null) {
             return (

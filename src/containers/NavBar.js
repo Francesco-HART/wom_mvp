@@ -139,11 +139,6 @@ class NavBar extends React.Component {
                                     <MenuIcon/>
                                 </IconButton>
                             </Grid>
-                            <Grid item>
-                                <Typography>
-                                    Wom Paris
-                                </Typography>
-                            </Grid>
 
                             <Grid item>
                                 <Tooltip
