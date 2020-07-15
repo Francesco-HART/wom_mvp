@@ -19,7 +19,7 @@ export default class Authentication extends React.Component {
                 <Grid item>
                     <Grid container justify="flex-start">
                         <Grid item >
-                            <Typography variant="h5">
+                            <Typography variant="h4">
                                 Etape 1 : Je m'identifie
                             </Typography>
                         </Grid>

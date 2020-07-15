@@ -18,7 +18,7 @@ export default class Validation extends React.Component {
                 <Grid item>
                     <Grid container>
                         <Grid item >
-                            <Typography variant="h5">
+                            <Typography variant="h4">
                                 Etape 4 : Je confirme
                             </Typography>
                         </Grid>

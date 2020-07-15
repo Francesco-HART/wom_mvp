@@ -18,7 +18,7 @@ export default class Gratuities extends React.Component {
                 <Grid item>
                     <Grid container>
                         <Grid item >
-                            <Typography variant="h5">
+                            <Typography variant="h4">
                                 Etape 2 : Choisis ton cadeau
                             </Typography>
                         </Grid>

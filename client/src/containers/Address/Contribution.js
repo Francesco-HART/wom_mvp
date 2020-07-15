@@ -45,7 +45,7 @@ const useStyles = makeStyles((theme = 'light') => ({
                 <Grid item>
                     <Grid container>
                         <Grid item >
-                            <Typography variant="h5">
+                            <Typography variant="h4">
                                 Etape 3 : Je choisis mon geste
                             </Typography>
                         </Grid>
@@ -71,7 +71,7 @@ const useStyles = makeStyles((theme = 'light') => ({
                                     </CardActionArea>
                                 </Grid>
                                 <Grid item>
-                                    <Button  onClick={() => selectionContribution("Avec mes amis")}>  <Typography variant='h6'> Tu es accompagné </Typography></Button>
+                                    <Button  onClick={() => selectionContribution("Avec mes amis")}>  <Typography variant='h4'> Tu es accompagné </Typography></Button>
                                 </Grid>
                             </Grid>
                         </Grid>
@@ -85,7 +85,7 @@ const useStyles = makeStyles((theme = 'light') => ({
                                     </CardActionArea>
                                 </Grid>
                                  <Grid item>
-                                    <Button onClick={() => selectionContribution("Seul")}> <Typography variant='h6'> Un petit truc en + </Typography></Button>
+                                    <Button onClick={() => selectionContribution("Seul")}> <Typography variant='h4'> Un petit truc en + </Typography></Button>
                                  </Grid>
                             </Grid>
                         </Grid>
