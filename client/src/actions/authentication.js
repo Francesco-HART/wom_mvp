@@ -163,7 +163,6 @@ export const getUserByPhoneNumber = (phoneNumber) => async dispatch => {
                 type: SHOW_SNACKBAR,
                 payload: {txt: "Ravie de vous revoir " + result[0].username + " !", variant: "success"}
             });
-            dispatch({type: AUTH_USER, payload: result[0]});
             return result[0];
         })
         .catch(e => {

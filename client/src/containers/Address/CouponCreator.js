@@ -46,6 +46,7 @@ class CouponCreator extends React.Component {
                                 couponLink: "http://localhost:3000/coupon/" + couponDocumentId,
                                 status: "success"
                             });
+                            await this.props.sendSms({to : '+'+this.props.auth.phoneNumber, body : 'Voici le lien vers ton coupon Wom : http://localhost:3000/coupon/' + couponDocumentId})
                             return;
                         }
 
@@ -233,8 +234,8 @@ class CouponCreator extends React.Component {
     }
 }
 
-const mapsStateToProps = (state) => {
-    return state;
+const mapsStateToProps = ({address}) => {
+    return {address};
 }
 
 export default connect(mapsStateToProps, {createCoupon, isStateOffer, changeStateOffer})(CouponCreator);

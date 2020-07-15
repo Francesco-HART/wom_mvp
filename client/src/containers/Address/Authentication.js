@@ -28,7 +28,7 @@ export default class Authentication extends React.Component {
                 <Grid item>
                     <Grid container justify='center'>
                         <Grid item>
-                            <LoginPhoneNumber />
+                            <LoginPhoneNumber getUserByPhoneNumber={this.props.getUserByPhoneNumber}/>
                         </Grid>
                     </Grid>
                 </Grid>

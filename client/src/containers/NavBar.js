@@ -20,13 +20,11 @@ import {
     Hidden,
     Grid,
     IconButton,
-    Icon,
     Tooltip,
     ListItem,
     ListItemIcon,
     ListItemText,
     Toolbar,
-    Typography,
 } from "@material-ui/core";
 import {withStyles} from "@material-ui/core/styles";
 
@@ -44,7 +42,7 @@ const styles = (theme) => {
             backgroundColor:
                 theme.palette.type === "light" ? theme.palette.primary.main : null,
             [theme.breakpoints.up("md")]: {
-                width: `calc(100% - ${drawerWidth}px)`,
+                width: `100% `,
                 marginLeft: drawerWidth,
             },
         },
@@ -58,7 +56,7 @@ const styles = (theme) => {
         drawerPaper: {width: drawerWidth},
         content: {
             [theme.breakpoints.up("sm")]: {
-                maxWidth: `calc(100% - ${drawerWidth}px)`,
+                maxWidth: `100% `,
             },
             [theme.breakpoints.down("sm")]: {maxWidth: "100%"},
             flexGrow: 1,
@@ -120,25 +118,14 @@ class NavBar extends React.Component {
 
     render() {
         const {classes, theme, container} = this.props;
-        const {mobileOpen/*, open_config_menu*/} = this.state;
-
         return (
             <div className={classes.root}>
                 <CssBaseline/>
-                <AppBar position="fixed" color="default" className={classes.appBar}>
+               {
+               this.props.auth === null ? <div></div> :
+               <AppBar position="fixed" color="default" className={classes.appBar}>
                     <Toolbar>
                         <Grid container justify="space-between">
-                            <Grid item>
-                                <IconButton
-                                    color="inherit"
-                                    aria-label="open drawer"
-                                    edge="start"
-                                    onClick={this.handleDrawerToggle}
-                                    className={classes.menuButton}
-                                >
-                                    <MenuIcon/>
-                                </IconButton>
-                            </Grid>
 
                             <Grid item>
                                 <Tooltip
@@ -209,32 +196,7 @@ class NavBar extends React.Component {
                         </Grid>
                     </Toolbar>
                 </AppBar>
-
-                <nav className={classes.drawer}>
-                    <Hidden mdUp implementation="css">
-                        <Drawer
-                            container={container}
-                            variant="temporary"
-                            anchor={theme.direction === "rtl" ? "right" : "left"}
-                            open={mobileOpen}
-                            onClose={this.handleDrawerToggle}
-                            classes={{paper: classes.drawerPaper}}
-                            ModalProps={{
-                                keepMounted: true, // Better open performance on mobile.
-                            }}
-                        >
-                        </Drawer>
-                    </Hidden>
-                    <Hidden smDown implementation="css">
-                        <Drawer
-                            classes={{paper: classes.drawerPaper}}
-                            variant="permanent"
-                            open
-                        >
-                        </Drawer>
-                    </Hidden>
-                </nav>
-
+}
                 <main className={classes.content}>
                     <div className={classes.toolbar}/>
                     {this.props.children}

@@ -5,7 +5,7 @@ export default class Gratuities extends React.Component {
 
     render() {
         return (
-            <Grid container direction="column" justify="space-between" spacing={10}>
+            <Grid container direction="column" justify="space-between" spacing={4}>
                 <Grid item>
                     <Grid container>
                         <Grid item >
@@ -19,7 +19,7 @@ export default class Gratuities extends React.Component {
                     <Grid container>
                         <Grid item >
                             <Typography variant="h5">
-                                Etape 2 : Je choisis ma gratuité
+                                Etape 2 : Choisis ton cadeau
                             </Typography>
                         </Grid>
                     </Grid>

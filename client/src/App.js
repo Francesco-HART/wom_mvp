@@ -31,14 +31,14 @@ class App extends React.Component {
     };
 
     render() {
-        const themeColor = theme(this.state.themeColorAdaptation ? 'light' : "dark");
+        const themeColor = theme('dark' );
         const cookies = new Cookies();
 
         return (
             (cookies.get('userCookie') /*? true : false*/) && !this.props.auth ? <CookieHandler/> :
-                <MuiThemeProvider theme={themeColor}>
+                <MuiThemeProvider  theme={themeColor}>
                     <BrowserRouter>
-                        <div style={{height: "100%"}}>
+                        <div  style={{height: "100%"}}>
                             <NavBar themeColor={this.state.themeColorAdaptation} setThemeColor={this.setColorTheme}>
                                 <Routes/>
                             </NavBar>

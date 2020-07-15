@@ -1,13 +1,28 @@
 import React from 'react'
 import PhoneInput from 'react-phone-input-2'
 import 'react-phone-input-2/lib/style.css'
-import {Button, Grid, Link, Typography} from "@material-ui/core";
+import {Button, Grid, Link, Typography, CardMedia} from "@material-ui/core";
 import es from 'react-phone-input-2/lang/es.json'
 import startsWith from 'lodash.startswith';
 import validator from 'validator';
-import {getUserByPhoneNumber} from "../actions/authentication";
 import {withRouter} from "react-router-dom";
 import {connect} from "react-redux";
+import Logo from '../img/logoApp.png'
+import {sendSms} from '../actions/sendSms'
+import { withStyles } from '@material-ui/core/styles';
+
+const useStyles = theme => ({
+    media: {
+        paddingTop: 80,
+        overflow: 'hidden',
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    mediaContainer : {
+        width : 250, 
+        borderRadius : 10
+    },
+  });
 
 class InputPhoneNumber extends React.Component {
     constructor(props) {
@@ -28,14 +43,22 @@ class InputPhoneNumber extends React.Component {
     verifIsValid = async () => {
         await this.props.getUserByPhoneNumber(this.state.phone);
     };
+    
 
     render() {
+        const { classes } = this.props;
         return (
-            <Grid container justify='center' spacing={5}>
+            <Grid container justify='center' spacing={2}>
                 <Grid item xs={12}>
-                    <Grid container justify='center' spacing={5}>
+                    <Grid container justify='center' direction='column' alignItems='center' spacing={2}>
+                        <Grid item >
+                            <div  className={classes.mediaContainer}  >
+                                            <CardMedia  className={classes.media} image={Logo}/>
+                            </div>
+                        </Grid>
                         <Grid item >
                             <PhoneInput
+
                                 inputProps={{
                                     name: 'phone',
                                     required: true,
@@ -55,7 +78,7 @@ class InputPhoneNumber extends React.Component {
                         </Grid>
                         <Grid item>
                             <Button disabled={!this.state.isValidPhoneNumber} variant="contained" onClick={this.verifIsValid}>
-                                Valider
+                              Valider  
                             </Button>
                         </Grid>
                     </Grid>
@@ -79,5 +102,5 @@ const mapStateToProps = (state) => {
 }
 
 export default withRouter(
-    connect(mapStateToProps, {getUserByPhoneNumber})(InputPhoneNumber)
+    connect(mapStateToProps , {sendSms} )(withStyles(useStyles)(InputPhoneNumber))
 );

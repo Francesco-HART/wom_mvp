@@ -1,11 +1,11 @@
 import React from 'react';
 import {Grid, Typography, Button} from '@material-ui/core';
 
-export default class Contribution extends React.Component {
+export default class Validation extends React.Component {
 
     render() {
         return (
-            <Grid container direction="column" justify="space-between" spacing={10}>
+            <Grid container direction="column" justify="space-between" spacing={4}>
                 <Grid item>
                     <Grid container>
                         <Grid item >
@@ -19,7 +19,16 @@ export default class Contribution extends React.Component {
                     <Grid container>
                         <Grid item >
                             <Typography variant="h5">
-                                Etape 3 : Je choisis mon geste
+                                Etape 4 : Je confirme
+                            </Typography>
+                        </Grid>
+                    </Grid>
+                </Grid>
+                <Grid item>
+                    <Grid container justify='center' direction='column' alignItems='center'>
+                        <Grid item >
+                            <Typography variant='h5'>
+                                J'ai choisi : {this.props.selectedOffer}
                             </Typography>
                         </Grid>
                     </Grid>
@@ -28,7 +37,7 @@ export default class Contribution extends React.Component {
                     <Grid container justify='center' >
                         <Grid item >
                             <Typography variant='h5'>
-                                Ma contribution :
+                                Je suis : {this.props.contribution}
                             </Typography>
                         </Grid>
                     </Grid>
@@ -36,13 +45,23 @@ export default class Contribution extends React.Component {
                 <Grid item>
                     <Grid container justify='center' spacing={5}>
                         <Grid item>
-                            <Button variant="contained" color="primary" style={{width: 200, height: 200}} onClick={() => this.props.selectionContribution("Seul")}>
-                                Seul
+                            <Button variant="contained" color="primary" style={{height: 50}} onClick={() => this.props.validation()}>
+                                Valider
                             </Button>
                         </Grid>
                         <Grid item>
-                            <Button variant="contained" color="primary" style={{width: 200, height: 200}} onClick={() => this.props.selectionContribution("Avec mes amis")}>
-                                Avec mes amis
+                            <Button variant="contained"  style={{height: 50}} onClick={() => this.props.resetSelectedOffer()}>
+                                Changer ma gratuité
+                            </Button>
+                        </Grid>
+                        <Grid item>
+                            <Button variant="contained" style={{height: 50}} onClick={() => this.props.resetContribution()}>
+                                Je ne suis pas {this.props.contribution}
+                            </Button>
+                        </Grid>
+                        <Grid item>
+                            <Button variant="contained" color="secondary" style={{height: 50}} onClick={() => this.props.cancel()}>
+                                Annuler
                             </Button>
                         </Grid>
                     </Grid>
@@ -51,7 +70,7 @@ export default class Contribution extends React.Component {
                     <Grid container justify="flex-end">
                         <Grid item >
                             <Typography variant="h5" >
-                                3 / 4
+                                4 / 4
                             </Typography>
                         </Grid>
                     </Grid>
