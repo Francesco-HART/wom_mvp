@@ -214,16 +214,6 @@ class CouponCreator extends React.Component {
                         </Grid>
                     </Grid>
                 </Grid>
-
-                <Grid item>
-                    <Grid container justify='center' >
-                        <Grid item >
-                            <Typography variant='h5'>
-                                {this.state.couponLink}
-                            </Typography>
-                        </Grid>
-                    </Grid>
-                </Grid>
                 
                 { this.getCouponCreating() }
 
