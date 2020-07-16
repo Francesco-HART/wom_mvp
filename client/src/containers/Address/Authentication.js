@@ -5,37 +5,32 @@ import LoginPhoneNumber from '../../containers/LoginPhoneNumber';
 export default class Authentication extends React.Component {
     
     render() {
+
+        const {classes} = this.props
+
         return (
-            <Grid container direction='column' justify='space-around' spacing={10}>
-                <Grid item>
-                    <Grid container>
-                        <Grid item>
-                            <Typography variant="h2">
-                                {this.props.addressName}
+            <Grid container direction='column' justify='center' spacing={2}>
+            
+                        <Grid item xs={12} className={classes.stapeTitle} >
+                            <Typography variant="h5" style={{fontFamily : 'Archivo Black'}}>
+                                Etape 1 : Enregistre-toi
                             </Typography>
                         </Grid>
-                    </Grid>
-                </Grid>
-                <Grid item>
-                    <Grid container justify="flex-start">
-                        <Grid item >
-                            <Typography variant="h4">
-                                Etape 1 : Je m'identifie
-                            </Typography>
-                        </Grid>
-                    </Grid>
-                </Grid>
+
                 <Grid item>
                     <Grid container justify='center'>
-                        <Grid item>
+                        <Grid item xs={12}>
                             <LoginPhoneNumber getUserByPhoneNumber={this.props.getUserByPhoneNumber}/>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Typography variant='h5' align='center'>{this.props.offers.length > 1 ? `Offre disponible aujourd'hui : ${this.props.offers.length} restantes` : `Offre disponible aujourd'hui : ${this.props.offers.length} restante`}</Typography>
                         </Grid>
                     </Grid>
                 </Grid>
                 <Grid item>
                     <Grid container justify="flex-end">
                         <Grid item >
-                            <Typography variant="h5" >
+                            <Typography variant="h5" className={classes.stapeNumber} style={{fontFamily : 'Archivo Black'}} >
                                 1 / 4
                             </Typography>
                         </Grid>

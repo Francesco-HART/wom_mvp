@@ -8,7 +8,6 @@ import {getAddressByDocumentId} from '../../actions/address';
 
 
 import{sendSms} from '../../actions/sendSms'
-import {disconnect} from '../../actions/authentication';
 
 import ActivityIndicator from '../../components/ActivityIndicator';
 import Authentication from './Authentication';
@@ -18,6 +17,60 @@ import Gratuities from './Gratuities';
 import Contribution from './Contribution';
 import Validation from './Validation';
 import CouponCreator from './CouponCreator';
+import { withStyles } from '@material-ui/core/styles';
+
+const useStyles = theme => ({
+    stapeTitle: {
+    
+     marginBottom : 120
+    },
+    stapeNumber : {
+       
+        marginTop : 120
+    },
+    stapeTitleContribution: {
+
+        marginBottom : 30
+       },
+       stapeNumberContribution : {
+           marginTop : 50
+       },
+       
+    root: {
+        width: 300,
+        height: '100%',
+        margin:10
+    },
+    mediaContainerContribution : {
+        background : 'white',
+        height : 250,
+        width : 250, 
+        borderRadius : 10
+    },
+    mediaContribution: {
+        width : '100%',
+        height : '100%',
+        paddingTop: '50%',
+        overflow: 'hidden',
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    mediaGratuities : {
+        width : '100%',
+        height : '100%',
+        paddingTop: '50%',
+        overflow: 'hidden',
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    mediaContainerGratuities : {
+        height : 200,
+        width : 200, 
+        borderRadius : 25 ,
+        borderWidth : 5,
+        borderColor : 'white'
+    }
+      });
 
 class Address extends React.Component {
 
@@ -89,9 +142,6 @@ class Address extends React.Component {
             idNotAssociate: false,
             hasValidate: false
         }, () => {
-            if (this.state.auth !== null) {
-                disconnect();
-            }
             this.props.dispatch({type: ADDRESS_CANCEL, payload: null});
             this.props.history.push("/");
         });
@@ -104,6 +154,8 @@ class Address extends React.Component {
     };
 
     render() {
+
+        const { classes } = this.props;
         const {auth, isLoading, idNotAssociate, selectedOffer, contribution, hasValidate} = this.state
         
         /* 
@@ -119,29 +171,29 @@ class Address extends React.Component {
         }
         
         if (this.offers.length === 0) {
-            return <NoOffers addressName={this.props.address.name} />;
+            return <NoOffers classes={classes} addressName={this.props.address.name} />;
         }
 
         if (auth === null) {
-            return <Authentication getUserByPhoneNumber={this.verfiPhoneNumber} addressName={this.props.address.name} />;
+            return <Authentication classes={classes} offers={this.offers} getUserByPhoneNumber={this.verfiPhoneNumber} addressName={this.props.address.name} />;
         }
 
         if (selectedOffer === null) {
-            return <Gratuities addressName={this.props.address.name} offers={this.offers} selectionOffer={this.selectionOffer} />;
+            return <Gratuities classes={classes} addressName={this.props.address.name} offers={this.offers} selectionOffer={this.selectionOffer} />;
         }
 
         if (contribution === null) {
-            return <Contribution addressName={this.props.address.name} selectionContribution={this.selectionContribution} />;
+            return <Contribution classes={classes} addressName={this.props.address.name} selectionContribution={this.selectionContribution} />;
         }
         
         if (!hasValidate) {
-            return <Validation sendSms={this.props.sendSms} addressName={this.props.address.name} selectedOffer={selectedOffer} contribution={contribution} 
+            return <Validation classes={classes} sendSms={this.props.sendSms} addressName={this.props.address.name} selectedOffer={selectedOffer} contribution={contribution} 
                         resetSelectedOffer={this.resetSelectedOffer} resetContribution={this.resetContribution} 
                         validation={this.validation} cancel={this.cancel} 
                     />
         }
 
-        return <CouponCreator auth={auth} sendSms={this.props.sendSms} addressName={this.props.address.name} selectedOffer={selectedOffer} contribution={contribution} cancel={this.cancel}/>;
+        return <CouponCreator classes={classes} auth={auth} sendSms={this.props.sendSms} addressName={this.props.address.name} selectedOffer={selectedOffer} contribution={contribution} cancel={this.cancel}/>;
     }
 }
 
@@ -150,6 +202,6 @@ const mapStateToProps = (state) => {
 }
 
 export default withRouter(
-    connect(mapStateToProps, {sendSms , getUserByPhoneNumber,getAddressByDocumentId})(Address)
+    connect(mapStateToProps, {sendSms , getUserByPhoneNumber,getAddressByDocumentId})( withStyles(useStyles)(Address))
 );
         

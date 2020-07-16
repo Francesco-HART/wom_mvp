@@ -12,7 +12,7 @@ class Home extends React.Component {
                     <Typography variant="h1">
                         Bienvenue sur Wom
                     </Typography>
-                    <Button variant="contained" color="primary" href="http://womparis.com" target="_blank">
+                    <Button variant="contained"  href="http://womparis.com" style={{height: 50, background : 'white'}} target="_blank">
                         Visitez notre site vitrine !
                     </Button>
                 </Grid>

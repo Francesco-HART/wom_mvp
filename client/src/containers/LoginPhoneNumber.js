@@ -10,6 +10,7 @@ import {connect} from "react-redux";
 import Logo from '../img/logoApp.png'
 import {sendSms} from '../actions/sendSms'
 import { withStyles } from '@material-ui/core/styles';
+import 'react-phone-number-input/style.css'
 
 const useStyles = theme => ({
     media: {
@@ -77,7 +78,7 @@ class InputPhoneNumber extends React.Component {
                             />
                         </Grid>
                         <Grid item>
-                            <Button disabled={!this.state.isValidPhoneNumber} variant="contained" onClick={this.verifIsValid}>
+                            <Button style={{color : 'black', background : 'white' }} disabled={!this.state.isValidPhoneNumber} variant="contained" onClick={this.verifIsValid}>
                               Valider  
                             </Button>
                         </Grid>

@@ -4,43 +4,28 @@ import {Grid, Typography, Button} from '@material-ui/core';
 export default class Validation extends React.Component {
 
     render() {
+
+        const {classes} = this.props
+
         return (
             <Grid container direction="column" justify="space-between" spacing={4}>
-                <Grid item>
-                    <Grid container>
-                        <Grid item >
-                            <Typography variant="h2">
-                                {this.props.addressName}
-                            </Typography>
-                        </Grid>
-                    </Grid>
-                </Grid>
-                <Grid item>
-                    <Grid container>
-                        <Grid item >
-                            <Typography variant="h4">
+            
+                <Grid item>                  
+                            <Typography variant="h5" style={{fontFamily : 'Archivo Black'}}>
                                 Etape 4 : Je confirme
-                            </Typography>
-                        </Grid>
-                    </Grid>
+                            </Typography>                     
                 </Grid>
+
                 <Grid item>
-                    <Grid container justify='center' direction='column' alignItems='center'>
-                        <Grid item >
                             <Typography variant='h5'>
                                 J'ai choisi : {this.props.selectedOffer}
-                            </Typography>
-                        </Grid>
-                    </Grid>
+                            </Typography>               
                 </Grid>
-                <Grid item>
-                    <Grid container justify='center' >
-                        <Grid item >
-                            <Typography variant='h5'>
+                
+                <Grid item>                  
+                            <Typography variant='h5' >
                                 Je suis : {this.props.contribution}
                             </Typography>
-                        </Grid>
-                    </Grid>
                 </Grid>
                 <Grid item>
                     <Grid container justify='center' spacing={5}>
@@ -68,8 +53,8 @@ export default class Validation extends React.Component {
                 </Grid>
                 <Grid item >
                     <Grid container justify="flex-end">
-                        <Grid item >
-                            <Typography variant="h5" >
+                        <Grid item className={classes.stapeNumberContribution}>
+                            <Typography variant="h5" style={{fontFamily : 'Archivo Black'}} >
                                 4 / 4
                             </Typography>
                         </Grid>

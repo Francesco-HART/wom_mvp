@@ -61,6 +61,7 @@ const styles = (theme) => {
             [theme.breakpoints.down("sm")]: {maxWidth: "100%"},
             flexGrow: 1,
             padding: theme.spacing(3),
+            fontFamily :  'Archivo Black'
         },
         icon: {marginBottom: 3},
         logo: {height: "58px", paddingTop: 5},
@@ -118,11 +119,15 @@ class NavBar extends React.Component {
 
     render() {
         const {classes, theme, container} = this.props;
-        return (
-            <div className={classes.root}>
+        return this.props.auth === null ? 
+        <div>
+            <CssBaseline/>
+        <main className={classes.content}>
+            {this.props.children}
+        </main> 
+    </div> :
+               <div className={classes.root}>
                 <CssBaseline/>
-               {
-               this.props.auth === null ? <div></div> :
                <AppBar position="fixed" color="default" className={classes.appBar}>
                     <Toolbar>
                         <Grid container justify="space-between">
@@ -191,18 +196,14 @@ class NavBar extends React.Component {
                                             <Account/>
                                         </IconButton>
                                     }
-                                </Tooltip>
+                                      </Tooltip>
                             </Grid>
                         </Grid>
                     </Toolbar>
                 </AppBar>
-}
-                <main className={classes.content}>
-                    <div className={classes.toolbar}/>
-                    {this.props.children}
-                </main>
+
+                
             </div>
-        );
     }
 }
 

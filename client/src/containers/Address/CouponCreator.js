@@ -92,51 +92,22 @@ class CouponCreator extends React.Component {
         switch (this.state.status) {
             case "success":
                 return (
-                    <Grid item container direction="column" spacing={5}>
+                    <Grid item container direction="column" alignItems='center' spacing={4}>
                         <Grid item>
-                            <Grid container justify='center'>
-                                <Grid item>
-                                    <Typography variant='h5'>
-                                        Coupon créé !
-                                    </Typography>
-                                </Grid>
-                            </Grid>
+                                    <Typography variant='h4' style={{fontFamily : 'Archivo Black'}} gutterBottom>
+                                        PROFITE
+                                    </Typography>     
                         </Grid>
                         <Grid item>
-                            <Grid container justify='center'>
-                                <Grid item>
-                                    <Typography variant='h5'>
-                                        Tu vas bientôt recevoir un message avec le lien de ton coupon !
-                                    </Typography>
-                                </Grid>
-                            </Grid>
+                            <Typography variant='h5' style={{fontFamily : 'Archivo Black'}} paragraph={true} gutterBottom>
+                                A partir de ce moment tu as 01h00 pour réaliser
+                                tes gestes de bouche à oreille
+                            </Typography>    
                         </Grid>
                         <Grid item>
-                            <Grid container justify='center'>
-                                <Grid item>
-                                    <Typography variant='h5'>
-                                        Fais signe au serveur pour recevoir ta gratuité !
-                                    </Typography>
-                                </Grid>
-                            </Grid>
-                        </Grid>
-                        <Grid item>
-                            <Grid container justify='center'>
-                                <Grid item>
-                                    <Typography variant='h5'>
-                                        Tu as une heure pour faire valider ton coupon.
-                                    </Typography>
-                                </Grid>
-                            </Grid>
-                        </Grid>
-                        <Grid item>
-                            <Grid container justify='center'>
-                                <Grid item>
-                                    <Typography variant='h5'>
-                                        Au-delà de ce délai, ton coupon ne sera plus actif !
-                                    </Typography>
-                                </Grid>
-                            </Grid>
+                            <Typography variant='h5' style={{fontFamily : 'Archivo Black'}}>
+                                Tu vas bientôt recevoir un message avec le lien de ton coupon !
+                            </Typography>    
                         </Grid>
                     </Grid>
                 );
@@ -169,8 +140,8 @@ class CouponCreator extends React.Component {
                         <Grid item>
                             <Grid container justify='center'>
                                 <Grid item>
-                                    <Typography variant='h5'>
-                                        Quelqu'un vient de réserver la même offre : (
+                                    <Typography variant='h5' >
+                                        Quelqu'un vient de réserver la même offre 😥
                                     </Typography>
                                 </Grid>
                             </Grid>
@@ -194,21 +165,12 @@ class CouponCreator extends React.Component {
 
     render() {
         return (
-            <Grid container direction="column" justify="space-between" spacing={10}>
-                <Grid item>
-                    <Grid container>
-                        <Grid item >
-                            <Typography variant="h2">
-                                {this.props.addressName}
-                            </Typography>
-                        </Grid>
-                    </Grid>
-                </Grid>
+            <Grid container direction="column" justify="space-between" spacing={3}>
                 
                 <Grid item>
                     <Grid container justify='center' >
                         <Grid item >
-                            <Typography variant='h5'>
+                            <Typography variant='h5' style={{fontFamily : 'Archivo Black'}}>
                                 Commande validée !
                             </Typography>
                         </Grid>
