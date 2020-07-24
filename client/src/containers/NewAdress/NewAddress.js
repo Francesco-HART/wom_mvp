@@ -115,7 +115,10 @@ class NewAddress extends React.Component {
     }
 
     render() {
+        console.log('whala');
+
         if (!this.state.canCreate) {
+            console.log('whalaaaaaa');
             return <CantCreate numberAddressCanCreate={this.props.auth.numberAddressCanCreate} />
         }
 
