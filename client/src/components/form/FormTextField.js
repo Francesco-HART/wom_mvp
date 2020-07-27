@@ -37,7 +37,7 @@ export default class FormTextField extends React.Component {
                     <Grid item xs={12}>
                         <Grid container justify='center'>
                             <Grid item>
-                                <Button type={"submit"}>Valider</Button>
+                                <Button style={{color: 'black', background: 'white'}} type={"submit"}>Valider</Button>
                             </Grid>
                         </Grid>
                     </Grid>
