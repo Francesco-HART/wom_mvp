@@ -11,37 +11,37 @@ export default class Validation extends React.Component {
             <Grid container justify='center' alignItems='center' spacing={5}>
                 <Grid item xs={12}>
                     <Grid container direction="column" justify="space-between" spacing={4}>
-                        <Grid item xs={12} >            
+                        <Grid item xs={12} >
                                         <Typography variant="h5" style={{fontFamily : 'Archivo Black'}}>
                                             Etape 4 : Validation
-                                        </Typography>                     
+                                        </Typography>
                         </Grid>
                     </Grid>
                 </Grid>
-                    <Grid item  xs={12}>      
+                    <Grid item  xs={12}>
 
                         <Grid container justify='center' alignContent='center' direction='column' alignItems='center' spacing={5}>
 
                             <Grid item >
                                         <Typography variant='h4' style={{fontFamily : 'Archivo Black'}}>
                                             BIENTOT FINI
-                                        </Typography>               
+                                        </Typography>
                             </Grid>
 
                             <Grid item xs={12}>
                                         <Typography  variant='h5' style={{ textAlign : 'center'  ,fontFamily : 'Archivo Black'}} display="inline">
                                             Pour valider ton expérience WOM présente ton
                                             écran au serveur en terrasse ou au comptoir.
-                                        </Typography>               
+                                        </Typography>
                             </Grid>
 
                             <Grid item>
                                         <Typography variant='h5'>
                                             J'ai choisi : {this.props.selectedOffer}
-                                        </Typography>               
+                                        </Typography>
                             </Grid>
-                        
-                            <Grid item>                  
+
+                            <Grid item>
                                         <Typography variant='h5' >
                                             Je suis : {this.props.contribution}
                                         </Typography>
@@ -52,31 +52,33 @@ export default class Validation extends React.Component {
                     <Grid item xs={12}>
 
                         <Grid container  justify='center' alignContent='center' direction='column' alignItems='center'spacing={2}>
-                    
+
                             <Grid item xs={12}>
-                                <Button alignContent='center' variant="contained"  style={{height: 50}} onClick={() => this.props.resetSelectedOffer()}>
+                                <Button alignContent='center' variant="contained"  onClick={() => this.props.resetSelectedOffer()}>
                                     Changer ma gratuité
                                 </Button>
                             </Grid>
 
                             <Grid item xs={12}>
-                                <Button variant="contained" style={{height: 50}} onClick={() => this.props.resetContribution()}>
+                                <Button variant="contained"  onClick={() => this.props.resetContribution()}>
                                     Je ne suis pas {this.props.contribution}
                                 </Button>
                             </Grid>
-
+        <Grid item xs={12}>
+            <Grid container justify="center" spacing={4}>
                             <Grid item xs={6}>
-                                <Button variant="contained"  style={{height: 50}} onClick={() => this.props.validation()}>
+                                <Button variant="contained"  style={{color : 'black', background : 'white' }} onClick={() => this.props.validation()}>
                                     Valider
                                 </Button>
                             </Grid>
 
                             <Grid item xs={6}>
-                                <Button variant="contained" color="secondary" style={{height: 50}} onClick={() => this.props.cancel()}>
+                                <Button variant="contained" color="secondary"  onClick={() => this.props.cancel()}>
                                     Annuler
                                 </Button>
                             </Grid>
-
+</Grid>
+                                        </Grid>
                         </Grid>
                     </Grid>
                     <Grid item xs={12}>
