@@ -61,7 +61,7 @@ const styles = (theme) => {
             [theme.breakpoints.down("sm")]: {maxWidth: "100%"},
             flexGrow: 1,
             padding: theme.spacing(3),
-            fontFamily :  'Archivo Black'
+            fontFamily: 'Archivo Black'
         },
         icon: {marginBottom: 3},
         logo: {height: "58px", paddingTop: 5},
@@ -119,16 +119,16 @@ class NavBar extends React.Component {
 
     render() {
         const {classes, theme, container} = this.props;
-        return this.props.auth === null ? 
-        <div>
-            <CssBaseline/>
-        <main className={classes.content}>
-            {this.props.children}
-        </main> 
-    </div> :
-               <div className={classes.root}>
+        return this.props.auth === null ?
+            <div>
                 <CssBaseline/>
-               <AppBar position="fixed" color="default" className={classes.appBar}>
+                <main className={classes.content}>
+                    {this.props.children}
+                </main>
+            </div> :
+            <div className={classes.root}>
+                <CssBaseline/>
+                <AppBar position="fixed" color="default" className={classes.appBar}>
                     <Toolbar>
                         <Grid container justify="space-between">
 
@@ -176,7 +176,7 @@ class NavBar extends React.Component {
                                     className={classes.appBarIcon}
                                 >
 
-                                    <IconButton to="/new-address" component={Link}>
+                                    <IconButton to="/newaddress" component={Link}>
                                         <Earth/>
                                     </IconButton>
                                 </Tooltip>}
@@ -196,13 +196,14 @@ class NavBar extends React.Component {
                                             <Account/>
                                         </IconButton>
                                     }
-                                      </Tooltip>
+                                </Tooltip>
                             </Grid>
                         </Grid>
                     </Toolbar>
                 </AppBar>
-
-                
+                <main className={classes.content}>
+                    {this.props.children}
+                </main>
             </div>
     }
 }

@@ -5,9 +5,9 @@ import {connect} from "react-redux";
 import {ADDRESS_CANCEL} from '../../actions/type';
 import {getUserByPhoneNumber} from "../../actions/authentication";
 import {getAddressByDocumentId} from '../../actions/address';
+import {showSnackbar} from '../../actions/snackbar'
 
-
-import{sendSms} from '../../actions/sendSms'
+import {sendSms} from '../../actions/sendSms'
 
 import ActivityIndicator from '../../components/ActivityIndicator';
 import Authentication from './Authentication';
@@ -17,60 +17,60 @@ import Gratuities from './Gratuities';
 import Contribution from './Contribution';
 import Validation from './Validation';
 import CouponCreator from './CouponCreator';
-import { withStyles } from '@material-ui/core/styles';
+import {withStyles} from '@material-ui/core/styles';
 
 const useStyles = theme => ({
     stapeTitle: {
-    
-     marginBottom : 120
+
+        marginBottom: 120
     },
-    stapeNumber : {
-       
-        marginTop : 120
+    stapeNumber: {
+
+        marginTop: 120
     },
     stapeTitleContribution: {
 
-        marginBottom : 30
-       },
-       stapeNumberContribution : {
-           marginTop : 50
-       },
-       
+        marginBottom: 30
+    },
+    stapeNumberContribution: {
+        marginTop: 50
+    },
+
     root: {
         width: 300,
         height: '100%',
-        margin:10
+        margin: 10
     },
-    mediaContainerContribution : {
-        background : 'white',
-        height : 250,
-        width : 250, 
-        borderRadius : 10
+    mediaContainerContribution: {
+        background: 'white',
+        height: 250,
+        width: 250,
+        borderRadius: 10
     },
     mediaContribution: {
-        width : '100%',
-        height : '100%',
+        width: '100%',
+        height: '100%',
         paddingTop: '50%',
         overflow: 'hidden',
         justifyContent: 'center',
         alignItems: 'center'
     },
-    mediaGratuities : {
-        width : '100%',
-        height : '100%',
+    mediaGratuities: {
+        width: '100%',
+        height: '100%',
         paddingTop: '50%',
         overflow: 'hidden',
         justifyContent: 'center',
         alignItems: 'center'
     },
-    mediaContainerGratuities : {
-        height : 200,
-        width : 200, 
-        borderRadius : 25 ,
-        borderWidth : 5,
-        borderColor : 'white'
+    mediaContainerGratuities: {
+        height: 200,
+        width: 200,
+        borderRadius: 25,
+        borderWidth: 5,
+        borderColor: 'white'
     }
-      });
+});
 
 class Address extends React.Component {
 
@@ -81,8 +81,9 @@ class Address extends React.Component {
             selectedOffer: null,
             contribution: null,
             idNotAssociate: false,
-            hasValidate: false, 
-            auth : null
+            hasValidate: false,
+            auth: null,
+            confirm: ''
         };
         this.offers = [];
     }
@@ -104,10 +105,10 @@ class Address extends React.Component {
     }
 
     verfiPhoneNumber = async (phonNumber) => {
-       const auth = await this.props.getUserByPhoneNumber(phonNumber)
-       if(auth){           
-           this.setState({auth})
-       }
+        const auth = await this.props.getUserByPhoneNumber(phonNumber)
+        if (auth) {
+            this.setState({auth})
+        }
     }
 
     selectionOffer = (value) => {
@@ -147,53 +148,72 @@ class Address extends React.Component {
         });
     };
 
+    handleChange = (event) => {
+        this.setState({confirm: event.target.value})
+    }
+
     validation = () => {
-        this.setState({
-            hasValidate: true
-        });
+        if (this.props.address) {
+            this.props.address.confirm && this.state.confirm === this.props.address.confirm ?
+                this.setState({
+                    hasValidate: true
+                })
+                :
+                this.props.showSnackbar('Code de validation incorrect', 'error')
+        }
+
     };
 
     render() {
 
-        const { classes } = this.props;
+        const {classes} = this.props;
         const {auth, isLoading, idNotAssociate, selectedOffer, contribution, hasValidate} = this.state
-        
+
         /* 
             http://localhost:3000/address/m1LzI2Z9L5RzVdAyaUtw
         */
 
         if (isLoading) {
-            return <ActivityIndicator />
+            return <ActivityIndicator/>
         }
 
         if (idNotAssociate) {
-            return <NotFound />;
+            return <NotFound/>;
         }
-        
+
         if (this.offers.length === 0) {
-            return <NoOffers classes={classes} addressName={this.props.address.name} />;
+            return <NoOffers classes={classes} addressName={this.props.address.name}/>;
         }
 
         if (auth === null) {
-            return <Authentication classes={classes} offers={this.offers} getUserByPhoneNumber={this.verfiPhoneNumber} addressName={this.props.address.name} />;
+            return <Authentication classes={classes} offers={this.offers} getUserByPhoneNumber={this.verfiPhoneNumber}
+                                   addressName={this.props.address.name}/>;
         }
 
         if (selectedOffer === null) {
-            return <Gratuities classes={classes} addressName={this.props.address.name} offers={this.offers} selectionOffer={this.selectionOffer} />;
+            return <Gratuities classes={classes} addressName={this.props.address.name} offers={this.offers}
+                               selectionOffer={this.selectionOffer}/>;
         }
 
         if (contribution === null) {
-            return <Contribution classes={classes} addressName={this.props.address.name} selectionContribution={this.selectionContribution} />;
-        }
-        
-        if (!hasValidate) {
-            return <Validation classes={classes} sendSms={this.props.sendSms} addressName={this.props.address.name} selectedOffer={selectedOffer} contribution={contribution} 
-                        resetSelectedOffer={this.resetSelectedOffer} resetContribution={this.resetContribution} 
-                        validation={this.validation} cancel={this.cancel} 
-                    />
+            return <Contribution classes={classes} addressName={this.props.address.name}
+                                 selectionContribution={this.selectionContribution}/>;
         }
 
-        return <CouponCreator classes={classes} auth={auth} sendSms={this.props.sendSms} addressName={this.props.address.name} selectedOffer={selectedOffer} contribution={contribution} cancel={this.cancel}/>;
+        if (!hasValidate) {
+            return <Validation classes={classes} sendSms={this.props.sendSms}
+                               addressCode={this.props.address.code || ''} addressName={this.props.address.name}
+                               selectedOffer={selectedOffer} contribution={contribution}
+                               resetSelectedOffer={this.resetSelectedOffer} resetContribution={this.resetContribution}
+                               validation={this.validation} cancel={this.cancel}
+                               confirm={this.state.confirm}
+                               handleChange={this.handleChange}
+            />
+        }
+
+        return <CouponCreator classes={classes} auth={auth} sendSms={this.props.sendSms}
+                              addressName={this.props.address.name} selectedOffer={selectedOffer}
+                              contribution={contribution} cancel={this.cancel}/>;
     }
 }
 
@@ -202,6 +222,11 @@ const mapStateToProps = (state) => {
 }
 
 export default withRouter(
-    connect(mapStateToProps, {sendSms , getUserByPhoneNumber,getAddressByDocumentId})( withStyles(useStyles)(Address))
+    connect(mapStateToProps, {
+        sendSms,
+        showSnackbar,
+        getUserByPhoneNumber,
+        getAddressByDocumentId
+    })(withStyles(useStyles)(Address))
 );
         

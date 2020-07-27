@@ -35,6 +35,7 @@ class NewAddress extends React.Component {
             password: "",
             validationCode: "",
             webSite: "",
+            confirm : '',
             documentId : null,
             status: null,
             canCreate: true
@@ -103,7 +104,7 @@ class NewAddress extends React.Component {
                 </Grid>
             );
         }
-        return null;
+        return;
     }
 
     componentDidMount() {
@@ -130,6 +131,7 @@ class NewAddress extends React.Component {
             {name: "offer1", label: "Offre 1", type: "text"},
             {name: "offer2", label: "Offre 2", type: "text"},
             {name: "mail", label: "e-mail", type: "mail"},
+            {name: "confirm", label: "Code de confirmation", type: "text"},
             {name: "password", label: "Mot de passe", type: "password"},
             {name: "validationCode", label: "Code de validationde coupon", type: "text"},
             {name: "webSite", label: "Site web (facultatif)", type: "url"}
@@ -139,6 +141,7 @@ class NewAddress extends React.Component {
         const cookie = cookies.get('userCookie') ? cookies.get('userCookie') : "";
             return (
                 <>
+                    iciiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii
                     <Grid container justify='center' spacing={2}>
                         <Grid item xs={12}>
                             <Grid container justify='center' spacing={2}>
@@ -167,7 +170,8 @@ class NewAddress extends React.Component {
                             offer2: Yup.string().required("Champs requis"),
                             mail: Yup.string().required("Champs requis"),
                             password: Yup.string().required("Champs requis"),
-                            validationCode: Yup.string().required("Champs requis")
+                            validationCode: Yup.string().required("Champs requis"),
+                            confirm : Yup.string().required("Champs requis")
                         })}
                     >
                         { props => <FormTextField {...props} arrayField={array}/> }

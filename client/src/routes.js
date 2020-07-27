@@ -13,8 +13,7 @@ import Instagram from './containers/Instagram';
 
 const Container = (props) => (
     <div>
-        <Route exact path="/instagram" component={requireAuth(Instagram)}/>
-        <Route exact path="/new-address" component={requireAuth(NewAddress)}/>
+
     </div>
 );
 
@@ -26,7 +25,8 @@ function Routes(props) {
             <Route exact path="/signin" component={requireNoAuth(Signin)}/>
             <Route exact path="/address/:id" component={requireNoAuth(Address)}/>
             <Route exact path="/coupon/:id" component={requireNoAuth(Coupon)}/>
-            <Route component={requireAuth(Container)}/>
+            <Route exact path="/instagram" component={requireAuth(Instagram)}/>
+            <Route exact path="/newaddress" component={requireAuth(NewAddress)}/>
         </Switch>
     );
 }
