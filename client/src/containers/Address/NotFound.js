@@ -9,7 +9,7 @@ export default class NotFound extends React.Component {
                 <Grid item />
                 <Grid item>
                     <Grid container justify='center'>
-                        <Grid item>
+                        <Grid item style={{textAlign: 'center', fontFamily: 'Archivo Black'}}>
                             <Typography variant='h5'>
                                 Aucune adresse associée à cet identifiant !
                             </Typography>

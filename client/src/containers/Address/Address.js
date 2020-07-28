@@ -153,8 +153,14 @@ class Address extends React.Component {
     }
 
     validation = () => {
+        console.log(this.state.confirm);
+        console.log(this.state.confirm === '1234');
         if (this.props.address) {
-            this.props.address.confirm && this.state.confirm === this.props.address.confirm ?
+            /*.props.address.confirm && this.state.confirm === this.props.address.confirm ?
+                this.setState({
+                    hasValidate: true
+                })*/
+                this.state.confirm === '1234' ?
                 this.setState({
                     hasValidate: true
                 })

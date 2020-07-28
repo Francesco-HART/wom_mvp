@@ -30,8 +30,8 @@ export default class Validation extends React.Component {
                             </Typography>
                         </Grid>
 
-                        <Grid item xs={12}>
-                            <Typography variant='h5' style={{textAlign: 'center', fontFamily: 'Archivo Black'}}
+                        <Grid item xs={12} style={{textAlign: 'center', fontFamily: 'Archivo Black'}}>
+                            <Typography variant='h5' 
                                         display="inline">
                                 Pour valider ton expérience WOM présente ton
                                 écran au serveur en terrasse ou au comptoir.
@@ -44,7 +44,7 @@ export default class Validation extends React.Component {
 
                                         <Grid item>
                                             <Typography variant='h5'>
-                                                J'ai choisi : {this.props.selectedOffer}
+                                                {this.props.selectedOffer}
                                                 <IconButton alignContent='center' variant="contained"
                                                             onClick={() => this.props.resetSelectedOffer()}>
                                                     <CreateIcon/>
@@ -56,11 +56,12 @@ export default class Validation extends React.Component {
 
                                     </Grid>
                                 </Grid>
+
                                 <Grid item xs={12}>
                                     <Grid container justify='center'>
                                         <Grid item>
                                             <Typography variant='h5'>
-                                                Je suis : {this.props.contribution}
+                                               {this.props.contribution}
                                                 <IconButton alignContent='center' variant="contained"
                                                             onClick={() => this.props.resetSelectedOffer()}>
                                                     <CreateIcon/>
@@ -71,42 +72,45 @@ export default class Validation extends React.Component {
                                         </Grid>
                                     </Grid>
                                 </Grid>
+
+                                    <Grid item>
+                                    <Grid container justify="center" direction="column" spacing={4}>
+                                        <Grid item xs={12}>
+                                            <TextField
+                                                InputProps={ {background: 'white'}}
+                                                type='text'
+                                                style={{background: 'fff', color: 'fff'}}
+                                                color='fff'
+                                                onChange={(e) => handleChange(e)} label={'Confirmation'}
+                                                InputLabelProps={{shrink: true}} variant="filled"
+                                                value={confirm}
+                                            />
+                                        </Grid>
+                                        <Grid item xs={12}>
+                                            <Grid container justify="center" spacing={4}>
+                                                <Grid item xs={6}>
+                                                    <Button variant="contained" style={{color: 'black', background: 'white'}}
+                                                            onClick={() => this.props.validation()}>
+                                                        Valider
+                                                    </Button>
+                                                </Grid>
+
+                                                <Grid item xs={6}>
+                                                    <Button variant="contained" color="secondary" onClick={() => this.props.cancel()}>
+                                                        Annuler
+                                                    </Button>
+                                                </Grid>
+                                            </Grid>
+                                        </Grid>
+                                    </Grid>
+                                </Grid>
                             </Grid>
                         </Grid>
                     </Grid>
                 </Grid>
 
 
-                <Grid item>
-                    <Grid container justify="center" direction="column" spacing={4}>
-                        <Grid item xs={12}>
-                            <TextField
-                                type='text'
-                                style={{background: 'fff', color: 'fff'}}
-                                color='fff'
-                                onChange={(e) => handleChange(e)} label={'Confirmation'}
-                                InputLabelProps={{shrink: true}} variant="outlined"
-                                value={confirm}
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <Grid container justify="center" spacing={4}>
-                                <Grid item xs={6}>
-                                    <Button variant="contained" style={{color: 'black', background: 'white'}}
-                                            onClick={() => this.props.validation()}>
-                                        Valider
-                                    </Button>
-                                </Grid>
-
-                                <Grid item xs={6}>
-                                    <Button variant="contained" color="secondary" onClick={() => this.props.cancel()}>
-                                        Annuler
-                                    </Button>
-                                </Grid>
-                            </Grid>
-                        </Grid>
-                    </Grid>
-                </Grid>
+              
                 <Grid item xs={12}>
                     <Grid container justify="flex-end">
                         <Grid item className={classes.stapeNumberContribution}>

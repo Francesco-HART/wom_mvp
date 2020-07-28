@@ -99,13 +99,13 @@ class CouponCreator extends React.Component {
                                     </Typography>     
                         </Grid>
                         <Grid item>
-                            <Typography variant='h5' style={{fontFamily : 'Archivo Black'}} paragraph={true} gutterBottom>
+                            <Typography variant='h5' style={{  textAlign: 'center' ,fontFamily : 'Archivo Black'}} paragraph={true} gutterBottom>
                                 A partir de ce moment tu as 01h00 pour réaliser
                                 tes gestes de bouche à oreille
                             </Typography>    
                         </Grid>
                         <Grid item>
-                            <Typography variant='h5' style={{fontFamily : 'Archivo Black'}}>
+                            <Typography variant='h5' style={{textAlign: 'center' ,fontFamily : 'Archivo Black'}}>
                                 Tu vas bientôt recevoir un message avec le lien de ton coupon !
                             </Typography>    
                         </Grid>
@@ -139,7 +139,7 @@ class CouponCreator extends React.Component {
                     <Grid item container direction="column" spacing={5}>
                         <Grid item>
                             <Grid container justify='center'>
-                                <Grid item>
+                                <Grid item style={{textAlign: 'center'}}>
                                     <Typography variant='h5' >
                                         Quelqu'un vient de réserver la même offre 😥
                                     </Typography>
