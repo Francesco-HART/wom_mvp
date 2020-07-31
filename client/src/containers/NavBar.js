@@ -76,35 +76,11 @@ class NavBar extends React.Component {
         this.setState({selectedItem: window.location.pathname});
     };
 
-    handleClickConfig = () => {
-        this.setState({open_config_menu: !this.state.open_config_menu});
-    };
-
-    handleDrawerToggle = () => {
-        this.setState((state) => ({mobileOpen: !state.mobileOpen}));
-    };
-
     handleSelectItem = (link) => {
         if (this.state.mobileOpen)
             this.setState((state) => ({mobileOpen: !state.mobileOpen}));
         this.setState({selectedItem: link});
     };
-
-    renderListItem = ({link, title, icon, disabled}) => (
-        <ListItem
-            button
-            disabled={disabled}
-            to={link}
-            component={Link}
-            onClick={() => this.handleSelectItem(link)}
-            className={
-                this.state.selectedItem === link ? this.props.classes.selectedTab : null
-            }
-        >
-            <ListItemIcon className={this.props.classes.icon}>{icon}</ListItemIcon>
-            <ListItemText primary={title}/>
-        </ListItem>
-    );
 
     setTheme = () => {
         this.props.setThemeColor(!this.props.themeColor);
@@ -118,7 +94,7 @@ class NavBar extends React.Component {
     }
 
     render() {
-        const {classes, theme, container} = this.props;
+        const {classes} = this.props;
         return this.props.auth === null ?
             <div>
                 <CssBaseline/>
@@ -128,7 +104,7 @@ class NavBar extends React.Component {
             </div> :
             <div className={classes.root}>
                 <CssBaseline/>
-                <AppBar position="fixed" color="default" className={classes.appBar}>
+                <AppBar position="fixed" color="default" className={classes.appBar} style={{ marginBottom : 10  }}>
                     <Toolbar>
                         <Grid container justify="space-between">
 

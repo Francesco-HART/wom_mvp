@@ -10,6 +10,7 @@ import NewAddress from './containers/NewAdress/NewAddress';
 import Signin from './containers/Signin';
 import LoginAdmin from './containers/LoginAdmin';
 import Instagram from './containers/Instagram';
+import HomeAdmin from './containers/HomeAdmin';
 
 const Container = (props) => (
     <div>
@@ -18,9 +19,10 @@ const Container = (props) => (
 );
 
 function Routes(props) {
+    console.log(props.auth)
     return (
         <Switch>
-            <Route exact path="/" component={Home}/>
+            <Route exact path="/" component={props.auth && props.auth.type === 'admin' ? HomeAdmin : Home}/>
             <Route exact path="/login" component={requireNoAuth(LoginAdmin)}/>
             <Route exact path="/signin" component={requireNoAuth(Signin)}/>
             <Route exact path="/address/:id" component={requireNoAuth(Address)}/>
