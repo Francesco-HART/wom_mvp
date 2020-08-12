@@ -31,7 +31,7 @@ export default class Validation extends React.Component {
                         </Grid>
 
                         <Grid item xs={12} style={{textAlign: 'center', fontFamily: 'Archivo Black'}}>
-                            <Typography variant='h5' 
+                            <Typography variant='h5'
                                         display="inline">
                                 Pour valider ton expérience WOM présente ton
                                 écran au serveur en terrasse ou au comptoir.
@@ -61,7 +61,7 @@ export default class Validation extends React.Component {
                                     <Grid container justify='center'>
                                         <Grid item>
                                             <Typography variant='h5'>
-                                               {this.props.contribution}
+                                                {this.props.contribution}
                                                 <IconButton alignContent='center' variant="contained"
                                                             onClick={() => this.props.resetSelectedOffer()}>
                                                     <CreateIcon/>
@@ -73,12 +73,12 @@ export default class Validation extends React.Component {
                                     </Grid>
                                 </Grid>
 
-                                    <Grid item>
+                                <Grid item>
                                     <Grid container justify="center" direction="column" spacing={4}>
                                         <Grid item xs={12}>
                                             <TextField
-                                                InputProps={ {background: 'white'}}
-                                                type='text'
+                                                InputProps={{background: 'white'}}
+                                                type='password'
                                                 style={{background: 'fff', color: 'fff'}}
                                                 color='fff'
                                                 onChange={(e) => handleChange(e)} label={'Confirmation'}
@@ -89,14 +89,16 @@ export default class Validation extends React.Component {
                                         <Grid item xs={12}>
                                             <Grid container justify="center" spacing={4}>
                                                 <Grid item xs={6}>
-                                                    <Button variant="contained" style={{color: 'black', background: 'white'}}
+                                                    <Button variant="contained"
+                                                            style={{color: 'black', background: 'white'}}
                                                             onClick={() => this.props.validation()}>
                                                         Valider
                                                     </Button>
                                                 </Grid>
 
                                                 <Grid item xs={6}>
-                                                    <Button variant="contained" color="secondary" onClick={() => this.props.cancel()}>
+                                                    <Button variant="contained" color="secondary"
+                                                            onClick={() => this.props.cancel()}>
                                                         Annuler
                                                     </Button>
                                                 </Grid>
@@ -110,7 +112,6 @@ export default class Validation extends React.Component {
                 </Grid>
 
 
-              
                 <Grid item xs={12}>
                     <Grid container justify="flex-end">
                         <Grid item className={classes.stapeNumberContribution}>

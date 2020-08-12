@@ -1,7 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="2747cc6e-df74-41d9-af06-71b9f042862a" name="Default Changelist" comment="" />
+    <list default="true" id="2747cc6e-df74-41d9-af06-71b9f042862a" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/actions/coupon.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/actions/coupon.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/containers/Address/Address.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/containers/Address/Address.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/containers/Address/CouponCreator.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/containers/Address/CouponCreator.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/containers/Address/Validation.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/containers/Address/Validation.js" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -51,11 +75,32 @@
       <workItem from="1593895506158" duration="35242000" />
       <workItem from="1595870089535" duration="7243000" />
       <workItem from="1595891841919" duration="1575000" />
+      <workItem from="1596209678787" duration="1594000" />
+      <workItem from="1596447444147" duration="607000" />
+      <workItem from="1596732100376" duration="617000" />
+      <workItem from="1596747780587" duration="1262000" />
+      <workItem from="1596800489659" duration="2553000" />
+      <workItem from="1597163556694" duration="25000" />
+      <workItem from="1597163725372" duration="36000" />
+      <workItem from="1597225885622" duration="609000" />
+      <workItem from="1597235717311" duration="594000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="2" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="WindowStateProjectService">
     <state x="547" y="263" key="#ESLint" timestamp="1593937202723">

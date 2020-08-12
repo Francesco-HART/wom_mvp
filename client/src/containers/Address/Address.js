@@ -93,15 +93,15 @@ class Address extends React.Component {
         this.offers = [];
         if (query !== null) {
             query.offers.forEach(element => {
-                if (element.split(':value:')[1] === "available") {
-                    this.offers.push(element.split(':value:')[0]);
+                if (element.split(':value:')[ 1 ] === "available") {
+                    this.offers.push(element.split(':value:')[ 0 ]);
                 }
             });
         }
         this.setState({
-            isLoading: false,
-            idNotAssociate: query == null
-        });
+                          isLoading: false,
+                          idNotAssociate: query == null
+                      });
     }
 
     verfiPhoneNumber = async (phonNumber) => {
@@ -113,36 +113,36 @@ class Address extends React.Component {
 
     selectionOffer = (value) => {
         this.setState({
-            selectedOffer: this.offers[value]
-        });
+                          selectedOffer: this.offers[ value ]
+                      });
     };
 
     selectionContribution = (value) => {
         this.setState({
-            contribution: value
-        });
+                          contribution: value
+                      });
     };
 
     resetSelectedOffer = () => {
         this.setState({
-            selectedOffer: null
-        });
+                          selectedOffer: null
+                      });
     };
 
     resetContribution = () => {
         this.setState({
-            contribution: null
-        });
+                          contribution: null
+                      });
     };
 
     cancel = () => {
         this.setState({
-            isLoading: true,
-            selectedOffer: null,
-            contribution: null,
-            idNotAssociate: false,
-            hasValidate: false
-        }, () => {
+                          isLoading: true,
+                          selectedOffer: null,
+                          contribution: null,
+                          idNotAssociate: false,
+                          hasValidate: false
+                      }, () => {
             this.props.dispatch({type: ADDRESS_CANCEL, payload: null});
             this.props.history.push("/");
         });
@@ -157,13 +157,13 @@ class Address extends React.Component {
         console.log(this.state.confirm === '1234');
         if (this.props.address) {
             /*.props.address.confirm && this.state.confirm === this.props.address.confirm ?
+             this.setState({
+             hasValidate: true
+             })*/
+            this.state.confirm === '1234' ?
                 this.setState({
-                    hasValidate: true
-                })*/
-                this.state.confirm === '1234' ?
-                this.setState({
-                    hasValidate: true
-                })
+                                  hasValidate: true
+                              })
                 :
                 this.props.showSnackbar('Code de validation incorrect', 'error')
         }
@@ -176,8 +176,8 @@ class Address extends React.Component {
         const {auth, isLoading, idNotAssociate, selectedOffer, contribution, hasValidate} = this.state
 
         /* 
-            http://localhost:3000/address/m1LzI2Z9L5RzVdAyaUtw
-        */
+         http://localhost:3000/address/m1LzI2Z9L5RzVdAyaUtw
+         */
 
         if (isLoading) {
             return <ActivityIndicator/>
